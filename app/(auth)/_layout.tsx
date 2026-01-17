@@ -22,21 +22,24 @@ export default function AuthLayout() {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
-          default: {},
+          default: {
+            display: 'none'
+          },
         }),
       }}>
       <Tabs.Screen
         name="signIn"
         options={{
           title: 'signIn',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          href: null,
         }}
       />
       <Tabs.Screen
         name="signUp"
         options={{
           title: 'signUp',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          href: null,
+          headerShown: false,
         }}
       />
     </Tabs>
