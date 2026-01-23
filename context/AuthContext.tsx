@@ -7,6 +7,7 @@ type AuthProvderTypes = {
 const AuthContext = createContext({isVerified: false, isLoading: false});
 
 export function AuthProvider ({children}: AuthProvderTypes) {
+
     const [isVerified, setIsVerifed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
