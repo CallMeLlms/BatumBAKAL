@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-
+import  useInterFonts from '@/hooks/useInterFonts';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -39,17 +39,18 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const interFontsLoaded = useInterFonts();
+  // const [loaded] = useFonts({
+  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  // });
 
   useEffect(() => {
-    if (loaded) {
+    if (interFontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [interFontsLoaded]);
 
-  if (!loaded) {
+  if (!interFontsLoaded) {
     return null;
   }
 

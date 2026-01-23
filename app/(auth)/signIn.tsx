@@ -176,11 +176,13 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: MAIN_COLORS.white,
         marginBottom: 8,
+        fontFamily: 'Inter_700Bold'
     },
     subtitle: {
         fontSize: FONT_SIZES.large,
         color: MAIN_COLORS.mediumGrey,
         fontWeight: '500',
+        fontFamily: 'Inter_500Medium'
     },
     inputGroup: {
         marginBottom: 24,
@@ -190,6 +192,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: MAIN_COLORS.white,
         marginBottom: 10,
+        fontFamily: 'Inter_600SemiBold'
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -204,11 +207,13 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     input: {
+        width: 0,
         flex: 1,
-        paddingVertical: 14,
+        paddingVertical: 12,
         fontSize: 16,
         color: MAIN_COLORS.white,
         fontWeight: '500',
+        fontFamily: 'Inter_500Medium'
     },
     inputError: {
         borderColor: MAIN_COLORS.secondary,
@@ -221,6 +226,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 8,
         fontWeight: '500',
+        fontFamily: 'Inter_500Medium'
     },
     primaryButton: {
         backgroundColor: MAIN_COLORS.primary,
@@ -234,6 +240,7 @@ const styles = StyleSheet.create({
         color: MAIN_COLORS.black,
         fontSize: FONT_SIZES.large,
         fontWeight: '700',
+        fontFamily: 'Inter_700Bold'
     },
     footer: {
         flexDirection: 'row',
@@ -243,10 +250,12 @@ const styles = StyleSheet.create({
     footerText: {
         color: MAIN_COLORS.mediumGrey,
         fontSize: 14,
+        fontFamily: 'Inter_400Regular'
     },
     footerLink: {
         color: MAIN_COLORS.primary,
         fontSize: 14,
         fontWeight: '700',
+        fontFamily: 'Inter_700Bold'
     },
 });
