@@ -6,10 +6,12 @@ import { FONT_SIZES } from "@/constants/Fonts";
 import { router } from "expo-router";
 import { signInUser } from "@/api/authService";
 import { MAIN_COLORS } from "@/constants/MainColors";
+import { useAuth } from "@/context/AuthContext";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function SignIn() {
+    const {isVerified, signIn} = useAuth();
     const [showPassword, setShowPassword] = useState(false);
 
     const { handleSubmit, control, formState: { errors } } = useForm({
@@ -22,10 +24,15 @@ export default function SignIn() {
     const onSubmit = async (data: any) => {
         try {
             const response = await signInUser(data.email, data.password);
-            if (!response) {
-                console.log("Sign in failed");
+            if (response.success) {
+                // console.log("Sign in failed");
+                console.log(response);
+                await signIn();
+                router.replace('/(tabs)')
+                
+            } else {
+                Alert.alert("Sign in failed", response.message);
             }
-            router.replace('/(tabs)')
         } catch (error: any) {
             Alert.alert('Sign In Error', 'Invalid email or password');
             console.error(error)

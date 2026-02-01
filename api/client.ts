@@ -1,4 +1,6 @@
 import axios from "axios"
+import { get_jwt_token } from "@/utils/authStorage"
+import { signInUser } from "./authService";
 
 const apiClient = axios.create({
 
@@ -16,5 +18,15 @@ const apiClient = axios.create({
         'Content-Type': 'application/json',
     }
 })
+
+apiClient.interceptors.request.use(
+    async (config) => {
+        const TOKEN = await get_jwt_token();
+        if (TOKEN) {
+            config.headers.Authorization = `Bearer ${TOKEN}`
+        }
+        return config;
+    }
+)
 
 export default apiClient;
