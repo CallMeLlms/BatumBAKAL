@@ -9,7 +9,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import  useInterFonts from '@/hooks/useInterFonts';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-
+import { PortalHost } from '@rn-primitives/portal';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -62,6 +62,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack> */}
+        <PortalHost />
         <RootLayoutNav/>
         <StatusBar style="auto" />
       </ThemeProvider>
