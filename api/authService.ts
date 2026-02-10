@@ -40,3 +40,15 @@ export const signInUser = async(email: string, password: string) => {
         }
     }
 }
+
+
+export const logOutUser = async () => {
+    
+    try {
+        const response = await fetch('/auth/logut', {
+
+        });
+    } catch(error: any) {
+
+    }
+}

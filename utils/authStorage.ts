@@ -10,7 +10,7 @@ export const store_jwt_token = async (value : string): Promise<void>  => {
     }
 }
 
-export const get_jwt_token = async (): Promise<void>  => {
+export const get_jwt_token = async (): Promise<string | null>  => {
     try {
         await SecureStore.getItemAsync(TOKEN_KEY);
     } catch (error) {
