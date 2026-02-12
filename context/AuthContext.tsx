@@ -10,7 +10,8 @@ const AuthContext = createContext({isVerified: false, isLoading: false, signIn: 
 
 export function AuthProvider ({children}: AuthProvderTypes) {
 
-    const [isVerified, setIsVerifed] = useState(false);
+    // Revert back to false. true for only testing logout funciton 4 now
+    const [isVerified, setIsVerifed] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
     const signIn = async () => {

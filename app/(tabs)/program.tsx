@@ -1,14 +1,14 @@
-import {View, Text } from "react-native";
+import {View, Text} from "react-native";
 
-
-export default function Home () {
+export default function Program () { 
     return (
         <>
         <View className="flex-1 justify-center items-center">
             <View className="">
-                <Text className="text-white">Main Screen</Text>
+                <Text className="text-white">Program Screen</Text>
             </View>
         </View>
         </>
     )
 }
+

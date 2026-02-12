@@ -12,9 +12,11 @@ export const store_jwt_token = async (value : string): Promise<void>  => {
 
 export const get_jwt_token = async (): Promise<string | null>  => {
     try {
-        await SecureStore.getItemAsync(TOKEN_KEY);
-    } catch (error) {
-        console.error("Error saving AuthToken", error)
+        const token = await SecureStore.getItemAsync(TOKEN_KEY);
+        return token;
+    } catch (error : any) {
+        console.error("Error retrieving AuthToken", error);
+        return null;
     }
 }
 
