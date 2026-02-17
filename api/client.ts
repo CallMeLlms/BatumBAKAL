@@ -1,5 +1,6 @@
 import axios from "axios"
 import { get_jwt_token, delete_jwt_token } from "@/utils/authStorage"
+import { useAuthStore } from "@/stores/authStore";
 
 const apiClient = axios.create({
 
@@ -34,14 +35,13 @@ const processRefresh = async () => {
     } catch (error) {
         return Promise.reject(error);
     }
-    
+
 }
 
 apiClient.interceptors.response.use (
     async (response) => response,
     async (error) => {
         const originalRequest = error.config
-
 
         if (error.response?.status !== 401) {
             return Promise.reject(error);
@@ -55,7 +55,8 @@ apiClient.interceptors.response.use (
 
         if (isRefreshing) {
             return new Promise((resolve) => {
-                requestQueue.push((token) => {
+                // fix any later
+                requestQueue.push((token : any) => {
                     originalRequest.headers['Authorization'] = 'Bearer ' + token;
                     resolve(apiClient(originalRequest));
                 })
@@ -75,12 +76,10 @@ apiClient.interceptors.response.use (
 
             return apiClient(originalRequest);
         } catch (error) {
-            
-            delete_jwt_token();
-            signOut()
+            useAuthStore.getState().signOut();
             console.log("JWT token session deleted" , error);
-            
         }
+        return Promise.reject(error);
     },
 )
 
