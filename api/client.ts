@@ -1,5 +1,5 @@
 import axios from "axios"
-import { get_jwt_token } from "@/utils/authStorage"
+import { get_jwt_token, delete_jwt_token } from "@/utils/authStorage"
 
 const apiClient = axios.create({
 
@@ -19,25 +19,28 @@ const apiClient = axios.create({
 })
 
 let isRefreshing = false;
-const requestQueue = [];
+let requestQueue : Array<any> = [];
 
 const processRefresh = async () => {
     
     try {
         const refreshToken = await get_jwt_token();
-        const response  = await fetch('/auth/refresh', 
-            {method: 'POST', body: JSON.stringify({refreshToken})}
-        );
-        console.log(response);
-    } catch (error) {
+        const response  = await apiClient.post('/auth/refresh', {refreshToken});
 
+        const newToken = response.data.token;
+    
+        return newToken;
+
+    } catch (error) {
+        return Promise.reject(error);
     }
+    
 }
 
 apiClient.interceptors.response.use (
     async (response) => response,
     async (error) => {
-        const originalRequest = error.status
+        const originalRequest = error.config
 
 
         if (error.response?.status !== 401) {
@@ -50,16 +53,32 @@ apiClient.interceptors.response.use (
 
         originalRequest._retry = true;
 
-        // if (!isRefreshing) {
-        //     isRefreshing = true;
-        // }
-
-        if(isRefreshing) {
-            
+        if (isRefreshing) {
+            return new Promise((resolve) => {
+                requestQueue.push((token) => {
+                    originalRequest.headers['Authorization'] = 'Bearer ' + token;
+                    resolve(apiClient(originalRequest));
+                })
+            })
         }
+
+        isRefreshing = true;
+
         try {
-            
+            const newToken = await processRefresh();
+            originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+
+            isRefreshing = false;
+
+            requestQueue.forEach((callback) => callback(newToken));
+            requestQueue = [];
+
+            return apiClient(originalRequest);
         } catch (error) {
+            
+            delete_jwt_token();
+            signOut()
+            console.log("JWT token session deleted" , error);
             
         }
     },

@@ -1,17 +1,15 @@
 import { createContext, useContext, useState} from "react";
-import { get_jwt_token } from "@/utils/authStorage";
-import { signInUser } from "@/api/authService";
 
 type AuthProvderTypes = {
     children: React.ReactNode
 }
 
-const AuthContext = createContext({isVerified: false, isLoading: false, signIn: () => {}});
+const AuthContext = createContext({isVerified: false, isLoading: false, signIn: () => {},});
 
 export function AuthProvider ({children}: AuthProvderTypes) {
 
     // Revert back to false. true for only testing logout funciton 4 now
-    const [isVerified, setIsVerifed] = useState(true);
+    const [isVerified, setIsVerifed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const signIn = async () => {
