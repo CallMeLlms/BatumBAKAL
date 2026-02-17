@@ -1,6 +1,5 @@
 import axios from "axios"
 import { get_jwt_token } from "@/utils/authStorage"
-import { signInUser } from "./authService";
 
 const apiClient = axios.create({
 
@@ -22,20 +21,44 @@ const apiClient = axios.create({
 let isRefreshing = false;
 const requestQueue = [];
 
+const processRefresh = async () => {
+    
+    try {
+        const refreshToken = await get_jwt_token();
+        const response  = await fetch('/auth/refresh', 
+            {method: 'POST', body: JSON.stringify({refreshToken})}
+        );
+        console.log(response);
+    } catch (error) {
+
+    }
+}
+
 apiClient.interceptors.response.use (
     async (response) => response,
     async (error) => {
-        if (error.response?.status === 401) {
-            if (!isRefreshing) {
-                isRefreshing = true;
-            }
+        const originalRequest = error.status
+
+
+        if (error.response?.status !== 401) {
+            return Promise.reject(error);
         }
 
+        if (originalRequest._retry) {
+            return Promise.reject(error);
+        }
+
+        originalRequest._retry = true;
+
+        // if (!isRefreshing) {
+        //     isRefreshing = true;
+        // }
+
+        if(isRefreshing) {
+            
+        }
         try {
-            const refreshToken = await get_jwt_token();
-            const res  = await fetch('/auth/refresh', 
-                {method: 'POST', body: JSON.stringify({refreshToken})}
-            );
+            
         } catch (error) {
             
         }
