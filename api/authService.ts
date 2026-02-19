@@ -1,5 +1,5 @@
 import apiClient from "./client";
-import { store_jwt_token } from "@/utils/authStorage";
+import { store_jwt_token, store_refresh_tokens } from "@/utils/authStorage";
 
 export const signUpUser = async (email: string, password: string, username: string) => {
     try {
@@ -11,7 +11,7 @@ export const signUpUser = async (email: string, password: string, username: stri
         return response.data
     } catch(error : any) {
         if (error.response) {
-            throw {status: error.reponse.status, message: error.response.data?.error || "Request failed" };
+            throw {status: error.response.status, message: error.response.data?.error || "Request failed" };
         } else {
             throw {message: "Network Error"};
         }
@@ -27,14 +27,15 @@ export const signInUser = async(email: string, password: string) => {
         });
 
         if (response.data.success) {
-            console.log(response.data.success);
-            store_jwt_token(response.data.token)
+            await console.log(response.data.success);
+            await store_refresh_tokens(response.data.refreshToken);
+            await store_jwt_token(response.data.shortLivedJWT);
         }
         
         return response.data;
     } catch (error: any) {
         if (error.response) {
-            throw {status: error.reponse.status, message: error.response.data?.error || "Request failed" };
+            throw {status: error.response.status, message: error.response.data?.error || "Request failed" };
         } else {
             throw {message: "Network Error"};
         }
@@ -45,9 +46,10 @@ export const signInUser = async(email: string, password: string) => {
 export const logOutUser = async () => {
     
     try {
-        const response = await fetch('/auth/logut', {
+        const response = await fetch('/auth/logout', {
 
         });
+
     } catch(error: any) {
 
     }

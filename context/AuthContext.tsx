@@ -5,7 +5,7 @@ type AuthProvderTypes = {
     children: React.ReactNode
 }
 
-const AuthContext = createContext({isVerified: false, isLoading: false, signIn: () => {},});
+const AuthContext = createContext(useAuthStore());
 
 export function AuthProvider ({children}: AuthProvderTypes) {
 
@@ -18,7 +18,7 @@ export function AuthProvider ({children}: AuthProvderTypes) {
     // }
 
     return (
-        <AuthContext.Provider value={{useAuthStore()}}>
+        <AuthContext.Provider value={useAuthStore()}>
             {children}
         </AuthContext.Provider>
     )

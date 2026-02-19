@@ -1,5 +1,5 @@
 import axios from "axios"
-import { get_jwt_token, delete_jwt_token } from "@/utils/authStorage"
+import { get_jwt_token, get_refresh_tokens, store_jwt_token } from "@/utils/authStorage"
 import { useAuthStore } from "@/stores/authStore";
 
 const apiClient = axios.create({
@@ -25,11 +25,13 @@ let requestQueue : Array<any> = [];
 const processRefresh = async () => {
     
     try {
-        const refreshToken = await get_jwt_token();
+        const refreshToken = await get_refresh_tokens();
         const response  = await apiClient.post('/auth/refresh', {refreshToken});
 
         const newToken = response.data.token;
-    
+
+        await store_jwt_token(newToken);
+
         return newToken;
 
     } catch (error) {
