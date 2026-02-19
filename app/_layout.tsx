@@ -8,15 +8,15 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import  useInterFonts from '@/hooks/useInterFonts';
-import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { PortalHost } from '@rn-primitives/portal';
+import { useAuthStore } from "@/stores/authStore";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const router = useRouter();
   const segments = useSegments();
-  const { isVerified, isLoading } = useAuth();
+  const { isVerified, isLoading } = useAuthStore();
   useEffect(() => {
     if (isLoading) return;
 
@@ -55,17 +55,15 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 
-        {/* <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack> */}
-        <PortalHost />
-        <RootLayoutNav/>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </AuthProvider>
+      {/* <Stack>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack> */}
+      <PortalHost />
+      <RootLayoutNav/>
+      <StatusBar style="auto" />
+    </ThemeProvider>
   );
 }
