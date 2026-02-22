@@ -4,16 +4,15 @@ import { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { FONT_SIZES } from "@/constants/Fonts";
 import { router } from "expo-router";
-import { signInUser } from "@/api/authService";
+import { signInUser } from "@/api/services/authService";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores/authStore";
 
- 
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function SignIn() {
-    const {isVerified, signIn} = useAuth();
+    const {isVerified, signIn} = useAuthStore();
     const [showPassword, setShowPassword] = useState(false);
 
     const { handleSubmit, control, formState: { errors } } = useForm({

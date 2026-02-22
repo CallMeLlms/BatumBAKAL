@@ -1,24 +1,7 @@
-import axios from "axios"
-import { get_jwt_token, get_refresh_tokens, store_jwt_token } from "@/utils/authStorage"
+import apiClient from "../axiosInstance";
+import { store_jwt_token, get_refresh_tokens, get_jwt_token} from "@/utils/auth/authStorage";
+
 import { useAuthStore } from "@/stores/authStore";
-
-const apiClient = axios.create({
-
-    // BASE
-    // baseURL: '',
-    
-    // Localhost:3000
-    // baseURL: 'http://localhost:3000',
-
-    // Physical Device IP
-    baseURL: 'http://192.168.100.2:3000',
-    
-    timeout: 30000,
-    headers: {
-        'Content-Type': 'application/json',
-    }
-})
-
 let isRefreshing = false;
 let requestQueue : Array<any> = [];
 
@@ -95,6 +78,3 @@ apiClient.interceptors.request.use(
         return config;
     } 
 )
-
-
-export default apiClient;

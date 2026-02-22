@@ -1,5 +1,6 @@
-import apiClient from "./client";
-import { store_jwt_token, store_refresh_tokens } from "@/utils/authStorage";
+import axios from "axios";
+import apiClient from "../axiosInstance";
+import { store_jwt_token, store_refresh_tokens } from "@/utils/auth/authStorage";
 
 export const signUpUser = async (email: string, password: string, username: string) => {
     try {
@@ -42,13 +43,12 @@ export const signInUser = async(email: string, password: string) => {
     }
 }
 
-
+// add this l4ter
 export const logOutUser = async () => {
     
     try {
-        const response = await fetch('/auth/logout', {
+        const response = await apiClient.delete('/auth/logout', {});
 
-        });
 
     } catch(error: any) {
 

@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import { delete_jwt_token } from "@/utils/authStorage";
+import { delete_jwt_token } from "@/utils/auth/authStorage";
 
 interface AuthState {
     isVerified: boolean;

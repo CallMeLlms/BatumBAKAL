@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { FONT_SIZES } from "@/constants/Fonts";
 import { router } from "expo-router";
-import { signUpUser } from "@/api/authService";
+import { signUpUser } from "@/api/services/authService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
