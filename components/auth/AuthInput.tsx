@@ -1,10 +1,8 @@
 import { View, Text, TextInput, KeyboardType, TouchableOpacity } from "react-native";
-import { FieldErrors, Control} from "react-hook-form";
+import { FieldErrors, Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { MAIN_COLORS } from "@/constants/MainColors";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-
 
 interface AuthInputFieldTypes {
     control: Control<any>;
@@ -20,64 +18,83 @@ interface AuthInputFieldTypes {
 }
 
 export const AuthInputField = ({
-    control, 
-    errors, 
-    rules, 
-    name, 
-    label, 
-    placeholder, 
-    icon, 
-    secureTextEntry = false, 
-    keyboardType = "default", 
+    control,
+    errors,
+    rules,
+    name,
+    label,
+    placeholder,
+    icon,
+    secureTextEntry = false,
+    keyboardType = "default",
     autoCapitalize = "none",
-    }: AuthInputFieldTypes) => {
-
-    const fieldError = errors.root;
-    const [isPasswordVisible, setIsPassowordVisible] = useState(false);
+}: AuthInputFieldTypes) => {
+    const fieldError = errors[name];
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     return (
-        <View className="mb-[24px]">
-            <Text>{label}</Text>
+        <View className="mb-5">
+            {/* Label */}
+            <Text className="text-neutral-400 text-xs font-medium tracking-widest uppercase mb-2 ml-1">
+                {label}
+            </Text>
+
             <Controller
                 control={control}
                 name={name}
                 rules={rules}
                 render={({ field: { onChange, value, onBlur } }) => (
                     <View>
-                        <View className="bg-red-500">
-                            <Feather 
-                                name={icon as any} 
-                                size={18} 
-                                color="#f2f2f2" 
-                                style={{marginRight: 12}} 
-                            />
+                        {/* Input container */}
+                        <View
+                            className={`flex-row items-center bg-neutral-900 border rounded-xl px-4 h-14 ${
+                                fieldError ? "border-red-500/60" : "border-neutral-800"
+                            }`}
+                        >
+                            {icon ? (
+                                <Feather
+                                    name={icon as any}
+                                    size={18}
+                                    color="#525252"
+                                    style={{ marginRight: 12 }}
+                                />
+                            ) : null}
+
                             <TextInput
                                 placeholder={placeholder}
-                                placeholderTextColor="#808080"
+                                placeholderTextColor="#404040"
                                 onBlur={onBlur}
-                                className="flex-1 py-3 text-base text-white font-medium"
+                                className="flex-1 text-[15px] text-white font-normal"
                                 value={value}
                                 onChangeText={onChange}
                                 keyboardType={keyboardType}
                                 autoCapitalize={autoCapitalize}
-                                secureTextEntry={secureTextEntry}
+                                secureTextEntry={secureTextEntry && !isPasswordVisible}
                             />
+
                             {secureTextEntry && (
-                                <TouchableOpacity onPress={() => setIsPassowordVisible(!isPasswordVisible)}>
-                                     <Feather
+                                <TouchableOpacity
+                                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                                    className="p-1"
+                                >
+                                    <Feather
                                         name={isPasswordVisible ? "eye" : "eye-off"}
                                         size={18}
-                                        color={MAIN_COLORS.mediumGrey}
+                                        color="#525252"
                                     />
                                 </TouchableOpacity>
                             )}
                         </View>
+
+                        {/* Error message */}
                         {fieldError && (
-                           <Text>{fieldError.message}</Text>
+                            <Text className="text-red-500 text-xs mt-1.5 ml-1">
+                                {fieldError.message as string}
+                            </Text>
                         )}
                     </View>
                 )}
             />
         </View>
     );
-}
+};

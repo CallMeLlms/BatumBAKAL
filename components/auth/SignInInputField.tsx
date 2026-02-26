@@ -1,76 +1,119 @@
-import { TouchableOpacity, View, Text, Alert } from "react-native"
+import { TouchableOpacity, View, Text, Alert, ActivityIndicator } from "react-native";
 import { AuthInputField } from "./AuthInput";
-import { useForm } from "react-hook-form"
+import AuthHeader from "./AuthHeader";
+import { useForm } from "react-hook-form";
 import { authValidationRules } from "@/utils/auth/authUtils";
-import { signInUser, signUpUser } from "@/api/services/authService";
+import { signInUser } from "@/api/services/authService";
 import { useAuthStore } from "@/stores/authStore";
 import { router } from "expo-router";
+import { useState } from "react";
 
-export default function SignInInputField () {
+export default function SignInInputField() {
     const { signIn } = useAuthStore();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { handleSubmit, control, formState: { errors } } = useForm({
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
-            email: '',
-            password: ''
-        }
+            email: "",
+            password: "",
+        },
     });
 
-
-    const onSubmit = async (data : any) => {
+    const onSubmit = async (data: any) => {
+        setIsLoading(true);
         try {
             const response = await signInUser(data.email, data.password);
-
             if (response.success) {
                 await signIn();
-                Alert.alert("SignIn successfull")
             } else {
-                Alert.alert(response.message);
+                Alert.alert("Error", response.message);
             }
-        } catch (error : any) {
-            Alert.alert("Incorrect Email or Password");
+        } catch (error: any) {
+            Alert.alert("Error", error.message || "Incorrect email or password");
+        } finally {
+            setIsLoading(false);
         }
-    }
-    
+    };
+
     return (
-        <View className="w-[300px] bg-red-300">
-            {/* Email */}
-            
-            <AuthInputField
-                control={control}
-                errors={errors}
-                rules={authValidationRules.email}
-                name="email"
-                label="Email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                secureTextEntry = {false}
-                icon=""
-                placeholder="Your@email.com"
-            />
+        <View className="rounded-2xl border-2 border-neutral-800 p-4">
+            {/* Header */}
+            {/* <AuthHeader title="Sign In" subtitle="Welcome back, let's get to work" /> */}
 
-            {/* Password */}
-            <AuthInputField
-                control={control}
-                errors={errors}
-                rules={authValidationRules.password}
-                name="password"
-                label="Password"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                secureTextEntry = {false}
-                icon=""
-                placeholder="Your Password"
-            />
+            {/* Form fields */}
+            <View className="mb-4 mt-2">
+                <AuthInputField
+                    control={control}
+                    errors={errors}
+                    rules={authValidationRules.email}
+                    name="email"
+                    label="Email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    secureTextEntry={false}
+                    icon="mail"
+                    placeholder="your@email.com"
+                />
 
-            <View>
-                <TouchableOpacity onPress={() => handleSubmit(onSubmit)}>
-                    <Text>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/(auth)/signUp")}>
-                    <Text>Sign IN</Text>
+                <AuthInputField
+                    control={control}
+                    errors={errors}
+                    rules={authValidationRules.password}
+                    name="password"
+                    label="Password"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    icon="lock"
+                    placeholder="Enter your password"
+                />
+            </View>
+
+            {/* Forgot password */}
+            <TouchableOpacity className="self-end mb-8">
+                <Text className="text-neutral-500 text-xs tracking-wide">
+                    Forgot password?
+                </Text>
+            </TouchableOpacity>
+
+            {/* Sign In button */}
+            <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                disabled={isLoading}
+                className="bg-white h-14 rounded-xl items-center justify-center mb-6"
+                activeOpacity={0.8}
+            >
+                {isLoading ? (
+                    <ActivityIndicator color="#000" />
+                ) : (
+                    <Text className="text-black text-base font-semibold tracking-wide">
+                        SIGN IN
+                    </Text>
+                )}
+            </TouchableOpacity>
+
+            {/* Divider */}
+            <View className="flex-row items-center mb-8">
+                <View className="flex-1 h-[1px] bg-neutral-800" />
+                <Text className="text-neutral-600 text-xs mx-4 tracking-wider">OR</Text>
+                <View className="flex-1 h-[1px] bg-neutral-800" />
+            </View>
+
+            {/* Switch to Sign Up */}
+            <View className="flex-row justify-center">
+                <Text className="text-neutral-500 text-sm">
+                    Don't have an account?{" "}
+                </Text>
+                <TouchableOpacity onPress={() => router.replace("/(auth)/signUp")}>
+                    <Text className="text-white text-sm font-semibold">
+                        Sign Up
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
-    )
+    );
 }

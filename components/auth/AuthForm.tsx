@@ -1,46 +1,21 @@
-import { KeyboardAvoidingView, ScrollView, View, Text} from "react-native";
-import AuthHeader from "./AuthHeader";
+import { KeyboardAvoidingView, ScrollView, View, Platform } from "react-native";
+import React from "react";
 
-import React, { ReactNode, useState } from "react";
-
-
-interface AuthFormState {
-    children: React.ReactNode
-}
-
-
-export default function AuthForm({children} : {children: React.ReactNode}) {
-
-    const [authScreenView, setAuthScreenView] = useState(false);
-    return ( 
-        <>
-            <KeyboardAvoidingView className="flex-1">
-                <ScrollView
-                    contentContainerClassName="grow"
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <View className={`flex-1 justify-center bg-red-200`}>
-
-                        <View className="bg-red-800 justify-center items-center">
-                            <AuthHeader 
-                                headerContainerClassName="test"
-                            />
-
-                            {/* {authScreenView ? 
-                            (<SignInInputField
-                            toggleAuthScreen={setAuthScreenView}
-                            authScreen={authScreenView}
-                            />) : 
-                            (<SignUpInputField
-                            toggleAuthScreen={setAuthScreenView}
-                            authScreen={authScreenView}
-                            />)}    */}
-                            {children}
-        
-                        </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView> 
-        </>
-    )
+export default function AuthForm({ children }: { children: React.ReactNode }) {
+    return (
+        <KeyboardAvoidingView
+            className="flex-1"
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <ScrollView
+                contentContainerClassName="grow"
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+            >
+                <View className="flex-1 justify-center px-8 py-16">
+                    {children}
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    );
 }
