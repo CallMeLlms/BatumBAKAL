@@ -28,7 +28,7 @@ export const signInUser = async(email: string, password: string) => {
         });
 
         if (response.data.success) {
-            await console.log(response.data.success);
+            console.log(response.data.success);
             await store_refresh_tokens(response.data.refreshToken);
             await store_jwt_token(response.data.shortLivedJWT);
         }

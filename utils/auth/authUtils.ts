@@ -31,8 +31,8 @@ export const authValidationRules = {
     },
     confirmPassword: {
         required: 'Please confirm your password',
-        validate: (value: string, formValues: any) => 
-        value === formValues.password || 'Passwords do not match'
+        // validate: (value: string, formValues: any) => 
+        // value === formValues.password || 'Passwords do not match'
     }
 }
 
