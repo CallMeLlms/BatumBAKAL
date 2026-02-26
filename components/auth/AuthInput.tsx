@@ -13,23 +13,23 @@ interface AuthInputFieldTypes {
     name: string;
     label: string;
     placeholder: string;
-    icon: undefined;
+    icon: string;
     secureTextEntry?: boolean;
     keyboardType?: KeyboardType;
     autoCapitalize?: "none" | "sentences" | "words" | "characters";
 }
 
 export const AuthInputField = ({
-     control, 
-     errors, 
-     rules, 
-     name, 
-     label, 
-     placeholder, 
-     icon, 
-     secureTextEntry = false, 
-     keyboardType = "default", 
-     autoCapitalize = "none",
+    control, 
+    errors, 
+    rules, 
+    name, 
+    label, 
+    placeholder, 
+    icon, 
+    secureTextEntry = false, 
+    keyboardType = "default", 
+    autoCapitalize = "none",
     }: AuthInputFieldTypes) => {
 
     const fieldError = errors[name];
@@ -37,20 +37,25 @@ export const AuthInputField = ({
 
     return (
         <View className="mb-[24px]">
-            <Text style={styles.label}>{label}</Text>
+            <Text>{label}</Text>
             <Controller
                 control={control}
                 name={name}
                 rules={rules}
                 render={({ field: { onChange, value, onBlur } }) => (
                     <View>
-                        <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
-                            <Feather name={icon} size={18} color={MAIN_COLORS.mediumGrey} style={styles.inputIcon} />
+                        <View className={`flex-row, items-center bg-black border-2 rounded-xl px-4 ${errors ? 'border-red-500' : 'border-gray-500'}`}>
+                            <Feather 
+                                name={icon as any} 
+                                size={18} 
+                                color="#f2f2f2" 
+                                style={{marginRight: 12}} 
+                            />
                             <TextInput
                                 placeholder={placeholder}
-                                placeholderTextColor={MAIN_COLORS.mediumGrey}
+                                placeholderTextColor="#808080"
                                 onBlur={onBlur}
-                                style={styles.input}
+                                className="flex-1 py-3 text-base text-white font-medium"
                                 value={value}
                                 onChangeText={onChange}
                                 keyboardType={keyboardType}
