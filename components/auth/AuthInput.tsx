@@ -32,7 +32,7 @@ export const AuthInputField = ({
     autoCapitalize = "none",
     }: AuthInputFieldTypes) => {
 
-    const fieldError = errors[name];
+    const fieldError = errors.root;
     const [isPasswordVisible, setIsPassowordVisible] = useState(false);
 
     return (
@@ -44,7 +44,7 @@ export const AuthInputField = ({
                 rules={rules}
                 render={({ field: { onChange, value, onBlur } }) => (
                     <View>
-                        <View className={`flex-row, items-center bg-black border-2 rounded-xl px-4 ${errors ? 'border-red-500' : 'border-gray-500'}`}>
+                        <View className="bg-red-500">
                             <Feather 
                                 name={icon as any} 
                                 size={18} 
@@ -73,7 +73,7 @@ export const AuthInputField = ({
                             )}
                         </View>
                         {fieldError && (
-                            <Text> {fieldError.message} </Text>
+                           <Text>{fieldError.message}</Text>
                         )}
                     </View>
                 )}

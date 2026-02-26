@@ -1,35 +1,46 @@
-import { KeyboardAvoidingView, ScrollView, View} from "react-native";
+import { KeyboardAvoidingView, ScrollView, View, Text} from "react-native";
 import AuthHeader from "./AuthHeader";
 
-import { SignInInputField, SignUpInputField } from "./AuthFields";
+import React, { ReactNode, useState } from "react";
 
 
 interface AuthFormState {
-    mode: string;
+    children: React.ReactNode
 }
 
 
-export default function AuthForm({mode} : AuthFormState) {
+export default function AuthForm({children} : {children: React.ReactNode}) {
 
-    return (
+    const [authScreenView, setAuthScreenView] = useState(false);
+    return ( 
         <>
             <KeyboardAvoidingView className="flex-1">
                 <ScrollView
                     contentContainerClassName="grow"
                     keyboardShouldPersistTaps="handled"
                 >
-                    <View className={`flex-1 justify-center items-center px-40 py-20 bg-neutral-300`}>
-                        <View className={`flex-1 w-[90%] max-w-[400px] rounded-[12px] p-32`}>
+                    <View className={`flex-1 justify-center bg-red-200`}>
+
+                        <View className="bg-red-800 justify-center items-center">
                             <AuthHeader 
                                 headerContainerClassName="test"
                             />
 
-                                {mode === "signIn" ? (<SignInInputField/>) : (<SignUpInputField/>)}                  
-
+                            {/* {authScreenView ? 
+                            (<SignInInputField
+                            toggleAuthScreen={setAuthScreenView}
+                            authScreen={authScreenView}
+                            />) : 
+                            (<SignUpInputField
+                            toggleAuthScreen={setAuthScreenView}
+                            authScreen={authScreenView}
+                            />)}    */}
+                            {children}
+        
                         </View>
                     </View>
                 </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> 
         </>
     )
 }

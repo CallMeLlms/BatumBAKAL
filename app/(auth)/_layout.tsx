@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 import { HapticTab } from '@/components/HapticTab';
@@ -11,37 +11,24 @@ export default function AuthLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {
-            display: 'none'
-          },
-        }),
-      }}>
-      <Tabs.Screen
+    <Stack
+      screenOptions={{headerShown: false}}>
+
+      <Stack.Screen
         name="signIn"
         options={{
           title: 'signIn',
-          href: null,
+          // href: null,
         }}
       />
-      <Tabs.Screen
+      <Stack.Screen
         name="signUp"
         options={{
           title: 'signUp',
-          href: null,
+          // href: null,
           headerShown: false,
         }}
       />
-    </Tabs>
+    </Stack>
   );
 }
