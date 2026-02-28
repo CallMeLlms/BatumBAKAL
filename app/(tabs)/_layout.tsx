@@ -21,9 +21,15 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="settings"
+                name="profile"
                 options={{
-                    title: "Settings"
+                    title: "Profile"
+                }}
+            />
+            <Tabs.Screen
+                name="progress"
+                options={{
+                    title: "Progress"
                 }}
             />
         </Tabs>
