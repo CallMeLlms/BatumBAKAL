@@ -55,12 +55,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-
-      {/* <Stack>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack> */}
+    <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
       <PortalHost />
       <RootLayoutNav/>
       <StatusBar style="auto" />

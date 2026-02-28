@@ -25,7 +25,7 @@ export default function SignUpInputField() {
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         try {
-            const response = await signUpUser(data.username, data.email, data.password);
+            const response = await signUpUser(data.email, data.password, data.username);
             if (response.success) {
                 Alert.alert("Success", "Account created successfully", [
                     { text: "Sign In", onPress: () => router.replace("/(auth)/signIn") },
@@ -41,7 +41,7 @@ export default function SignUpInputField() {
     };
 
     return (
-        <View className="rounded-2xl border-2 border-neutral-800 p-4">
+        <View className="rounded-2xl border-2 border-neutral-800 p-4 bg-black">
             {/* Header */}
             {/* <AuthHeader title="Create Account" subtitle="Start your fitness journey today" /> */}
 

@@ -1,6 +1,5 @@
 import { TouchableOpacity, View, Text, Alert, ActivityIndicator } from "react-native";
 import { AuthInputField } from "./AuthInput";
-import AuthHeader from "./AuthHeader";
 import { useForm } from "react-hook-form";
 import { authValidationRules } from "@/utils/auth/authUtils";
 import { signInUser } from "@/api/services/authService";
@@ -30,7 +29,7 @@ export default function SignInInputField() {
             if (response.success) {
                 await signIn();
             } else {
-                Alert.alert("Error", response.message);
+                Alert.alert(response.message);
             }
         } catch (error: any) {
             Alert.alert("Error", error.message || "Incorrect email or password");
@@ -40,12 +39,12 @@ export default function SignInInputField() {
     };
 
     return (
-        <View className="rounded-2xl border-2 border-neutral-800 p-4">
+        <View className="rounded-2xl border-2 border-neutral-800 p-4 bg-black">
             {/* Header */}
             {/* <AuthHeader title="Sign In" subtitle="Welcome back, let's get to work" /> */}
 
             {/* Form fields */}
-            <View className="mb-4 mt-2">
+            <View className="mb-2 mt-2">
                 <AuthInputField
                     control={control}
                     errors={errors}
@@ -74,7 +73,7 @@ export default function SignInInputField() {
             </View>
 
             {/* Forgot password */}
-            <TouchableOpacity className="self-end mb-8">
+            <TouchableOpacity className="self-end mb-4">
                 <Text className="text-neutral-500 text-xs tracking-wide">
                     Forgot password?
                 </Text>

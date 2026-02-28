@@ -20,6 +20,12 @@ export default function TabLayout() {
                     title: "Program"
                 }}
             />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: "Settings"
+                }}
+            />
         </Tabs>
     )
 }
