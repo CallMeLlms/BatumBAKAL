@@ -12,6 +12,5 @@
     "**/*.ts",
     "**/*.tsx",
     "nativewind-env.d.ts",
-    "declarations.d.ts"
   ]
 }

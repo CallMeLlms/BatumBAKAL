@@ -1,14 +1,11 @@
 import {View, Text } from "react-native";
-
+import HomeLayout from "@/components/home-components/HomeLayout";
+import HomeScreen from "@/components/home-components/HomeScreen";
 
 export default function Home () {
     return (
-        <>
-        <View className="flex-1 justify-center items-center">
-            <View className="">
-                <Text className="text-white">Main Screen</Text>
-            </View>
-        </View>
-        </>
+        <HomeLayout>
+            <HomeScreen/>
+        </HomeLayout>
     )
 }

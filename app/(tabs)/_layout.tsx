@@ -14,22 +14,33 @@ export default function TabLayout() {
                     title: "Home",
                 }}
             />
+
+            <Tabs.Screen
+                name="log"
+                options={{
+                    title: "Log"
+                }}
+            />
+            
             <Tabs.Screen
                 name="program"
                 options={{
                     title: "Program"
                 }}
             />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: "Profile"
-                }}
-            />
+        
             <Tabs.Screen
                 name="progress"
                 options={{
                     title: "Progress"
+                }}
+            />
+
+
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile"
                 }}
             />
         </Tabs>
