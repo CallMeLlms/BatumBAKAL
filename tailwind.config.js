@@ -53,7 +53,8 @@ module.exports = {
         bold: ["Inter_700Bold"],
       },
       spacing: {
-        screen: "32px",
+        verticalSpacing: "42px",
+        horizontalSpacing: "32px"
       }
     },
   },

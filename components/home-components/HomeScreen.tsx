@@ -2,7 +2,7 @@ import {View, Text} from "react-native";
 import HomeHeader from "./HomeHeader";
 export default function HomeScreen () {
     return (
-        <View className="mt-screen mx-screen">
+        <View className="mt-verticalSpacing mx-horizontalSpacing">
             <HomeHeader
             username="MR BATUM"
             />
