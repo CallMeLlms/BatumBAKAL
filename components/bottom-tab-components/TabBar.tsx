@@ -7,16 +7,17 @@ import { View, Platform } from 'react-native';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const { colors } = useTheme();
     const { buildHref } = useLinkBuilder();
 
 return (
-    <View className="flex-row p-6 bg-zinc-200 rounded-tl-[14px] rounded-tr-[14px] ">
+    <View className="flex-row pb-2 pt-2 bg-zinc-200 rounded-xl m-2">
     {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label =
+        const label : any =
         options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
@@ -57,8 +58,9 @@ return (
             className="flex-1 justify-center items-center"
         >
             {/*  color: isFocused ? colors.primary : colors.text */}
-            <Text style={{ color: "black" }}>
-                    {label}
+            <FontAwesome5 name="dumbbell" size={16} color="black" />
+            <Text style={{ color: "black", fontSize: 10 }}>
+                    {label} 
             </Text>
             </PlatformPressable>
         );
