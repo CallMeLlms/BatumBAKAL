@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import "../global.css"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -8,8 +9,11 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import  useInterFonts from '@/hooks/useInterFonts';
-import { PortalHost } from '@rn-primitives/portal';
+// import { PortalHost } from '@rn-primitives/portal';
 import { useAuthStore } from "@/stores/authStore";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -55,10 +59,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-      <PortalHost />
-      <RootLayoutNav/>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <BottomSheetModalProvider>
+        <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
+          <RootLayoutNav/>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
