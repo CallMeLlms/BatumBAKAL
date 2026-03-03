@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity} from "react-native";
 import { Card } from "../ui/card";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Separator } from "../ui/separator";
+
 export default function ProgramCreation () {
     return (
         <Card className="py-2 border-transparent bg-transparent">

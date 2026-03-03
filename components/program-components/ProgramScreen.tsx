@@ -7,7 +7,9 @@ export default function ProgramScreen () {
     
         <View className="mt-verticalSpacing mx-horizontalSpacing">
             <ProgramCreation/>
+
             
+
             <Separator/>
         </View>
     )
