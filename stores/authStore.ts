@@ -8,6 +8,10 @@ interface AuthState {
     signOut: () => void;
 }
 
+interface GlobalBottomSheet {
+
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
     isVerified: false,
     isLoading: false,
@@ -17,3 +21,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ isVerified: false});
     },
 }))
+
+export const globalBottomSheet = create(() => ({
+
+}));

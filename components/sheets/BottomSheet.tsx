@@ -1,9 +1,15 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetView, BottomSheetModal } from '@gorhom/bottom-sheet';
 
-export default function FormSheet () {
+interface FormSheetTypes {
+  
+  snapPoints:  Array<string | number>
+  refProp: any
+  children: React.ReactNode
+}
+
+export default function BottomFormSheet ({snapPoints, refProp, children} : FormSheetTypes) {
   // ref
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -12,19 +18,14 @@ export default function FormSheet () {
     console.log('handleSheetChanges', index);
   }, []);
 
-  
-  bottomSheetRef.current?.present()
-  // renders
   return (
-    // <View style={styles.container}>
       <BottomSheetModal
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        index={0}
-        snapPoints={['90%']}
+        ref={refProp}
+        snapPoints={snapPoints}
       >
+
         <BottomSheetView style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
+          {children}
         </BottomSheetView>
       </BottomSheetModal>
   );

@@ -2,23 +2,28 @@
 import {View, Text} from "react-native";
 import ProgramCreation from "./ProgramCreation";
 import { Separator } from "../ui/separator";
-import { useState } from "react";
-import FormSheet from "../sheets/FormSheet";
+import { useEffect, useState, useRef } from "react";
+import BottomFormSheet from "../sheets/BottomSheet";
+import BottomSheet, { BottomSheetView, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 export default function ProgramScreen () {
 
-    const [showBottomPanel, setShowBotomPanel] = useState(false);
-
+    const sheetRef = useRef<BottomSheetModal>(null)
+    sheetRef.current?.present();
+    
     return (
         <View className="mt-verticalSpacing mx-horizontalSpacing">
             {/* <Test/> */}
             <ProgramCreation
-                showPanelState={showBottomPanel}
-                showPanelonChange={setShowBotomPanel}
+                // showPanelState={showBottomPanel}
+                // showPanelonChange={() => }
             />
             
             <Separator/>
-            <FormSheet/>
+
+            <BottomFormSheet snapPoints={["90%"]} refProp={sheetRef}>
+                <Text>Test</Text>
+            </BottomFormSheet>
         </View>
     )
 }
