@@ -1,16 +1,12 @@
 
-import {View, Text} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import ProgramCreation from "./ProgramCreation";
 import { Separator } from "../ui/separator";
-import { useEffect, useState, useRef } from "react";
-import BottomFormSheet from "../sheets/BottomSheet";
-import BottomSheet, { BottomSheetView, BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useBottomSheetStore } from '@/stores/bottomSheetStore';
 
 export default function ProgramScreen () {
+    const { openSheet } = useBottomSheetStore();
 
-    const sheetRef = useRef<BottomSheetModal>(null)
-    sheetRef.current?.present();
-    
     return (
         <View className="mt-verticalSpacing mx-horizontalSpacing">
             {/* <Test/> */}
@@ -19,11 +15,14 @@ export default function ProgramScreen () {
                 // showPanelonChange={() => }
             />
             
-            <Separator/>
+                <TouchableOpacity
+                    className="text-white"
+                    onPress={() => openSheet(<Text>BURAT</Text>, ['90%'])} 
+                >
+                    <Text>God Speed</Text>
+                </TouchableOpacity> 
 
-            <BottomFormSheet snapPoints={["90%"]} refProp={sheetRef}>
-                <Text>Test</Text>
-            </BottomFormSheet>
+            <Separator/>
         </View>
     )
 }

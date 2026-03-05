@@ -13,6 +13,7 @@ import  useInterFonts from '@/hooks/useInterFonts';
 import { useAuthStore } from "@/stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import GlobalBottomSheet from '@/components/global/BottomSheet';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -61,10 +62,11 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <BottomSheetModalProvider>
-        <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-          <RootLayoutNav/>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+          <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
+            <RootLayoutNav/>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+          <GlobalBottomSheet/>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
