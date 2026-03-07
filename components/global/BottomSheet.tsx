@@ -1,33 +1,35 @@
 import React, { useEffect, useRef } from 'react';
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useBottomSheetStore } from '@/stores/bottomSheetStore';
-import { StyleSheet } from 'react-native';
 
 export default function GlobalBottomSheet() {
   const ref = useRef<BottomSheetModal>(null);
-  const { setBottomSheetRef, content, snapPoints } = useBottomSheetStore();
 
-  // Register the ref into the store once on mount
+  const { content, snapPoints, isOpen} = useBottomSheetStore();
+  
   useEffect(() => {
-    setBottomSheetRef(ref);
-  }, []);
+    if (isOpen) {
+      ref.current?.present();
+    } else {
+      ref.current?.dismiss();
+    }
+  }, [isOpen]);
 
   return (
     <BottomSheetModal
       ref={ref}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
+      onDismiss={() => {
+        useBottomSheetStore.setState({
+          isOpen: false,
+          content: null
+        })
+      }}
     >
-      <BottomSheetView style={styles.container}>
+      <BottomSheetView className="flex-1 p-6">
         {content}
       </BottomSheetView>
     </BottomSheetModal>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-  },
-});

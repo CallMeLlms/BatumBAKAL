@@ -9,18 +9,10 @@ export default function ProgramScreen () {
 
     return (
         <View className="mt-verticalSpacing mx-horizontalSpacing">
-            {/* <Test/> */}
             <ProgramCreation
-                // showPanelState={showBottomPanel}
-                // showPanelonChange={() => }
+                onPress={() => openSheet(<Text>Tell me how can right my wrongs</Text>, ['90%'])}
             />
             
-                <TouchableOpacity
-                    className="text-white"
-                    onPress={() => openSheet(<Text>BURAT</Text>, ['90%'])} 
-                >
-                    <Text>God Speed</Text>
-                </TouchableOpacity> 
 
             <Separator/>
         </View>
