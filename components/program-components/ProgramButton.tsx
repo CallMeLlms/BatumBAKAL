@@ -7,7 +7,7 @@ interface ProgramCreationProps {
     onPress: () => void
 }
 
-export default function ProgramCreation({onPress} : ProgramCreationProps) {
+export default function ProgramButton({onPress} : ProgramCreationProps) {
     return (
         <Card className="py-2 border-transparent bg-transparent">
             <TouchableOpacity className="bg-white flex-row justify-center items-center gap-1 w-24 p-2 rounded-xl"
