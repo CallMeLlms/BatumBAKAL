@@ -4,15 +4,21 @@ import ProgramButton from "./ProgramButton";
 import { Separator } from "../ui/separator";
 import { useBottomSheetStore } from '@/stores/bottomSheetStore';
 import ProgramInputFieldForm from "./ProgramInputFieldForm";
+import { useRouter } from "expo-router";
+
 
 export default function ProgramScreen () {
     const { openSheet } = useBottomSheetStore();
+    const router = useRouter();
 
     return (
-        <View className="mt-verticalSpacing mx-horizontalSpacing">
-            <ProgramButton
-                onPress={() => openSheet(<ProgramInputFieldForm/>, ['90%'])}
-            />
+        <View className="">
+            
+            <View className="items-end">
+                <ProgramButton
+                    onPress={() => router.push('/program/create')}
+                />
+            </View>
             
             <Separator/>
         </View>

@@ -14,6 +14,7 @@ export const store_jwt_token = async (value : string): Promise<void>  => {
 export const get_jwt_token = async (): Promise<string | null>  => {
     try {
         const token = await SecureStore.getItemAsync(TOKEN_KEY);
+        console.log(token);
         return token;
     } catch (error : any) {
         console.error("Error retrieving AuthToken", error);
@@ -33,6 +34,7 @@ export const delete_jwt_token = async (): Promise<void>  => {
 export const get_refresh_tokens = async (): Promise<string | null> => {
     try {
         const refreshTokens = await SecureStore.getItemAsync(REFRESH_KEY)
+        console.log(refreshTokens);
         return refreshTokens
     } catch (error) {
         console.log("Error storing refresh key",error)

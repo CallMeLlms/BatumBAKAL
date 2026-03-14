@@ -14,7 +14,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import GlobalBottomSheet from '@/components/global/BottomSheet';
-
+import "@/api/interceptors/jwtInterceptor";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 

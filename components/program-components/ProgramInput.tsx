@@ -1,15 +1,24 @@
 import {View, Text, TextInput} from "react-native";
-import { Controller } from "react-hook-form";
-
+import { Controller, FieldErrors } from "react-hook-form";
+import { Control } from "react-hook-form";
+import { KeyboardType } from "react-native";
 interface ProgramInputProps {
-    title: string
-    set: number
+    control: Control<any>
+    // label: string
+    errors: FieldErrors
+    name: string
+    placeholder: string;
+    keyboardType: KeyboardType;
 }
 
 export default function ProgramInput ({
     control,
-    name
-}: any) {
+    name,
+    errors,
+    // label,
+    placeholder,
+    keyboardType
+}: ProgramInputProps) {
 
     return (
         <View className="bg-red-50 w-[100%]">
@@ -22,6 +31,9 @@ export default function ProgramInput ({
                             value={value}
                             onBlur={onBlur}
                             onChangeText={onChange}
+                            className="h-10 p-2 rounded text-[15px] font-normal"
+                            placeholder={placeholder}
+                            keyboardType={keyboardType}
                         />
                     </View>
                 )}

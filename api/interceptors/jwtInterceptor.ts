@@ -74,7 +74,11 @@ apiClient.interceptors.request.use(
         const TOKEN = await get_jwt_token();
         if (TOKEN) {
             config.headers.Authorization = `Bearer ${TOKEN}`
+            console.log("JWT attached to request:", TOKEN);
+        } else {
+            console.log("No JWT found, Authorization header not set.");
         }
+        console.log("Request headers:", config.headers);
         return config;
     } 
 )
