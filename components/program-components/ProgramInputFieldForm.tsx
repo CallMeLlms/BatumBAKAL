@@ -2,7 +2,7 @@ import {View, Text, TouchableOpacity} from "react-native";
 import ProgramInput from "./ProgramInput";
 import { useForm } from "react-hook-form";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { programCreation } from "@/api/services/programService";
+import { postProgramCreation } from "@/api/services/programService";
 
 export default function ProgramInputFieldForm () {
     // const { programId } = useLocalSearchParams();
@@ -14,11 +14,11 @@ export default function ProgramInputFieldForm () {
     const onSubmitProgramData = async (data: any) => {
         
         try {
-            const response = await programCreation(data.title, data.description, data.daysPerWeek, data.durationWeeks = 2);
-
-            if (response) {
-                const programId = response;
-                router.push(`/program/${programId}`)
+            const response = await postProgramCreation(data.title, data.description, data.daysPerWeek, data.durationWeeks = 2);
+            // console.log(response);
+            if (response.success) {
+                const programId = response.program.id;
+                router.replace(`/program/${programId}`)
             } else {
                 console.log("error IN PROGRAM FUCTIOn")
             }

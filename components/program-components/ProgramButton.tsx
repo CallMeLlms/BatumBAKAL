@@ -12,7 +12,7 @@ export default function ProgramButton({onPress} : ProgramCreationProps) {
 
     return (
         <Card className="py-2 border-transparent bg-transparent">
-            <TouchableOpacity className="bg-white flex-row justify-center items-center gap-1 w-24 p-2 rounded-xl"
+            <TouchableOpacity className="bg-[#BEF600] flex-row justify-center items-center gap-1 w-10 p-2 rounded-sm"
                 onPress={() => onPress()}
                 accessible
                 accessibilityRole="button"

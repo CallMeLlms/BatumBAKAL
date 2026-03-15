@@ -1,30 +1,53 @@
 import * as React from 'react';
-import {
-    createStaticNavigation,
-    NavigationContainer,
-} from '@react-navigation/native';
-import { View, Platform } from 'react-native';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
+import { View } from 'react-native';
+import { useLinkBuilder } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
-import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { MAIN_COLORS } from '@/constants/MainColors';
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
-    const { colors } = useTheme();
     const { buildHref } = useLinkBuilder();
 
+    const iconByRoute: Record<
+        string,
+        {
+            focused: React.ComponentProps<typeof Ionicons>['name'];
+            unfocused: React.ComponentProps<typeof Ionicons>['name'];
+        }
+    > = {
+        index: { focused: 'home', unfocused: 'home-outline' },
+        log: { focused: 'pencil', unfocused: 'pencil-outline' },
+        program: { focused: 'layers', unfocused: 'layers-outline' },
+        progress: { focused: 'stats-chart', unfocused: 'stats-chart-outline' },
+        profile: { focused: 'person', unfocused: 'person-outline' },
+    };
+
 return (
-    <View className="flex-row pb-2 pt-2 bg-zinc-200 rounded-xl m-2">
+    <View
+        className="mx-1 mb-2 px-2 py-1 flex-row rounded-[28px]"
+        style={{
+            backgroundColor: '#0B0B0B',
+            borderWidth: 1,
+            borderColor: '#141414',
+        }}
+    >
     {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label : any =
-        options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
+        const rawLabel =
+            options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name;
+
+        const label = typeof rawLabel === 'string' ? rawLabel : options.title ?? route.name;
 
         const isFocused = state.index === index;
+        const iconSet = iconByRoute[route.name] ?? {
+            focused: 'ellipse',
+            unfocused: 'ellipse-outline',
+        };
 
         const onPress = () => {
             const event = navigation.emit({
@@ -48,19 +71,39 @@ return (
         return (
         <PlatformPressable
             key={route.key}
+            android_ripple={null}
+            pressColor="transparent"
+            pressOpacity={1}
             href={buildHref(route.name, route.params)}
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarButtonTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            // style={{ flex: 1,}}
-            className="flex-1 justify-center items-center"
+            className="flex-1 items-center justify-center py-1"
         >
-            {/*  color: isFocused ? colors.primary : colors.text */}
-            <FontAwesome5 name="dumbbell" size={16} color="black" />
-            <Text style={{ color: "black", fontSize: 10 }}>
-                    {label} 
+            <View
+                className="absolute top-0 h-[1px] w-[22px] rounded-full"
+                style={{
+                    backgroundColor: isFocused ? MAIN_COLORS.primary : 'transparent',
+                }}
+            />
+
+            <Ionicons
+                name={isFocused ? iconSet.focused : iconSet.unfocused}
+                size={18}
+                color={isFocused ? MAIN_COLORS.primary : '#4A4A4A'}
+            />
+
+            <Text
+                style={{
+                    marginTop: 2,
+                    color: isFocused ? MAIN_COLORS.primary : '#4A4A4A',
+                    fontSize: 9,
+                    fontWeight: isFocused ? '700' : '500',
+                }}
+            >
+                    {label}
             </Text>
             </PlatformPressable>
         );

@@ -1,6 +1,6 @@
 import apiClient from "../axiosInstance"
 
-export const programCreation = async (title: string, workoutDescription: string, daysPerWeek: number, durationWeeks?: number) => {
+export const postProgramCreation = async (title: string, workoutDescription: string, daysPerWeek: number, durationWeeks?: number) => {
     
     try {
         const response = await apiClient.post('/program/createProgram', {
@@ -9,9 +9,20 @@ export const programCreation = async (title: string, workoutDescription: string,
             daysPerWeek,
             durationWeeks
         })
-
         return response.data
     } catch (error) {
         console.log("Error in creating program", error);
     }
 } 
+
+
+export const getProgramById = async (programId: any) => {
+    
+    try {
+        const response = await apiClient.get(`/program/getProgram/${programId}`)
+
+        return response.data
+    } catch (error) {
+        console.log("Error Getting Program By Id", error);
+    }
+}
