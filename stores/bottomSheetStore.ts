@@ -1,32 +1,51 @@
 import { create } from "zustand";
 import { ReactNode } from "react";
 
-interface BottomSheetState {
-  content: ReactNode | null;
-  snapPoints: Array<string | number>;
-  isOpen: boolean
-  
-  openSheet: (content: ReactNode, snapPoints?: Array<string | number> )  => void
-
-  closeSheet: () => void
+interface BottomSheetConfig {
+    backgroundColor?: string;
+    handleColor?: string;
+    showHandle?: boolean;
+    padding?: number;
 }
 
-export const useBottomSheetStore = create<BottomSheetState>((set, get) => ({
-  isOpen: false,
-  content: null,
-  snapPoints: ['50%'],
+interface BottomSheetState {
+    content: ReactNode | null;
+    snapPoints: Array<string | number>;
+    isOpen: boolean;
+    config: BottomSheetConfig;
 
-  
-  openSheet: (content, snapPoints = ['50%']) => set({
-    content,
-    isOpen: true,
-    snapPoints
-  }), 
+    openSheet: (
+        content: ReactNode,
+        snapPoints?: Array<string | number>,
+        config?: BottomSheetConfig
+    ) => void;
 
-  
-  closeSheet: () => set({
+    closeSheet: () => void;
+}
+
+const defaultConfig: BottomSheetConfig = {
+    backgroundColor: '#111111',
+    handleColor: '#6B7280',
+    showHandle: false,
+    padding: 0,
+};
+
+export const useBottomSheetStore = create<BottomSheetState>((set) => ({
     isOpen: false,
-    content: null
-  })
+    content: null,
+    snapPoints: ['50%'],
+    config: defaultConfig,
 
+    openSheet: (content, snapPoints = ['50%'], config = {}) => set({
+        content,
+        isOpen: true,
+        snapPoints,
+        config: { ...defaultConfig, ...config }
+    }),
+
+    closeSheet: () => set({
+        isOpen: false,
+        content: null,
+        config: defaultConfig
+    })
 }));

@@ -1,38 +1,133 @@
-import {View, Text, TouchableOpacity} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import ProgramInput from "../ProgramInput";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FocusTagSelector from "./FocusTagSelector";
+import { MAIN_COLORS } from "@/constants/MainColors";
+import { useState } from "react";
+import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTagMap";
+import { useBottomSheetStore } from "@/stores/bottomSheetStore";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function CreateWorkoutBottomSheet (selectedDay : object) {    
-    
-    const day = Object.values(selectedDay);
+interface WorkoutFormData {
+    title: string;
+}
 
-    const {handleSubmit, control, formState: {errors}} = useForm()
+interface CreateWorkoutBottomSheetProps {
+    selectedDay: number | string;
+}
+
+export default function CreateWorkoutBottomSheet({ selectedDay }: CreateWorkoutBottomSheetProps) {
+    const { handleSubmit, control, formState: { errors } } = useForm<WorkoutFormData>();
+    const [selectedFocusTags, setSelectedFocusTags] = useState<FocusTag[]>([]);
+    const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([]);
+    const { closeSheet } = useBottomSheetStore();
+
+    const handleSelectionChange = (focusTags: FocusTag[], muscles: MuscleGroup[]) => {
+        setSelectedFocusTags(focusTags);
+        setSelectedMuscles(muscles);
+    };
+
+    const onSubmit = (data: WorkoutFormData) => {
+        const workoutData = {
+            ...data,
+            day: selectedDay,
+            focusTags: selectedFocusTags,
+            targetMuscles: selectedMuscles,
+        };
+        console.log('Creating workout:', workoutData);
+        closeSheet();
+    };
+
+    const isFormValid = selectedFocusTags.length > 0 && selectedMuscles.length > 0;
 
     return (
-        <View className="bg-red-200">
-            <Text className="text-black">Lorem ipsum dolor sit amet.</Text>
+        <BottomSheetScrollView
+            style={{ flex: 1, backgroundColor: MAIN_COLORS.black }}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+        >
+            {/* Header with Close Button */}
+            <View className="flex-row items-center justify-between px-5 pt-4 pb-4">
+                <View>
+                    <Text
+                        style={{ color: MAIN_COLORS.white }}
+                        className="text-xl font-bold"
+                    >
+                        Create Workout
+                    </Text>
+                    <Text
+                        style={{ color: MAIN_COLORS.mediumGrey }}
+                        className="text-sm mt-1"
+                    >
+                        Day {selectedDay}
+                    </Text>
+                </View>
 
-            <ProgramInput
-                    control={control}
-                    errors={errors}
-                    label="Workout Title"
-                    placeholder="e.g. Push Pull Legs"
-                    name="title"
-                    keyboardType="default"
-            />
-
-
-            <View>
-                <Text>This is going to be chip/pills</Text>
-                <FocusTagSelector/>
+                {/* Close Button */}
+                <TouchableOpacity
+                    onPress={closeSheet}
+                    activeOpacity={0.7}
+                    style={{
+                        backgroundColor: MAIN_COLORS.darkGrey,
+                    }}
+                    className="w-10 h-10 rounded-full items-center justify-center"
+                >
+                    <Ionicons
+                        name="close"
+                        size={22}
+                        color={MAIN_COLORS.lightGrey}
+                    />
+                </TouchableOpacity>
             </View>
 
+            {/* Content */}
+            <View className="px-5 flex-1">
+                {/* Workout Title Input */}
+                <View className="mb-2">
+                    <ProgramInput
+                        control={control}
+                        errors={errors}
+                        label="Workout Title"
+                        placeholder="e.g. Push Day, Back & Biceps"
+                        name="title"
+                        keyboardType="default"
+                    />
+                </View>
 
+                {/* Focus Tag Selector */}
+                <FocusTagSelector onSelectionChange={handleSelectionChange} />
+            </View>
 
-            <TouchableOpacity>
-                <Text>Add Day eg day {day}</Text>
-            </TouchableOpacity>
-        </View>
-    )
+            {/* Action Button */}
+            <View
+                style={{ backgroundColor: MAIN_COLORS.black }}
+                className="px-5 pb-8 pt-6 mt-4"
+            >
+                <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    disabled={!isFormValid}
+                    activeOpacity={0.8}
+                    style={{
+                        backgroundColor: isFormValid ? MAIN_COLORS.primary : MAIN_COLORS.darkGrey,
+                    }}
+                    className="py-4 rounded-xl items-center"
+                >
+                    <Text
+                        style={{
+                            color: isFormValid ? MAIN_COLORS.black : MAIN_COLORS.mediumGrey,
+                            fontWeight: '700',
+                        }}
+                        className="text-base"
+                    >
+                        {isFormValid
+                            ? `Add Day ${selectedDay} Workout`
+                            : 'Select focus & muscles'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </BottomSheetScrollView>
+    );
 }
