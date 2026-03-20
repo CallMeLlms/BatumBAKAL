@@ -1,20 +1,23 @@
-import {View, ScrollView, KeyboardAvoidingView} from "react-native"; 
+import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ProgramLayout ({children} : {children : React.ReactNode}) {
+export default function ProgramLayout({ children }: { children: React.ReactNode }) {
     return (
-        <KeyboardAvoidingView 
-            className="flex-1"
-        >
-            <View className="flex-1 mt-verticalSpacing mx-horizontalSpacing">
-             <ScrollView 
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ flexGrow: 1 }}
-             >
-                {/* <View className="flex-1"> */}
-                    {children}
-                 {/* </View> */}
-             </ScrollView>
-             </View>
-         </KeyboardAvoidingView>
-    )
+        <SafeAreaView className="flex-1 bg-[#111111]" edges={["top"]}>
+            <KeyboardAvoidingView
+                className="flex-1"
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+                <View className="flex-1 mt-4 mx-horizontalSpacing">
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
+                        keyboardShouldPersistTaps="handled"
+                    >
+                        {children}
+                    </ScrollView>
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
+    );
 }

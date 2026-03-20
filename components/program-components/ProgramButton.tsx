@@ -1,27 +1,28 @@
-import React, { useCallback, useMemo, useRef, forwardRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Card } from "../ui/card";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useRouter, usePathname } from 'expo-router';
-interface ProgramCreationProps {
-    onPress: () => void
+import { TouchableOpacity } from "react-native";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { MAIN_COLORS } from "@/constants/MainColors";
+
+interface ProgramButtonProps {
+    onPress: () => void;
+    icon?: string;
+    size?: "sm" | "md";
 }
 
-export default function ProgramButton({onPress} : ProgramCreationProps) {
-
+export default function ProgramButton({ onPress, icon = "plus", size = "sm" }: ProgramButtonProps) {
+    const sizeClasses = size === "sm" ? "w-9 h-9" : "w-11 h-11";
+    const iconSize = size === "sm" ? 12 : 14;
 
     return (
-        <Card className="py-2 border-transparent bg-transparent">
-            <TouchableOpacity className="bg-[#BEF600] flex-row justify-center items-center gap-1 w-10 p-2 rounded-sm"
-                onPress={() => onPress()}
-                accessible
-                accessibilityRole="button"
-            >
-                
-                <FontAwesome5 name="plus" size={12} color="black" />
-            </TouchableOpacity>
-            
-        </Card>
-    )
+        <TouchableOpacity
+            onPress={onPress}
+            className={`${sizeClasses} rounded-lg items-center justify-center`}
+            style={{ backgroundColor: MAIN_COLORS.primary }}
+            activeOpacity={0.8}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Create program"
+        >
+            <FontAwesome5 name={icon} size={iconSize} color={MAIN_COLORS.black} />
+        </TouchableOpacity>
+    );
 }
-

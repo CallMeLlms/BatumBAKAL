@@ -6,7 +6,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { MAIN_COLORS } from '@/constants/MainColors';
 
-export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function TabBar({ state, descriptors, navigation}: BottomTabBarProps) {
     const { buildHref } = useLinkBuilder();
 
     const iconByRoute: Record<
@@ -30,6 +30,10 @@ return (
             backgroundColor: '#0B0B0B',
             borderWidth: 1,
             borderColor: '#141414',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,  
         }}
     >
     {state.routes.map((route, index) => {
