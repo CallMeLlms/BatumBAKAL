@@ -8,16 +8,17 @@ import { useState } from "react";
 import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTagMap";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
 import { Ionicons } from "@expo/vector-icons";
-
+import { postWorkoutDayCreation } from "@/api/services/workoutDayService";
 interface WorkoutFormData {
     title: string;
 }
 
 interface CreateWorkoutBottomSheetProps {
     selectedDay: number | string;
+    programId: string
 }
 
-export default function CreateWorkoutBottomSheet({ selectedDay }: CreateWorkoutBottomSheetProps) {
+export default function CreateWorkoutBottomSheet({ selectedDay, programId }: CreateWorkoutBottomSheetProps) {
     const { handleSubmit, control, formState: { errors } } = useForm<WorkoutFormData>();
     const [selectedFocusTags, setSelectedFocusTags] = useState<FocusTag[]>([]);
     const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([]);
@@ -28,17 +29,27 @@ export default function CreateWorkoutBottomSheet({ selectedDay }: CreateWorkoutB
         setSelectedMuscles(muscles);
     };
 
-    const onSubmit = (data: WorkoutFormData) => {
+
+    const onSubmit = async (data: WorkoutFormData) => {
+
         const workoutData = {
             ...data,
             day: selectedDay,
             focusTags: selectedFocusTags,
             targetMuscles: selectedMuscles,
         };
-        console.log('Creating workout:', workoutData);
+
+        try {
+            const response = await postWorkoutDayCreation(programId, workoutData);
+
+            console.log(response);
+        } catch(error) {
+            console.log("error in onSubmit on postWorkoutDayCreation: ", error)
+        }
+
         closeSheet();
     };
-
+    // closeSheet();
     const isFormValid = selectedFocusTags.length > 0 && selectedMuscles.length > 0;
 
     return (

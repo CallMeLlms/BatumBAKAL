@@ -6,6 +6,7 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
 import CreateWorkoutBottomSheet from "./workout-components/CreateWorkoutBottomSheet";
+import { createBottomSheetScrollableComponent } from "@gorhom/bottom-sheet";
 
 export default function ProgramWorkoutFieldForm() {
     const { programId } = useLocalSearchParams();
@@ -13,6 +14,7 @@ export default function ProgramWorkoutFieldForm() {
 
     const [programData, setProgramData] = useState<object | any>();
     const [programDaysPerWeek, setProgramDaysPerWeek] = useState<number>(0);
+    const [userId, setUserid] = useState<string>();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -20,6 +22,7 @@ export default function ProgramWorkoutFieldForm() {
             try {
                 const response = await getProgramById(id); 
                 setProgramDaysPerWeek(response.userProgram.daysPerWeek);
+                setUserid(response.userProgram.id);
                 setProgramData(response);
             } catch (error) {
                 console.log("Error in client [getProgramData]", error);
@@ -33,10 +36,12 @@ export default function ProgramWorkoutFieldForm() {
     
 
 
-    const showBottomSheetModal = (selectedDay: object)  => {
+    const showBottomSheetModal = (selectedDay: any, programId: any)  => {
+        console.log(programId);
         useBottomSheetStore.getState().openSheet(
             <CreateWorkoutBottomSheet 
                 selectedDay={selectedDay}
+                programId={programId}
             />,
             ['90%']
         )
@@ -146,7 +151,7 @@ export default function ProgramWorkoutFieldForm() {
                     <TouchableOpacity 
                         key={i}
                         className="bg-[#1A1A1A] rounded-md border border-dashed border-[#2A2A2A] px-2 py-4 items-center mr-4"
-                        onPress={() => showBottomSheetModal(i + 1)}
+                        onPress={() => showBottomSheetModal(i + 1, userId)}
                     >
                         
                         <Text className="text-white font-bold">Day {i + 1}</Text>
