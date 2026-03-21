@@ -19,10 +19,11 @@ interface CreateWorkoutBottomSheetProps {
 }
 
 export default function CreateWorkoutBottomSheet({ selectedDay, programId }: CreateWorkoutBottomSheetProps) {
-    const { handleSubmit, control, formState: { errors } } = useForm<WorkoutFormData>();
+    const { handleSubmit, control, formState: { errors }, watch } = useForm<WorkoutFormData>();
     const [selectedFocusTags, setSelectedFocusTags] = useState<FocusTag[]>([]);
     const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([]);
     const { closeSheet } = useBottomSheetStore();
+    const workoutTitle = watch("title");
 
     const handleSelectionChange = (focusTags: FocusTag[], muscles: MuscleGroup[]) => {
         setSelectedFocusTags(focusTags);
@@ -31,26 +32,28 @@ export default function CreateWorkoutBottomSheet({ selectedDay, programId }: Cre
 
 
     const onSubmit = async (data: WorkoutFormData) => {
+        const parsedDayOrder = Number(selectedDay);
 
         const workoutData = {
-            ...data,
-            day: selectedDay,
+            name: data.title.trim(),
+            dayOrder: parsedDayOrder,
             focusTags: selectedFocusTags,
-            targetMuscles: selectedMuscles,
+            workoutGroups: selectedMuscles,
         };
 
         try {
-            const response = await postWorkoutDayCreation(programId, workoutData);
-
-            console.log(response);
+            await postWorkoutDayCreation(programId, workoutData);
+            closeSheet();
         } catch(error) {
             console.log("error in onSubmit on postWorkoutDayCreation: ", error)
         }
-
-        closeSheet();
     };
-    // closeSheet();
-    const isFormValid = selectedFocusTags.length > 0 && selectedMuscles.length > 0;
+
+    const isFormValid =
+        selectedFocusTags.length > 0 &&
+        selectedMuscles.length > 0 &&
+        Boolean(workoutTitle?.trim()) &&
+        Number(selectedDay) > 0;
 
     return (
         <BottomSheetScrollView

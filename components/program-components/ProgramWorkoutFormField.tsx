@@ -6,24 +6,30 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
 import CreateWorkoutBottomSheet from "./workout-components/CreateWorkoutBottomSheet";
-import { createBottomSheetScrollableComponent } from "@gorhom/bottom-sheet";
+
+type ProgramData = {
+    userProgram: {
+        id: string;
+        name: string;
+        description?: string | null;
+        daysPerWeek: number;
+    };
+};
 
 export default function ProgramWorkoutFieldForm() {
     const { programId } = useLocalSearchParams();
     const router = useRouter();
 
-    const [programData, setProgramData] = useState<object | any>();
-    const [programDaysPerWeek, setProgramDaysPerWeek] = useState<number>(0);
-    const [userId, setUserid] = useState<string>();
+    const [programData, setProgramData] = useState<ProgramData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getProgramData = async (id: any) => {
+        const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
+
+        const getProgramData = async (id: string) => {
             try {
                 const response = await getProgramById(id); 
-                setProgramDaysPerWeek(response.userProgram.daysPerWeek);
-                setUserid(response.userProgram.id);
-                setProgramData(response);
+                setProgramData(response as ProgramData);
             } catch (error) {
                 console.log("Error in client [getProgramData]", error);
             } finally {
@@ -31,17 +37,25 @@ export default function ProgramWorkoutFieldForm() {
             }
         };
 
-        getProgramData(programId);
+        if (!resolvedProgramId) {
+            setLoading(false);
+            return;
+        }
+
+        getProgramData(resolvedProgramId);
     }, [programId]);
     
 
 
-    const showBottomSheetModal = (selectedDay: any, programId: any)  => {
-        console.log(programId);
+    const showBottomSheetModal = (selectedDay: number)  => {
+        if (!programData?.userProgram.id) {
+            return;
+        }
+
         useBottomSheetStore.getState().openSheet(
             <CreateWorkoutBottomSheet 
                 selectedDay={selectedDay}
-                programId={programId}
+                programId={programData.userProgram.id}
             />,
             ['90%']
         )
@@ -80,6 +94,7 @@ export default function ProgramWorkoutFieldForm() {
     }
 
     const program = programData.userProgram;
+    const programDaysPerWeek = program.daysPerWeek;
 
     return (
         <View className="flex-1">
@@ -151,7 +166,7 @@ export default function ProgramWorkoutFieldForm() {
                     <TouchableOpacity 
                         key={i}
                         className="bg-[#1A1A1A] rounded-md border border-dashed border-[#2A2A2A] px-2 py-4 items-center mr-4"
-                        onPress={() => showBottomSheetModal(i + 1, userId)}
+                        onPress={() => showBottomSheetModal(i + 1)}
                     >
                         
                         <Text className="text-white font-bold">Day {i + 1}</Text>
