@@ -174,6 +174,35 @@ export default function ProgramWorkoutFieldForm() {
                 ))}
             </ScrollView>
 
+
+            {/* Confirmation button before submitting everything to the backend */}
+            <View
+                style={{position: "absolute", bottom: 8}}
+                className="w-[100%] pb-8 pt-6 mt-4"
+            >
+                <TouchableOpacity
+                    // onPress={handleSubmit(onSubmit)}
+                    // disabled={!isFormValid}
+                    activeOpacity={0.8}
+                    style={{
+                        // backgroundColor:  ? MAIN_COLORS.primary : MAIN_COLORS.darkGrey,
+                        backgroundColor: "white"
+                    }}
+                    className="py-4 rounded-xl items-center"
+                >
+                    <Text
+                        style={{
+                            // color: ? MAIN_COLORS.black : MAIN_COLORS.mediumGrey,
+                            fontWeight: '700',
+                        }}
+                        className="text-white text-base"
+                    >
+
+                        Test
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
         </View>
     );
 }

@@ -26,3 +26,15 @@ export const getProgramById = async (programId: any) => {
         console.log("Error Getting Program By Id", error);
     }
 }
+
+
+export const getUserPrograms = async () => {
+    
+    try {
+        const response = await apiClient.get('/program/userPrograms');
+
+        return response.data
+    } catch (error) {
+        console.log("Error on fetching data from getUserPrograms MOBILE", error)
+    }
+}

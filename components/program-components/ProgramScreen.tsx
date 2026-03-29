@@ -3,10 +3,29 @@ import ProgramButton from "./ProgramButton";
 import ProgramDisplayCard from "./ProgramCard";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
+import { getUserPrograms } from "@/api/services/programService";
+import { useEffect, useState } from "react";
 
 export default function ProgramScreen() {
     const router = useRouter();
 
+    const [programs, setPrograms] = useState([]);
+
+    useEffect(() => {
+        const cardData = async () => {
+            try {
+                const response = await getUserPrograms()
+                console.log(response.response.name);
+                setPrograms(response.response)
+            } catch (error : any ) {
+                console.log("Error useEffect fetching cardData", error)
+            }
+        }
+        cardData()
+    }, [])
+
+    console.log(programs)
+    
     return (
         <View className="flex-1">
             {/* Header */}
@@ -69,7 +88,15 @@ export default function ProgramScreen() {
 
             {/* Program cards */}
             <View className="gap-3">
-                <ProgramDisplayCard />
+                
+                {programs.map(program => (
+                    <ProgramDisplayCard
+                        key={program.id}
+                        title={program.name}
+                        description={program.description}
+                        daysPerWeek={program.daysPerWeek}
+                    />
+                ))}
             </View>
         </View>
     );

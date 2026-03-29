@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { getUserPrograms } from "@/api/services/programService";
+import { useEffect, useRef, useState } from "react";
 
 interface ProgramDisplayCardProps {
     title?: string;
@@ -10,11 +12,12 @@ interface ProgramDisplayCardProps {
 }
 
 export default function ProgramDisplayCard({
-    title = "Push Pull Legs",
-    description = "A classic 6-day split focusing on push, pull, and leg movements",
-    daysPerWeek = 6,
+    title = "",
+    description = "",
+    daysPerWeek,
     onPress,
 }: ProgramDisplayCardProps) {
+
     return (
         <TouchableOpacity
             onPress={onPress}
