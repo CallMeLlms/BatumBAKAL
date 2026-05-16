@@ -1,13 +1,13 @@
-import {View, Text} from "react-native";
+import {View} from "react-native";
+import ProfileScreenLayout from "@/components/profile-components/ProfileScreenLayout"
+import ProfileScreen from "@/components/profile-components/ProfileScreen";
 
 export default function profile () {
     return (
         <>
-           <View className="flex-1 justify-center items-center">
-            <View className="">
-                <Text className="text-white">dadad</Text>
-            </View>
-        </View>
+            <ProfileScreenLayout>
+                <ProfileScreen/>
+            </ProfileScreenLayout>
         </>
     )
 }

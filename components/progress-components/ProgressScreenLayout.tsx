@@ -1,9 +1,8 @@
 import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-export default function HomeLayout ({children} : {children: React.ReactNode}) {
-    return ( 
+export default function ProgressScreenLayout({ children }: { children: React.ReactNode }) {
+    return (
         <SafeAreaView className="flex-1 bg-[#111111]" edges={["top"]}>
             <KeyboardAvoidingView
                 className="flex-1"
@@ -20,5 +19,5 @@ export default function HomeLayout ({children} : {children: React.ReactNode}) {
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
-    )
+    );
 }

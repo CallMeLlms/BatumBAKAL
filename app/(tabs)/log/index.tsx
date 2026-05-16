@@ -1,9 +1,10 @@
-import {View, Text} from "react-native"
+import LayoutScreenLayout from "@/components/log-components/LogScreenLayout"
+import LogScreen from "@/components/log-components/LogScreen"
 
 export default function log () {
     return (
-        <View className="flex">
-            <Text>JANE!</Text>
-        </View>
+        <LayoutScreenLayout>
+            <LogScreen/>
+        </LayoutScreenLayout>
     )
 }
