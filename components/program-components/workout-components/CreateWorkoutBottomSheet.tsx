@@ -7,22 +7,22 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import { useState } from "react";
 import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTagMap";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
+import { useProgramBuilderStore } from "@/stores/programBuilderStore";
 import { Ionicons } from "@expo/vector-icons";
-import { postWorkoutDayCreation } from "@/api/services/workoutDayService";
 interface WorkoutFormData {
     title: string;
 }
 
 interface CreateWorkoutBottomSheetProps {
     selectedDay: number | string;
-    programId: string
 }
 
-export default function CreateWorkoutBottomSheet({ selectedDay, programId }: CreateWorkoutBottomSheetProps) {
+export default function CreateWorkoutBottomSheet({ selectedDay }: CreateWorkoutBottomSheetProps) {
     const { handleSubmit, control, formState: { errors }, watch } = useForm<WorkoutFormData>();
     const [selectedFocusTags, setSelectedFocusTags] = useState<FocusTag[]>([]);
     const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([]);
     const { closeSheet } = useBottomSheetStore();
+    const upsertWorkoutDayDraft = useProgramBuilderStore((state) => state.upsertWorkoutDayDraft);
     const workoutTitle = watch("title");
 
     const handleSelectionChange = (focusTags: FocusTag[], muscles: MuscleGroup[]) => {
@@ -35,17 +35,17 @@ export default function CreateWorkoutBottomSheet({ selectedDay, programId }: Cre
         const parsedDayOrder = Number(selectedDay);
 
         const workoutData = {
-            name: data.title.trim(),
             dayOrder: parsedDayOrder,
+            name: data.title.trim(),
             focusTags: selectedFocusTags,
             workoutGroups: selectedMuscles,
         };
 
         try {
-            await postWorkoutDayCreation(programId, workoutData);
+            upsertWorkoutDayDraft(workoutData);
             closeSheet();
         } catch(error) {
-            console.log("error in onSubmit on postWorkoutDayCreation: ", error)
+            console.log("error in onSubmit on workout draft save: ", error)
         }
     };
 

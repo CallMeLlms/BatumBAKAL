@@ -1,11 +1,13 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
-import { getProgramById } from "@/api/services/programService";
+import { getProgramById, postProgramCreation } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
 import CreateWorkoutBottomSheet from "./workout-components/CreateWorkoutBottomSheet";
+import { useProgramBuilderStore } from "@/stores/programBuilderStore";
+import { postWorkoutDayCreation } from "@/api/services/workoutDayService";
 
 type ProgramData = {
     userProgram: {
@@ -19,12 +21,21 @@ type ProgramData = {
 export default function ProgramWorkoutFieldForm() {
     const { programId } = useLocalSearchParams();
     const router = useRouter();
+    const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
+    const isDraftMode = resolvedProgramId === "draft";
 
     const [programData, setProgramData] = useState<ProgramData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const programDraft = useProgramBuilderStore((state) => state.programDraft);
+    const workoutDayDrafts = useProgramBuilderStore((state) => state.workoutDayDrafts);
+    const resetProgramBuilder = useProgramBuilderStore((state) => state.resetProgramBuilder);
 
     useEffect(() => {
-        const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
+        if (isDraftMode) {
+            setLoading(false);
+            return;
+        }
 
         const getProgramData = async (id: string) => {
             try {
@@ -43,19 +54,78 @@ export default function ProgramWorkoutFieldForm() {
         }
 
         getProgramData(resolvedProgramId);
-    }, [programId]);
+    }, [resolvedProgramId, isDraftMode]);
+
+    const draftProgramPreview = {
+        id: "draft",
+        name: programDraft.title.trim() || "Untitled Program",
+        description: programDraft.description.trim() || null,
+        daysPerWeek: programDraft.daysPerWeek,
+    };
+
+    const displayProgram = isDraftMode ? draftProgramPreview : programData?.userProgram;
+    const displayDaysPerWeek = displayProgram?.daysPerWeek ?? 0;
+
+    const isReadyToSubmit =
+        isDraftMode &&
+        Boolean(programDraft.title.trim()) &&
+        programDraft.daysPerWeek > 0 &&
+        workoutDayDrafts.length === programDraft.daysPerWeek &&
+        !isSubmitting;
+
+    const handleFinalSubmit = async () => {
+        if (!isDraftMode || !isReadyToSubmit) {
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+
+            const createdProgramResponse = await postProgramCreation(
+                programDraft.title.trim(),
+                programDraft.description.trim(),
+                programDraft.daysPerWeek,
+                programDraft.durationWeeks || 2,
+            );
+
+            const createdProgramId = createdProgramResponse?.program?.id;
+
+            if (!createdProgramId) {
+                throw new Error("Program id missing from create response");
+            }
+
+            const sortedWorkoutDayDrafts = [...workoutDayDrafts].sort(
+                (left, right) => left.dayOrder - right.dayOrder,
+            );
+
+            for (const workoutDay of sortedWorkoutDayDrafts) {
+                await postWorkoutDayCreation(createdProgramId, {
+                    name: workoutDay.name,
+                    dayOrder: workoutDay.dayOrder,
+                    focusTags: workoutDay.focusTags,
+                    workoutGroups: workoutDay.workoutGroups,
+                });
+            }
+
+            resetProgramBuilder();
+            router.replace(`/program/${createdProgramId}`);
+        } catch (error) {
+            console.log("Error in final program submission", error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     
 
 
     const showBottomSheetModal = (selectedDay: number)  => {
-        if (!programData?.userProgram.id) {
+        if (!isDraftMode && !programData?.userProgram.id) {
             return;
         }
 
         useBottomSheetStore.getState().openSheet(
             <CreateWorkoutBottomSheet 
                 selectedDay={selectedDay}
-                programId={programData.userProgram.id}
             />,
             ['90%']
         )
@@ -69,7 +139,7 @@ export default function ProgramWorkoutFieldForm() {
         );
     }
 
-    if (!programData) {
+    if (!displayProgram) {
         return (
             <View className="flex-1 items-center justify-center">
                 <FontAwesome5 name="exclamation-circle" size={40} color={MAIN_COLORS.mediumGrey} />
@@ -77,7 +147,7 @@ export default function ProgramWorkoutFieldForm() {
                     className="text-[16px] font-semibold font-sans mt-4"
                     style={{ color: MAIN_COLORS.mediumGrey }}
                 >
-                    Program not found
+                    {isDraftMode ? "Draft program not found" : "Program not found"}
                 </Text>
                 <TouchableOpacity
                     onPress={() => router.back()}
@@ -93,8 +163,8 @@ export default function ProgramWorkoutFieldForm() {
         );
     }
 
-    const program = programData.userProgram;
-    const programDaysPerWeek = program.daysPerWeek;
+    const program = displayProgram;
+    const programDaysPerWeek = displayDaysPerWeek;
 
     return (
         <View className="flex-1">
@@ -128,7 +198,7 @@ export default function ProgramWorkoutFieldForm() {
 
                     {/* Program meta */}
                     <View className="flex-row gap-3 mt-4">
-                        {program?.daysPerWeek && (
+                        {program?.daysPerWeek ? (
                             <View
                                 className="flex-row items-center px-3 py-1.5 rounded-full"
                                 style={{ backgroundColor: `${MAIN_COLORS.primary}15` }}
@@ -141,7 +211,7 @@ export default function ProgramWorkoutFieldForm() {
                                     {program.daysPerWeek} days/week
                                 </Text>
                             </View>
-                        )}
+                        ) : null}
                     </View>
                 </View>
             </View>
@@ -174,34 +244,34 @@ export default function ProgramWorkoutFieldForm() {
                 ))}
             </ScrollView>
 
-
-            {/* Confirmation button before submitting everything to the backend */}
-            <View
-                style={{position: "absolute", bottom: 8}}
-                className="w-[100%] pb-8 pt-6 mt-4"
-            >
-                <TouchableOpacity
-                    // onPress={handleSubmit(onSubmit)}
-                    // disabled={!isFormValid}
-                    activeOpacity={0.8}
-                    style={{
-                        // backgroundColor:  ? MAIN_COLORS.primary : MAIN_COLORS.darkGrey,
-                        backgroundColor: "white"
-                    }}
-                    className="py-4 rounded-xl items-center"
+            {isDraftMode && (
+                <View
+                    style={{ position: "absolute", bottom: 8 }}
+                    className="w-[100%] pb-8 pt-6 mt-4"
                 >
-                    <Text
+                    <TouchableOpacity
+                        onPress={handleFinalSubmit}
+                        disabled={!isReadyToSubmit}
+                        activeOpacity={0.8}
                         style={{
-                            // color: ? MAIN_COLORS.black : MAIN_COLORS.mediumGrey,
-                            fontWeight: '700',
+                            backgroundColor: isReadyToSubmit ? MAIN_COLORS.primary : MAIN_COLORS.darkGrey,
                         }}
-                        className="text-white text-base"
+                        className="py-4 rounded-xl items-center"
                     >
-
-                        Test
-                    </Text>
-                </TouchableOpacity>
-            </View>
+                        <Text
+                            style={{
+                                color: isReadyToSubmit ? MAIN_COLORS.black : MAIN_COLORS.mediumGrey,
+                                fontWeight: '700',
+                            }}
+                            className="text-white text-base"
+                        >
+                            {isSubmitting
+                                ? "Submitting..."
+                                : `Submit Program${workoutDayDrafts.length ? ` (${workoutDayDrafts.length}/${programDraft.daysPerWeek})` : ""}`}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
         </View>
     );

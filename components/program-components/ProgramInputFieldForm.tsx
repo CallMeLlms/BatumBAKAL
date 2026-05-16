@@ -2,12 +2,13 @@ import { View, Text, TouchableOpacity } from "react-native";
 import ProgramInput from "./ProgramInput";
 import { useForm } from "react-hook-form";
 import { useRouter } from "expo-router";
-import { postProgramCreation } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { useProgramBuilderStore } from "@/stores/programBuilderStore";
 
 export default function ProgramInputFieldForm() {
     const router = useRouter();
+    const setProgramDraft = useProgramBuilderStore((state) => state.setProgramDraft);
     const {
         handleSubmit,
         control,
@@ -16,18 +17,14 @@ export default function ProgramInputFieldForm() {
 
     const onSubmitProgramData = async (data: any) => {
         try {
-            const response = await postProgramCreation(
-                data.title,
-                data.description,
-                data.daysPerWeek,
-                (data.durationWeeks = 2)
-            );
-            if (response.success) {
-                const programId = response.program.id;
-                router.replace(`/program/${programId}`);
-            } else {
-                console.log("error IN PROGRAM FUCTIOn");
-            }
+            setProgramDraft({
+                title: data.title.trim(),
+                description: (data.description ?? "").trim(),
+                daysPerWeek: Number(data.daysPerWeek),
+                durationWeeks: 2,
+            });
+
+            router.push("/program/draft");
         } catch (error) {
             console.log("error program try catch", error);
         }
