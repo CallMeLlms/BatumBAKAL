@@ -72,8 +72,6 @@ apiClient.interceptors.response.use (
 apiClient.interceptors.request.use(
     async (config)  => {
         const TOKEN = await get_jwt_token();
-        console.log("JWT attached to request:", "fake-token");
-        console.log("JWT attached to request:", "fake-token");
         if (TOKEN) {
             config.headers.Authorization = `Bearer ${TOKEN}`
         }
