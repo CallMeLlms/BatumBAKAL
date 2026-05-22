@@ -21,10 +21,10 @@ export default function ProgramScreen() {
                 console.log("Error useEffect fetching cardData", error)
             }
         }
-        cardData()
+        cardData();
     }, [])
 
-    console.log(programs)
+    console.log(programs);
     
     return (
         <View className="flex-1">
@@ -87,14 +87,14 @@ export default function ProgramScreen() {
             </Text>
 
             {/* Program cards */}
-            <View className="gap-3">
-                
+            <View className="gap-3">                
                 {programs.map(program => (
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
                         description={program.description}
                         daysPerWeek={program.daysPerWeek}
+                        onPress={() => router.push(`/program/${program.id}`)}
                     />
                 ))}
             </View>
