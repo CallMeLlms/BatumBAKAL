@@ -44,6 +44,6 @@ export const store_refresh_tokens = async (value: string): Promise<void> => {
     try {
         await SecureStore.setItemAsync(REFRESH_KEY, value);
     } catch (error) {
-        console.log("Error storing refresh tokens", error)
+        console.error("Error storing refresh credentials", error)
     }
 }

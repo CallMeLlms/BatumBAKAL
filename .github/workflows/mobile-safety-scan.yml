@@ -1,0 +1,51 @@
+name: Mobile safety scan
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  safety-scan:
+    name: Safety scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Block tracked env files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tracked_env_files="$(git ls-files '.env' '.env.*')"
+          if [ -n "$tracked_env_files" ]; then
+            echo "Tracked environment files are not allowed:"
+            echo "$tracked_env_files"
+            exit 1
+          fi
+
+      - name: Block risky debug and local-only strings
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          matches="$(git grep -n -I -i -E \
+            'console\.log\(.*(jwt|token|authorization|headers?)|JWT attached|Request headers|TODO|FIXME|HACK|XXX|http://localhost|https://localhost|http://127\.0\.0\.1|https://127\.0\.0\.1|http://192\.168\.|https://192\.168\.|http://10\.|https://10\.|http://172\.(1[6-9]|2[0-9]|3[0-1])\.|https://172\.(1[6-9]|2[0-9]|3[0-1])\.' \
+            -- \
+            ':!.github/workflows/mobile-safety-scan.yml' \
+            ':!package-lock.json' \
+            ':!assets/loader/*.json' \
+            ':!components/__tests__/__snapshots__/*' || true)"
+
+          if [ -n "$matches" ]; then
+            echo "Risky debug comments/logs or local-only URLs found:"
+            echo "$matches"
+            exit 1
+          fi

@@ -62,7 +62,7 @@ apiClient.interceptors.response.use (
             return apiClient(originalRequest);
         } catch (error) {
             useAuthStore.getState().signOut();
-            console.log("JWT token session deleted" , error);
+            console.error("JWT token session deleted", error);
         }
         return Promise.reject(error);
     },
@@ -74,11 +74,7 @@ apiClient.interceptors.request.use(
         const TOKEN = await get_jwt_token();
         if (TOKEN) {
             config.headers.Authorization = `Bearer ${TOKEN}`
-            console.log("JWT attached to request:", TOKEN);
-        } else {
-            console.log("No JWT found, Authorization header not set.");
         }
-        console.log("Request headers:", config.headers);
         return config;
     } 
 )
