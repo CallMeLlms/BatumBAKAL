@@ -1,7 +1,8 @@
 import { View, Text } from "react-native";
-import type { ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
+import { getProfileData } from "@/api/services/settingServices";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
@@ -89,6 +90,26 @@ function ProfileAction({
 }
 
 export default function ProfileScreen () {
+    
+    const [userProfileName, setUserProfileName] = useState<String>();
+
+    useEffect(() => {
+        
+        const settingsTesting = async () => {
+            try {
+                const response = await getProfileData()
+                console.log(response, "DATA FETCH USER NAME")
+                setUserProfileName(response.userData.username);
+
+            } catch (error) {
+                console.log(error, "FROM SETTINGS")
+            }
+        }
+
+        settingsTesting()
+    }, [])
+
+
     return (
         <View className="flex-1">
             <View className="flex-row justify-between items-center mb-6">
@@ -121,7 +142,7 @@ export default function ProfileScreen () {
 
                         <View className="flex-1">
                             <Text className="text-white text-[18px] font-bold font-sans">
-                                MR BATUM
+                                {userProfileName}
                             </Text>
                             <Text
                                 className="text-[13px] mt-1 font-sans"
