@@ -29,6 +29,21 @@ export const delete_jwt_token = async (): Promise<void>  => {
     }
 }
 
+export const delete_refresh_tokens = async (): Promise<void> => {
+    try {
+        await SecureStore.deleteItemAsync(REFRESH_KEY);
+    } catch (error) {
+        console.error("Error deleting refresh credentials", error)
+    }
+}
+
+export const delete_auth_tokens = async (): Promise<void> => {
+    await Promise.all([
+        delete_jwt_token(),
+        delete_refresh_tokens(),
+    ]);
+}
+
 
 export const get_refresh_tokens = async (): Promise<string | null> => {
     try {

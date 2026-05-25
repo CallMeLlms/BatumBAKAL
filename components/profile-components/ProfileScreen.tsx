@@ -99,6 +99,7 @@ export default function ProfileScreen () {
             try {
                 const response = await getProfileData()
                 console.log(response, "DATA FETCH USER NAME")
+                // FIX THIS CALLING
                 setUserProfileName(response.userData.username);
 
             } catch (error) {

@@ -1,9 +1,9 @@
 import apiClient from "../axiosInstance";
-import { store_jwt_token, get_refresh_tokens, get_jwt_token} from "@/utils/auth/authStorage";
+import { store_jwt_token, store_refresh_tokens, get_refresh_tokens, get_jwt_token} from "@/utils/auth/authStorage";
 
 import { useAuthStore } from "@/stores/authStore";
 let isRefreshing = false;
-let requestQueue : Array<any> = [];
+let requestQueue : any[] = [];
 
 const processRefresh = async () => {
     
@@ -12,8 +12,12 @@ const processRefresh = async () => {
         const response  = await apiClient.post('/auth/refresh', {refreshToken});
 
         const newToken = response.data.token;
+        const newRefreshToken = response.data.refreshToken;
 
         await store_jwt_token(newToken);
+        if (newRefreshToken) {
+            await store_refresh_tokens(newRefreshToken);
+        }
 
         return newToken;
 
