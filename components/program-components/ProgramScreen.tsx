@@ -6,25 +6,30 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import { getUserPrograms } from "@/api/services/programService";
 import { useEffect, useState } from "react";
 
+type ProgramCardData = {
+    id: string;
+    name: string;
+    description?: string | null;
+    daysPerWeek?: number;
+};
+
 export default function ProgramScreen() {
     const router = useRouter();
 
-    const [programs, setPrograms] = useState([]);
+    const [programs, setPrograms] = useState<ProgramCardData[]>([]);
 
     useEffect(() => {
         const cardData = async () => {
             try {
                 const response = await getUserPrograms()
-                console.log(response.response.name);
-                setPrograms(response.response)
+                const userPrograms = Array.isArray(response?.response) ? response.response : [];
+                setPrograms(userPrograms)
             } catch (error : any ) {
                 console.log("Error useEffect fetching cardData", error)
             }
         }
         cardData();
     }, [])
-
-    console.log(programs);
     
     return (
         <View className="flex-1">
@@ -92,9 +97,9 @@ export default function ProgramScreen() {
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
-                        description={program.description}
+                        description={program.description ?? ""}
                         daysPerWeek={program.daysPerWeek}
-                        onPress={() => router.push(`/program/${program.id}`)}
+                        onPress={() => router.push(`/program/${program.id}/workout`)}
                     />
                 ))}
             </View>

@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import { delete_jwt_token } from "@/utils/auth/authStorage";
+import { delete_auth_tokens } from "@/utils/auth/authStorage";
 
 interface AuthState {
     isVerified: boolean;
@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     isLoading: false,
     signIn: () => set({ isVerified: true}),
     signOut: () => {
-        delete_jwt_token();
+        delete_auth_tokens();
         set({ isVerified: false});
     },
 }))
