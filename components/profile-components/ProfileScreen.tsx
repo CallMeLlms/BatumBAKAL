@@ -7,30 +7,13 @@ import { useRouter } from "expo-router";
 import { PROFILE_MENU } from "@/constants/settings-constants/profileMenuItems";
 import type { ProfileMenuItem } from "@/constants/settings-constants/profileMenuItems";
 import { useLogout } from "@/hooks/useLogout"
+import { useProfileData } from "@/stores/profileStore";
 
 export default function ProfileScreen () {
     
-    const [userProfileName, setUserProfileName] = useState<String | null>();
-
+    const username = useProfileData((state) => state.username)
     const router = useRouter();
     const logout = useLogout()
-
-    useEffect(() => {
-        
-        const settingsTesting = async () => {
-            try {
-                const response = await getProfileData()
-                console.log(response, "DATA FETCH USER NAME")
-                // FIX THIS CALLING
-                setUserProfileName(response.userData.username);
-
-            } catch (error) {
-                console.log(error, "FROM SETTINGS")
-            }
-        }
-
-        settingsTesting()
-    }, [])
 
     const handlePress = (item: ProfileMenuItem) => {
 
@@ -74,7 +57,7 @@ export default function ProfileScreen () {
 
                         <View className="flex-1">
                             <Text className="text-white text-[18px] font-bold font-sans">
-                                {userProfileName}
+                                {username}
                             </Text>
                             <Text
                                 className="text-[13px] mt-1 font-sans"

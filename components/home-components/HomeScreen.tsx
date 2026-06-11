@@ -1,8 +1,9 @@
 import { View, Text } from "react-native";
-import type { ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import HomeHeader from "./HomeHeader";
+import { useProfileData } from "@/stores/profileStore";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
@@ -81,11 +82,12 @@ function ActivityRow({
 }
 
 export default function HomeScreen () {
+    const username =  useProfileData((state) => state.username)
+
     return (
         <View className="flex-1">
             <HomeHeader
-                username="MR BATUM"
-                subtitle="Chest and triceps are queued"
+                username={username ?? "MR BATUM"}
             />
 
             <View className="rounded-2xl bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden mb-5">
@@ -179,7 +181,6 @@ export default function HomeScreen () {
                     />
                 ))}
             </View>
-
         </View>
     )
 }

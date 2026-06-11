@@ -1,5 +1,4 @@
 import {View, Text} from "react-native";
-import { Card, CardHeader, CardContent, CardFooter } from "../ui/card";
 
 interface HomeHeaderProps {
     username: string
@@ -7,8 +6,12 @@ interface HomeHeaderProps {
 
 export default function HomeHeader ({username}: HomeHeaderProps) {
     return (
-        <View>
-            <Text className="font-bold text-white text-xl">Welcome {username} </Text>  
+        <View className="flex-row justify-between items-center mb-6">
+            <View>
+                <Text className="text-white font-bold text-[28px] font-sans tracking-tight">
+                    {username ?? "where"}
+                </Text>
+            </View>
         </View>
     )
 }
