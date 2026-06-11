@@ -23,6 +23,4 @@ export const postWorkoutDayCreation = async (
         console.log("error in postWorkoutDayCreation: ", error)
         throw error
     }
-
-
 }

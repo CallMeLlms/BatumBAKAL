@@ -14,6 +14,8 @@ import { useAuthStore } from "@/stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import GlobalBottomSheet from '@/components/shared/BottomSheet';
+import { useProfileData } from "@/stores/profileStore";
+
 import "@/api/interceptors/jwtInterceptor";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -45,10 +47,16 @@ function RootLayoutNav() {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const interFontsLoaded = useInterFonts();
+  const fetchProfile =  useProfileData((state) => state.fetchProfile)
+      
   // const [loaded] = useFonts({
   //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   // });
 
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+  
   useEffect(() => {
     if (interFontsLoaded) {
       SplashScreen.hideAsync();
