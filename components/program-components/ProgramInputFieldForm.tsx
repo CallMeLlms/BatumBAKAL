@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { useProgramBuilderStore } from "@/stores/programBuilderStore";
+import { useProgramBuilderStore } from "@/stores/program-stores/programBuilderStore";
 
 export default function ProgramInputFieldForm() {
     const router = useRouter();

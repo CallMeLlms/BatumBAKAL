@@ -30,7 +30,7 @@ export default function ProgramScreen() {
         }
         cardData();
     }, [])
-    
+
     return (
         <View className="flex-1">
             {/* Header */}
@@ -61,7 +61,7 @@ export default function ProgramScreen() {
                     >
                         Active
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">1</Text>
+                    <Text className="text-white font-bold text-[20px] font-sans">{programs.length}</Text>
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text

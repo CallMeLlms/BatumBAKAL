@@ -11,7 +11,7 @@ export default function ProfileScreenLayout({ children }: { children: React.Reac
                 <View className="flex-1 mt-4 mx-horizontalSpacing">
                     <ScrollView
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
+                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 82 }}
                         keyboardShouldPersistTaps="handled"
                     >
                         {children}

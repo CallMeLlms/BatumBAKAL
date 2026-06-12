@@ -12,7 +12,7 @@ export default function HomeLayout ({children} : {children: React.ReactNode}) {
                 <View className="flex-1 mt-4 mx-horizontalSpacing">
                     <ScrollView
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
+                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 82 }}
                         keyboardShouldPersistTaps="handled"
                     >
                         {children}
