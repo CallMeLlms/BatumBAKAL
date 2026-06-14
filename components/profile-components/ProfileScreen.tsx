@@ -8,12 +8,13 @@ import { PROFILE_MENU } from "@/constants/settings-constants/profileMenuItems";
 import type { ProfileMenuItem } from "@/constants/settings-constants/profileMenuItems";
 import { useLogout } from "@/hooks/useLogout"
 import { useProfileData } from "@/stores/profileStore";
-
+import { useAuthStore } from "@/stores/authStore";
 export default function ProfileScreen () {
     
     const username = useProfileData((state) => state.username)
+    const logout = useAuthStore((state) => state.signOut)
     const router = useRouter();
-    const logout = useLogout()
+    // const logout = useLogout()
 
     const handlePress = (item: ProfileMenuItem) => {
 
@@ -23,7 +24,7 @@ export default function ProfileScreen () {
         }
 
         if (item.action === "logout") {
-            // logout()
+            logout()
         }
 
 

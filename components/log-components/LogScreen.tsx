@@ -2,6 +2,8 @@ import { View, Text } from "react-native";
 import type { ComponentProps } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
+import StatCard from "./stat-components/StatCard";
+import ExerciseRow from "./log-exercise-components/ExerciseRow";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
@@ -26,102 +28,6 @@ const recentLogs: {
     { title: "Leg Day", detail: "9 exercises - 14.2k kg volume", icon: "running" },
     { title: "Pull Session", detail: "Back and biceps - 46 min", icon: "clipboard-list" },
 ];
-
-function StatCard({ label, value, detail }: { label: string; value: string; detail: string }) {
-    return (
-        <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
-            <Text
-                className="text-[11px] font-sans uppercase tracking-wider mb-1"
-                style={{ color: MAIN_COLORS.mediumGrey }}
-            >
-                {label}
-            </Text>
-            <View className="flex-row items-end">
-                <Text className="text-white font-bold text-[20px] font-sans">{value}</Text>
-                <Text
-                    className="text-[11px] ml-1 mb-0.5 font-sans"
-                    style={{ color: MAIN_COLORS.mediumGrey }}
-                >
-                    {detail}
-                </Text>
-            </View>
-        </View>
-    );
-}
-
-function ExerciseRow({
-    name,
-    sets,
-    status,
-}: {
-    name: string;
-    sets: string;
-    status: string;
-}) {
-    return (
-        <View className="flex-row items-center justify-between py-3 border-b border-[#2A2A2A]">
-            <View className="flex-1 mr-3">
-                <Text className="text-white text-[14px] font-bold font-sans" numberOfLines={1}>
-                    {name}
-                </Text>
-                <Text
-                    className="text-[12px] mt-0.5 font-sans"
-                    style={{ color: MAIN_COLORS.mediumGrey }}
-                >
-                    {sets}
-                </Text>
-            </View>
-
-            <View
-                className="px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: `${MAIN_COLORS.primary}15` }}
-            >
-                <Text
-                    className="text-[11px] font-semibold font-sans"
-                    style={{ color: MAIN_COLORS.primary }}
-                >
-                    {status}
-                </Text>
-            </View>
-        </View>
-    );
-}
-
-function RecentLog({
-    title,
-    detail,
-    icon,
-}: {
-    title: string;
-    detail: string;
-    icon: FontAwesomeName;
-}) {
-    return (
-        <View className="flex-row items-center bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
-            <View
-                className="w-9 h-9 rounded-lg items-center justify-center mr-3"
-                style={{ backgroundColor: `${MAIN_COLORS.primary}15` }}
-            >
-                <FontAwesome5 name={icon} size={13} color={MAIN_COLORS.primary} />
-            </View>
-
-            <View className="flex-1 mr-3">
-                <Text className="text-white text-[14px] font-bold font-sans" numberOfLines={1}>
-                    {title}
-                </Text>
-                <Text
-                    className="text-[12px] mt-0.5 font-sans"
-                    style={{ color: MAIN_COLORS.mediumGrey }}
-                    numberOfLines={1}
-                >
-                    {detail}
-                </Text>
-            </View>
-
-            <FontAwesome5 name="chevron-right" size={11} color={MAIN_COLORS.mediumGrey} />
-        </View>
-    );
-}
 
 export default function LogScreen () {
     return (
@@ -207,7 +113,7 @@ export default function LogScreen () {
                 Recent Logs
             </Text>
 
-            <View className="gap-3">
+            {/* <View className="gap-3">
                 {recentLogs.map((log) => (
                     <RecentLog
                         key={log.title}
@@ -216,7 +122,7 @@ export default function LogScreen () {
                         icon={log.icon}
                     />
                 ))}
-            </View>
+            </View> */}
         </View>
     )
 }

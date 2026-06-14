@@ -7,7 +7,7 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import { useState } from "react";
 import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTagMap";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
-import { useProgramBuilderStore } from "@/stores/programBuilderStore";
+import { useProgramBuilderStore } from "@/stores/program-stores/programBuilderStore";
 import { Ionicons } from "@expo/vector-icons";
 interface WorkoutFormData {
     title: string;
