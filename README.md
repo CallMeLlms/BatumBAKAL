@@ -198,24 +198,6 @@ The app reads its API base URL from the `DEV_PHYSICAL_DEVICE_IP` environment var
 
 ---
 
-## 🤝 Contributing
-
-This is a personal development project and is not currently open to external contributions. If you spot a bug or have a suggestion, feel free to open an [Issue](https://github.com/CallMeLlms/BatumBAKAL/issues).
-
----
-
-## 👨‍💻 Author
-
-- **CallMeLlms** — [@CallMeLlms](https://github.com/CallMeLlms)
-
----
-
-## 📄 License
-
-This project is private. All rights reserved © 2026.
-
----
-
 <div align="center">
 
 Built with 💪 — one rep at a time.
