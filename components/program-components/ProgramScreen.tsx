@@ -5,8 +5,9 @@ import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { getUserPrograms } from "@/api/services/programService";
 import { useEffect, useState } from "react";
+import { useProgramData } from "@/stores/program-stores/programStore";
 
-type ProgramCardData = {
+type ProgramCardData =  {
     id: string;
     name: string;
     description?: string | null;
@@ -15,25 +16,27 @@ type ProgramCardData = {
 
 export default function ProgramScreen() {
     const router = useRouter();
+    const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
+    const programData = useProgramData((state) => state.programData);
+    const loading = useProgramData((state) => state.isLoading);
+    
 
-    const [programs, setPrograms] = useState<ProgramCardData[]>([]);
+    useEffect(() => {    
+        void fetchUserProgramData();
+    }, [fetchUserProgramData])
 
-    useEffect(() => {
-        const cardData = async () => {
-            try {
-                const response = await getUserPrograms()
-                const userPrograms = Array.isArray(response?.response) ? response.response : [];
-                setPrograms(userPrograms)
-            } catch (error : any ) {
-                console.log("Error useEffect fetching cardData", error)
-            }
-        }
-        cardData();
-    }, [])
+    // console.log(`${JSON.stringify(programData, null , 2)}`);
+
+    if (loading) {
+        return (
+            <Text>Loading lol</Text>
+        )
+    }
 
     return (
+
         <View className="flex-1">
-            {/* Header */}
+
             <View className="flex-row justify-between items-center mb-6">
                 <View>
                     <Text className="text-white font-bold text-[28px] font-sans tracking-tight">
@@ -52,7 +55,6 @@ export default function ProgramScreen() {
                 />
             </View>
 
-            {/* Quick stats */}
             <View className="flex-row gap-3 mb-5">
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -61,7 +63,7 @@ export default function ProgramScreen() {
                     >
                         Active
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">{programs.length}</Text>
+                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData.response.length}`}</Text>
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -83,7 +85,6 @@ export default function ProgramScreen() {
                 </View>
             </View>
 
-            {/* Section label */}
             <Text
                 className="text-[12px] font-semibold uppercase tracking-wider font-sans mb-3"
                 style={{ color: MAIN_COLORS.mediumGrey }}
@@ -91,9 +92,8 @@ export default function ProgramScreen() {
                 Your Programs
             </Text>
 
-            {/* Program cards */}
             <View className="gap-3">                
-                {programs.map(program => (
+                {programData.response.map((program : any) => (
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
@@ -102,7 +102,7 @@ export default function ProgramScreen() {
                         onPress={() => router.push(`/program/${program.id}/workout`)}
                     />
                 ))}
-            </View>
+            </View> 
         </View>
     );
 }
