@@ -16,6 +16,18 @@ export const postProgramCreation = async (title: string, workoutDescription: str
 } 
 
 
+export const getUserPrograms = async () => {
+    try {
+        const response = await apiClient.get('/program/userPrograms');
+        // console.log(response);    
+        return response.data
+    } catch (error) {
+        console.log("Error on fetching data from getUserPrograms MOBILE", error)
+    }
+}
+
+
+
 export const getProgramById = async (programId: any) => {
     
     try {
@@ -24,15 +36,5 @@ export const getProgramById = async (programId: any) => {
         return response.data
     } catch (error) {
         console.log("Error Getting Program By Id", error);
-    }
-}
-
-
-export const getUserPrograms = async () => {
-    try {
-        const response = await apiClient.get('/program/userPrograms');
-        return response.data
-    } catch (error) {
-        console.log("Error on fetching data from getUserPrograms MOBILE", error)
     }
 }

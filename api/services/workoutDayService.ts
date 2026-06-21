@@ -24,3 +24,17 @@ export const postWorkoutDayCreation = async (
         throw error
     }
 }
+
+
+
+export const getUserWorkoutDay = async (workoutID: string) => {
+
+    try {
+        const response = await apiClient.get(`/program/workoutDays/${workoutID}`)
+        // console.log(`${response} from mobile`)
+        return response.data
+    } catch (error) {
+        console.log("error in getUserWorkoutDay: ", error)
+        throw error
+    }
+}

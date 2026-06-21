@@ -1,7 +1,7 @@
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getProgramById } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import WorkoutDayCard from "./workout-components/WorkoutDayCard";
@@ -36,7 +36,7 @@ export type DaySlot = {
 
 
 export default function ProgramDetailedWorkoutScreen() {
-    const { programId } = useLocalSearchParams();
+    const {programId} = useLocalSearchParams();
     const router = useRouter();
     const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
 
@@ -56,6 +56,7 @@ export default function ProgramDetailedWorkoutScreen() {
                 setLoading(true);
                 setHasError(false);
                 const response = await getProgramById(resolvedProgramId);
+                // console.log(response.userProgram.workoutDays[0].id);
                 setProgramData(response ?? null);
                 setHasError(!response?.userProgram);
             } catch (err) {
@@ -70,7 +71,7 @@ export default function ProgramDetailedWorkoutScreen() {
     }, [resolvedProgramId]);
 
     const {daySlots, workoutDays, program} = useProgramDaySlots(programData)
-
+    
     if (loading) {
         return (
             <View className="flex-1 items-center justify-center">
@@ -183,10 +184,11 @@ export default function ProgramDetailedWorkoutScreen() {
 
             <View className="gap-3">
                 {daySlots.map((slot) => (
-                    <WorkoutDayCard 
+                    <WorkoutDayCard
                         key={slot.dayOrder} 
                         slot={slot}
                         onPress={() => {
+                            console.log(slot);
                             if (!slot.workoutDay?.id) return 
                             router.push(`/program/${program.id}/${slot.workoutDay?.id}`)
                         }}

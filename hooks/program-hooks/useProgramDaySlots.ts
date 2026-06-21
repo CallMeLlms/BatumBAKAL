@@ -1,12 +1,11 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DaySlot, ProgramData } from "@/components/program-components/ProgramDetailedWorkoutScreen";
-
 
 
 export default function useProgramDaySlots(programData: ProgramData | null) {
 
     const program = programData?.userProgram;
-
+    
     const workoutDays = useMemo(
         () => [...(program?.workoutDays ?? [])].sort((left, right) => left.dayOrder - right.dayOrder),
         [program?.workoutDays],
@@ -23,5 +22,5 @@ export default function useProgramDaySlots(programData: ProgramData | null) {
         });
     }, [program?.daysPerWeek, workoutDays]);
 
-    return {workoutDays, daySlots}
+    return {workoutDays, daySlots, program}
 }
