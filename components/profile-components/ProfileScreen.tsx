@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { useEffect, useState, type ComponentProps } from "react";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { getProfileData } from "@/api/services/settingServices";
@@ -8,13 +8,12 @@ import { PROFILE_MENU } from "@/constants/settings-constants/profileMenuItems";
 import type { ProfileMenuItem } from "@/constants/settings-constants/profileMenuItems";
 import { useLogout } from "@/hooks/useLogout"
 import { useProfileData } from "@/stores/profileStore";
-import { useAuthStore } from "@/stores/authStore";
+
 export default function ProfileScreen () {
     
     const username = useProfileData((state) => state.username)
-    const logout = useAuthStore((state) => state.signOut)
+    const { logout, isLoading } = useLogout();
     const router = useRouter();
-    // const logout = useLogout()
 
     const handlePress = (item: ProfileMenuItem) => {
 
@@ -24,11 +23,17 @@ export default function ProfileScreen () {
         }
 
         if (item.action === "logout") {
-            logout()
+            Alert.alert("Log out", "End this session on your device?", [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: isLoading ? "Logging out..." : "Log out",
+                    style: "destructive",
+                    onPress: async () => {
+                        await logout();
+                    },
+                },
+            ]);
         }
-
-
-        return { handlePress };
     }
 
 

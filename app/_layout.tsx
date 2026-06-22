@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler';
 import "../global.css"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -23,9 +22,19 @@ SplashScreen.preventAutoHideAsync();
 function RootLayoutNav() {
   const router = useRouter();
   const segments = useSegments();
-  const { isVerified, isLoading } = useAuthStore();
+  const { isVerified, isLoading, initializeAuth } = useAuthStore();
+  const fetchProfile = useProfileData((state) => state.fetchProfile);
+
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
   useEffect(() => {
     if (isLoading) return;
+
+    if (isVerified) {
+      fetchProfile();
+    }
 
     const inAuthGroup = segments[0] === '(auth)';
 
@@ -34,6 +43,8 @@ function RootLayoutNav() {
     } else if (isVerified && inAuthGroup) {
       router.replace('/(tabs)');
     }
+
+    SplashScreen.hideAsync();
   }, [isVerified, isLoading])
 
   return (
@@ -47,21 +58,6 @@ function RootLayoutNav() {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const interFontsLoaded = useInterFonts();
-  const fetchProfile =  useProfileData((state) => state.fetchProfile)
-      
-  // const [loaded] = useFonts({
-  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  // });
-
-  useEffect(() => {
-    fetchProfile()
-  }, [])
-  
-  useEffect(() => {
-    if (interFontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [interFontsLoaded]);
 
   if (!interFontsLoaded) {
     return null;

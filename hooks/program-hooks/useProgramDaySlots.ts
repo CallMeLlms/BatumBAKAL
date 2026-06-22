@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DaySlot, ProgramData } from "@/components/program-components/ProgramDetailedWorkoutScreen";
 
 

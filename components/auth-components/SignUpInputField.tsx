@@ -25,13 +25,13 @@ export default function SignUpInputField() {
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         try {
-            const response = await signUpUser(data.email, data.password, data.username);
+            const response = await signUpUser({ email: data.email, password: data.password, username: data.username });
             if (response.success) {
-                Alert.alert("Success", "Account created successfully", [
+                Alert.alert("Success", response.message || "Account created successfully", [
                     { text: "Sign In", onPress: () => router.replace("/(auth)/signIn") },
                 ]);
             } else {
-                Alert.alert("Error", response.message);
+                Alert.alert("Error", response.message || "Failed to create account");
             }
         } catch (error: any) {
             Alert.alert("Error", error.message || "Something went wrong");

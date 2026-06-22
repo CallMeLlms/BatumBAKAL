@@ -1,6 +1,10 @@
 
 import { View, Text } from "react-native"
 import { MAIN_COLORS } from "@/constants/MainColors";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import type { ComponentProps } from "react";
+
+type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
 export default function ExerciseRow({
     name,

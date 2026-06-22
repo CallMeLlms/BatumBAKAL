@@ -19,15 +19,15 @@ const workoutDraft = [
     { name: "Cable Fly", sets: "3 x 12", status: "Accessory" },
 ];
 
-const recentLogs: {
-    title: string;
-    detail: string;
-    icon: FontAwesomeName;
-}[] = [
-    { title: "Upper Strength", detail: "Logged yesterday - 52 min", icon: "dumbbell" },
-    { title: "Leg Day", detail: "9 exercises - 14.2k kg volume", icon: "running" },
-    { title: "Pull Session", detail: "Back and biceps - 46 min", icon: "clipboard-list" },
-];
+// const recentLogs: {
+//     title: string;
+//     detail: string;
+//     icon: FontAwesomeName;
+// }[] = [
+//     { title: "Upper Strength", detail: "Logged yesterday - 52 min", icon: "dumbbell" },
+//     { title: "Leg Day", detail: "9 exercises - 14.2k kg volume", icon: "running" },
+//     { title: "Pull Session", detail: "Back and biceps - 46 min", icon: "clipboard-list" },
+// ];
 
 export default function LogScreen () {
     return (
