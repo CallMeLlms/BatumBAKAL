@@ -38,3 +38,29 @@ export const getUserWorkoutDay = async (workoutID: string) => {
         throw error
     }
 }
+
+
+export const editUserWorkoutDay = async (
+    workoutID: string | undefined,
+    name: string,
+    dayOrder: number,
+    focusTags: string[],
+    workoutGroups: string[]
+) => {
+    try {
+
+        const payload = {
+            name,
+            dayOrder: Number(dayOrder),
+            focusTags,
+            workoutGroups
+        }
+
+        const response = await apiClient.patch(`/program/workoutDays/edit/${workoutID}`, payload)
+
+        return response.data
+
+    } catch (error) {
+        console.log("error on editUserworkoutDay from mobile api service", error)
+    }
+}
