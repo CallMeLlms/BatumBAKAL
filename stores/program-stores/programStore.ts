@@ -1,26 +1,20 @@
 import { create } from "zustand";
 import { getUserPrograms } from "@/api/services/programService";
 import { getUserWorkoutDay } from "@/api/services/workoutDayService";
+import type { ProgramStoreState } from "@/types/program";
+import type { WorkdayStoreState } from "@/types/workout";
 
-interface ProgramState {
-  programData: any;
-  isLoading: boolean;
-  hasError: boolean;
-  localIdParam: string;
-  fetchUserProgramData: () => Promise<void>;
-}
-
-export const useProgramData = create<ProgramState>((set) => ({
+export const useProgramData = create<ProgramStoreState>((set) => ({
   programData: null,
   isLoading: true,
   hasError: false,
   localIdParam: "",
-  fetchUserProgramData: async () : Promise<void> => {
+  fetchUserProgramData: async (): Promise<void> => {
     set({ isLoading: true });
     try {
       const response = await getUserPrograms();
       set({
-        programData: response,
+        programData: response ?? null,
         isLoading: false,
         hasError: false,
       });
@@ -34,15 +28,7 @@ export const useProgramData = create<ProgramState>((set) => ({
   },
 }));
 
-interface WorkdayState {
-  workoutDayData: any;
-  isLoading: boolean;
-  hasError: boolean;
-  localIdParam: string;
-  fetchUserWorkoutDayData: (workoutId: string) => Promise<void>;
-}
-
-export const useWorkdayData = create<WorkdayState>((set) => ({
+export const useWorkdayData = create<WorkdayStoreState>((set) => ({
   workoutDayData: null,
   isLoading: true,
   hasError: false,
@@ -52,7 +38,7 @@ export const useWorkdayData = create<WorkdayState>((set) => ({
     try {
       const response = await getUserWorkoutDay(workoutId);
       set({
-        workoutDayData: response,
+        workoutDayData: response ?? null,
         isLoading: false,
         hasError: false,
       });

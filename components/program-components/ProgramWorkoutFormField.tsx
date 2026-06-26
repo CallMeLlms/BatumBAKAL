@@ -9,14 +9,7 @@ import CreateWorkoutBottomSheet from "./workout-components/CreateWorkoutBottomSh
 import { useProgramBuilderStore } from "@/stores/program-stores/programBuilderStore";
 import { postWorkoutDayCreation } from "@/api/services/workoutDayService";
 
-type ProgramData = {
-    userProgram: {
-        id: string;
-        name: string;
-        description?: string | null;
-        daysPerWeek: number;
-    };
-};
+import type { Program } from "@/types/program";
 
 export default function ProgramWorkoutFieldForm() {
     const { programId } = useLocalSearchParams();
@@ -24,7 +17,7 @@ export default function ProgramWorkoutFieldForm() {
     const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
     const isDraftMode = resolvedProgramId === "draft";
 
-    const [programData, setProgramData] = useState<ProgramData | null>(null);
+    const [programData, setProgramData] = useState<{ userProgram: Program } | null>(null);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const programDraft = useProgramBuilderStore((state) => state.programDraft);
@@ -40,7 +33,7 @@ export default function ProgramWorkoutFieldForm() {
         const getProgramData = async (id: string) => {
             try {
                 const response = await getProgramById(id); 
-                setProgramData(response as ProgramData);
+                setProgramData(response as { userProgram: Program });
             } catch (error) {
                 console.log("Error in client [getProgramData]", error);
             } finally {

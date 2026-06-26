@@ -127,6 +127,11 @@ export default function SettingsScreen() {
         loadSettings();
     }, []);
 
+
+    const handleSubmit = () => {
+        
+    }
+
     const updatePreferences = async (nextPreferences: SettingsPreferences) => {
         setPreferences(nextPreferences);
         await storeSettingsPreferences(nextPreferences);

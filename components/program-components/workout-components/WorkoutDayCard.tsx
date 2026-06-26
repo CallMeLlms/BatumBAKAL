@@ -3,7 +3,7 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import type { ComponentProps } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { WorkoutDay, ProgramData, DaySlot} from "../ProgramDetailedWorkoutScreen";
+import type { DaySlot } from "@/types/workout";
 
 const formatLabel = (value: string) =>
     value
@@ -91,7 +91,7 @@ export default function WorkoutDayCard({ slot, onPress }: { slot: DaySlot, onPre
             </View>
 
             <View className="mt-3 flex-row flex-wrap">
-                {workoutDay.focusTags.slice(0, 3).map((tag) => (
+                {workoutDay.focusTags.slice(0, 3).map((tag: string) => (
                     <TagPill key={`focus-${workoutDay.id}-${tag}`} label={tag} />
                 ))}
             </View>

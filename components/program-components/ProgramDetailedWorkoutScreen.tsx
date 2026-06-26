@@ -7,32 +7,8 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import WorkoutDayCard from "./workout-components/WorkoutDayCard";
 import { useProgramData } from "@/stores/program-stores/programStore";
 import useProgramDaySlots from "@/hooks/program-hooks/useProgramDaySlots";
-
-export type WorkoutDay = {
-    id: string;
-    name: string;
-    dayOrder: number;
-    focusTags: string[];
-    workoutGroups: string[];
-};
-
-export type ProgramData = {
-    userProgram: {
-        id: string;
-        name: string;
-        description?: string | null;
-        daysPerWeek: number;
-        durationWeeks?: number | null;
-        createdAt?: string;
-        updatedAt?: string;
-        workoutDays?: WorkoutDay[];
-    };
-};
-
-export type DaySlot = {
-    dayOrder: number;
-    workoutDay?: WorkoutDay;
-};
+import type { WorkoutDay, DaySlot } from "@/types/workout";
+import type { Program } from "@/types/program";
 
 
 export default function ProgramDetailedWorkoutScreen() {
@@ -40,7 +16,7 @@ export default function ProgramDetailedWorkoutScreen() {
     const router = useRouter();
     const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
 
-    const [programData, setProgramData] = useState<ProgramData | null>(null);
+    const [programData, setProgramData] = useState<{ userProgram: Program } | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 

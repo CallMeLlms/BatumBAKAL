@@ -1,22 +1,14 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { getUserPrograms } from "@/api/services/programService";
-import { useEffect, useRef, useState } from "react";
-import { Router } from "expo-router";
-interface ProgramDisplayCardProps {
-    title?: string;
-    description?: string;
-    daysPerWeek?: number;
-    onPress?: () => void;
-}
+import type { ProgramCardProps } from "@/types/program";
 
 export default function ProgramDisplayCard({
     title = "",
     description = "",
     daysPerWeek,
     onPress,
-}: ProgramDisplayCardProps) {
+}: ProgramCardProps) {
 
     return (
         <TouchableOpacity

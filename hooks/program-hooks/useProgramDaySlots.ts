@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { DaySlot, ProgramData } from "@/components/program-components/ProgramDetailedWorkoutScreen";
+import type { DaySlot } from "@/types/workout";
+import type { Program } from "@/types/program";
 
 
-export default function useProgramDaySlots(programData: ProgramData | null) {
+export default function useProgramDaySlots(programData: { userProgram: Program } | null) {
 
     const program = programData?.userProgram;
     

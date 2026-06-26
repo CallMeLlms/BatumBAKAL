@@ -12,27 +12,9 @@ import {
     View,
     Alert,
 } from "react-native";
+import type { WorkoutDay, WorkoutDayResponse, WorkdayStoreState } from "@/types/workout";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
-
-type WorkoutDay = {
-    id: string;
-    name: string;
-    dayOrder: number;
-    focusTags: string[];
-    workoutGroups: string[];
-};
-
-type WorkoutDayResponse = {
-    workoutDay?: WorkoutDay;
-};
-
-type WorkdayStoreState = {
-    workoutDayData: WorkoutDayResponse | null;
-    isLoading: boolean;
-    hasError: boolean;
-    fetchUserWorkoutDayData: (workoutId: string) => Promise<void>;
-};
 
 const fallbackFocusTags = ["Push", "Pull", "Legs", "Upper", "Lower", "Full Body"];
 const fallbackWorkoutGroups = ["Chest", "Back", "Shoulders", "Arms", "Quads", "Hamstrings"];
