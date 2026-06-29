@@ -4,8 +4,8 @@ import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTa
 export interface ProgramDraft {
     title: string;
     description: string;
-    daysPerWeek: number;
-    durationWeeks: number;
+    // daysPerWeek: number;
+    // durationWeeks: number;
 }
 
 export interface WorkoutDayDraft {
@@ -28,8 +28,9 @@ interface ProgramBuilderState {
 const initialProgramDraft: ProgramDraft = {
     title: "",
     description: "",
-    daysPerWeek: 0,
-    durationWeeks: 0,
+
+    // daysPerWeek: 0,
+    // durationWeeks: 0,
 };
 
 
