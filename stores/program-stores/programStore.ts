@@ -28,6 +28,24 @@ export const useProgramBuilderStore = create<ProgramBuilderState>((set) => ({
       ),
     })),
 
+  addExercise: (dayOfWeek, exercise) =>
+    set((state) => ({
+      days: state.days.map((day) =>
+        day.dayOfWeek === dayOfWeek
+          ? { ...day, exercises: [...day.exercises, exercise] }
+          : day
+      ),
+    })),
+
+  removeExercise: (dayOfWeek, exerciseId) =>
+    set((state) => ({
+      days: state.days.map((day) =>
+        day.dayOfWeek === dayOfWeek
+          ? { ...day, exercises: day.exercises.filter((ex) => ex.exerciseId !== exerciseId) }
+          : day
+      ),
+    })),
+
   reset: () => set({ title: "", description: "", days: initialDays }),
 }));
 

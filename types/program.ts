@@ -33,6 +33,8 @@ export interface ProgramBuilderState {
 
   setMeta: (title: string, description: string) => void
   toggleDayStatus: (dayOfWeek: number, status: DayStatus) => void
+  addExercise: (dayOfWeek: number, exercise: ExerciseDraft) => void
+  removeExercise: (dayOfWeek: number, exerciseId: string) => void
   reset: () => void
 }
 

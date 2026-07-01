@@ -1,4 +1,4 @@
-import ProgramLayout from "@/components/program-components/ProgramLayout"
+import ProgramLayout from "@/components/program-components/program-layout-structure-components/ProgramLayout"
 import ProgramDetailedWorkoutScreen from "@/components/program-components/ProgramDetailedWorkoutScreen"
 
 export default function ProgramWorkoutScreen() {

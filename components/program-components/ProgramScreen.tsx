@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import ProgramButton from "./ProgramButton";
+import ProgramButton from "./program-input-field-components/ProgramButton";
 import ProgramDisplayCard from "./ProgramCard";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import ProgramInput from "../ProgramInput";
+import ProgramInput from "../program-input-field-components/ProgramInput";
 import { useForm } from "react-hook-form";
 import FocusTagSelector from "./FocusTagSelector";
 import { MAIN_COLORS } from "@/constants/MainColors";
