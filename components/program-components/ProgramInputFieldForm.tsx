@@ -7,6 +7,7 @@ import ProgramDaysCards from "./ProgramDaysCard";
 import ProgramDayBottomSheet from "./ProgramDayBottomSheet";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
 import ProgramInputSimplefied from "./program-input-field-components/ProgramInputSimplefied";
+import { postProgramCreation } from "@/api/services/programService";
 
 export default function ProgramInputFieldForm() {
     const router = useRouter();
@@ -15,6 +16,20 @@ export default function ProgramInputFieldForm() {
     const closeSheet = useBottomSheetStore((state) => state.closeSheet)
     
     const { title, description, days, setMeta } = useProgramBuilderStore();
+
+
+    const handleSubmit = async () : Promise<void> => {
+        
+        
+        console.log(title, description, days[0].dayOfWeek, days)
+        try {
+            const response = await postProgramCreation(title, description, days[0].dayOfWeek, days)
+            // console.log(response)
+        } catch (error) {
+            console.log(`ERROR ON POSTPROGRAMCREATION: ${error}`)
+        }
+    }
+
 
     return (
         <View className="flex-1">
@@ -96,6 +111,7 @@ export default function ProgramInputFieldForm() {
 
             {/* Submit button */}
             <TouchableOpacity
+                onPress={() => handleSubmit()}
                 className="mt-4 h-12 rounded-xl flex-row items-center justify-center"
                 style={{ backgroundColor: MAIN_COLORS.primary }}
                 activeOpacity={0.8}
@@ -103,14 +119,8 @@ export default function ProgramInputFieldForm() {
                 accessibilityLabel="Continue to next step"
             >
                 <Text className="text-[15px] font-bold font-sans" style={{ color: MAIN_COLORS.black }}>
-                    Continue
+                    Submit
                 </Text>
-                <FontAwesome5
-                    name="arrow-right"
-                    size={12}
-                    color={MAIN_COLORS.black}
-                    style={{ marginLeft: 8 }}
-                />
             </TouchableOpacity>
         </View >
     );

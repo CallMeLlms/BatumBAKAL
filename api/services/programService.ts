@@ -1,19 +1,23 @@
 import apiClient from "../axiosInstance"
-import type { Program, ProgramResponse } from "@/types/program";
+import type { ProgramCreateRequest, ProgramResponse } from "@/types/program";
+import type { ExerciseDraft, DayDraft } from "@/types/program";
 
+// I think i don't need the daysPerWeek Only the Days Object
 export const postProgramCreation = async (
   title: string,
-  workoutDescription: string,
+  description: string,
   daysPerWeek: number,
-  durationWeeks?: number,
-): Promise<{ program: Program } | undefined> => {
+  days: DayDraft[],
+): Promise<{ program: ProgramCreateRequest } | undefined> => {
+  console.log(daysPerWeek, "THIS IS FROM THE ")
   try {
-    const response = await apiClient.post("/program/createProgram", {
+    const payload = {
       title,
-      workoutDescription,
+      description,
       daysPerWeek,
-      durationWeeks,
-    });
+      days
+    }
+    const response = await apiClient.post("/program/createProgram", payload);
     return response.data;
   } catch (error) {
     console.log("Error in creating program", error);

@@ -17,6 +17,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
     const removeExercise = useProgramBuilderStore((state) => state.removeExercise);
     const title = useProgramBuilderStore((state) => state.title);
     const description = useProgramBuilderStore((state) => state.description);
+    const toggleDayStatus = useProgramBuilderStore((state) => state.toggleDayStatus);
 
     const router = useRouter()
 
@@ -30,10 +31,22 @@ export default function ProgramDraftDayOfTheWeekScreen() {
             defaultSets: Number(data.set),
             defaultReps: Number(data.rep),
         };
+
+
         addExercise(Number(dayOfWeek), newExercise);
         reset();
     }
+
+    const save = () => {
+        if (currentExercises.length > 0) {
+            toggleDayStatus(Number(dayOfWeek), "active");
+            router.back();
+        } else {
+            alert("No exercises created yet");
+        }
+    }
     
+    // console.log(JSON.stringify(days, null, 2))
     
     return (
         <View>
@@ -190,7 +203,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
                 </Text>
 
                 <TouchableOpacity
-                    onPress={handleSubmit(onSubmit)}
+                    onPress={() => save()}
                     className="mt-2 h-12 rounded-xl flex-row items-center justify-center"
                     style={{ backgroundColor: MAIN_COLORS.primary }}
                     activeOpacity={0.8}
