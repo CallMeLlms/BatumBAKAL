@@ -6,15 +6,14 @@ import type { ExerciseDraft, DayDraft } from "@/types/program";
 export const postProgramCreation = async (
   title: string,
   description: string,
-  daysPerWeek: number,
   days: DayDraft[],
 ): Promise<{ program: ProgramCreateRequest } | undefined> => {
-  console.log(daysPerWeek, "THIS IS FROM THE ")
+  // console.log(daysPerWeek, "THIS IS FROM THE ")
+  
   try {
     const payload = {
       title,
       description,
-      daysPerWeek,
       days
     }
     const response = await apiClient.post("/program/createProgram", payload);

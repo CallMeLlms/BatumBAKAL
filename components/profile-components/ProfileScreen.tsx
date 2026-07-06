@@ -31,6 +31,9 @@ export default function ProfileScreen () {
                     onPress: async () => {
                         await logout();
                     },
+                    // onPress: () => {
+                    //     router.push('(auth)/signIn')   
+                    // }
                 },
             ]);
         }

@@ -21,10 +21,10 @@ export default function ProgramInputFieldForm() {
     const handleSubmit = async () : Promise<void> => {
         
         
-        console.log(title, description, days[0].dayOfWeek, days)
+        console.log(title, description, days)
         try {
-            const response = await postProgramCreation(title, description, days[0].dayOfWeek, days)
-            // console.log(response)
+            const response = await postProgramCreation(title, description, days)
+            console.log(response)
         } catch (error) {
             console.log(`ERROR ON POSTPROGRAMCREATION: ${error}`)
         }
@@ -34,7 +34,7 @@ export default function ProgramInputFieldForm() {
     return (
         <View className="flex-1">
             {/* Back button */}
-            <TouchableOpacity
+            <TouchableOpacity 
                 onPress={() => router.back()}
                 className="flex-row items-center mb-6"
                 activeOpacity={0.7}

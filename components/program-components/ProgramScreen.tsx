@@ -9,22 +9,22 @@ import type { Program } from "@/types/program";
 
 export default function ProgramScreen() {
     const router = useRouter();
-    const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
-    const programData = useProgramData((state) => state.programData);
-    const loading = useProgramData((state) => state.isLoading);
+    // const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
+    // const programData = useProgramData((state) => state.programData);
+    // const loading = useProgramData((state) => state.isLoading);
     
 
-    useEffect(() => {    
-        void fetchUserProgramData();
-    }, [fetchUserProgramData])
+    // useEffect(() => {    
+    //     void fetchUserProgramData();
+    // }, [fetchUserProgramData])
 
     // console.log(`${JSON.stringify(programData, null , 2)}`);
 
-    if (loading) {
-        return (
-            <Text>Loading lol</Text>
-        )
-    }
+    // if (loading) {
+    //     return (
+    //         <Text>Loading lol</Text>
+    //     )
+    // }
 
     return (
 
@@ -56,7 +56,7 @@ export default function ProgramScreen() {
                     >
                         Active
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text>
+                    {/* <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text> */}
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -86,7 +86,7 @@ export default function ProgramScreen() {
             </Text>
 
             <View className="gap-3">                
-                {programData?.response?.map((program: Program) => (
+                {/* {programData?.response?.map((program: Program) => (
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
@@ -94,7 +94,7 @@ export default function ProgramScreen() {
                         daysPerWeek={program.daysPerWeek}
                         onPress={() => router.push(`/program/${program.id}/workout`)}
                     />
-                ))}
+                ))} */}
             </View> 
         </View>
     );
