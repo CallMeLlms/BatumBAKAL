@@ -9,22 +9,23 @@ import type { Program } from "@/types/program";
 
 export default function ProgramScreen() {
     const router = useRouter();
-    // const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
-    // const programData = useProgramData((state) => state.programData);
-    // const loading = useProgramData((state) => state.isLoading);
+    const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
+    const programData = useProgramData((state) => state.programData);
+    const loading = useProgramData((state) => state.isLoading);
     
 
-    // useEffect(() => {    
-    //     void fetchUserProgramData();
-    // }, [fetchUserProgramData])
+    useEffect(() => {    
+        void fetchUserProgramData();
+    }, [fetchUserProgramData])
 
-    // console.log(`${JSON.stringify(programData, null , 2)}`);
+    console.log(`${JSON.stringify(programData, null , 2)}`);
 
-    // if (loading) {
-    //     return (
-    //         <Text>Loading lol</Text>
-    //     )
-    // }
+    if (loading) {
+        return (
+            <Text>Loading lol</Text>
+        )
+    }
+
 
     return (
 

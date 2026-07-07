@@ -8,9 +8,10 @@ interface TestInputProps {
     value: string;
     onChangeText: (text: string) => void;
     multiline?: boolean;
+    editable?: boolean | undefined;
 }
 
-export default function ProgramInputSimplefied({ label, placeholder, value, onChangeText, multiline = false }: TestInputProps) {
+export default function ProgramInputSimplefied({ label, placeholder, value, onChangeText, multiline = false, editable }: TestInputProps) {
     const [isFocused, setIsFocused] = useState(false);
 
     return (
@@ -30,6 +31,7 @@ export default function ProgramInputSimplefied({ label, placeholder, value, onCh
                 }}
             >
                 <TextInput
+                    editable={editable}
                     value={value}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
