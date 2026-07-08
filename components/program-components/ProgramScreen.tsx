@@ -87,15 +87,15 @@ export default function ProgramScreen() {
             </Text>
 
             <View className="gap-3">                
-                {/* {programData?.response?.map((program: Program) => (
+                {programData?.response?.map((program: Program) => (
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
                         description={program.description ?? ""}
-                        daysPerWeek={program.daysPerWeek}
-                        onPress={() => router.push(`/program/${program.id}/workout`)}
+                        dayOfWeek={program.dayOfWeek}
+                        onPress={() => router.push(`/program/${program.id}`)}
                     />
-                ))} */}
+                ))}
             </View> 
         </View>
     );

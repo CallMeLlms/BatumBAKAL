@@ -2,15 +2,11 @@ export interface WorkoutDay {
   id: string;
   name: string;
   dayOrder: number;
-  focusTags: string[];
-  workoutGroups: string[];
 }
 
 export interface WorkoutDayCreatePayload {
   name: string;
   dayOrder: number;
-  focusTags: string[];
-  workoutGroups: string[];
 }
 
 export interface WorkoutDayResponse {
@@ -18,7 +14,9 @@ export interface WorkoutDayResponse {
 }
 
 export interface DaySlot {
+  dayName: string;
   dayOrder: number;
+  status: "active" | "empty";
   workoutDay?: WorkoutDay;
 }
 

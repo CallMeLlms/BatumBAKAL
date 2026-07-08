@@ -6,7 +6,7 @@ import type { ProgramCardProps } from "@/types/program";
 export default function ProgramDisplayCard({
     title = "",
     description = "",
-    daysPerWeek,
+    dayOfWeek,
     onPress,
 }: ProgramCardProps) {
 
@@ -64,7 +64,7 @@ export default function ProgramDisplayCard({
                             className="text-[11px] font-semibold ml-1.5 font-sans"
                             style={{ color: MAIN_COLORS.primary }}
                         >
-                            {daysPerWeek} days/week
+                            {dayOfWeek} days/week
                         </Text>
                     </View>
                 </View>

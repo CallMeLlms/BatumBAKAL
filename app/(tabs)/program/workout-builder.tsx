@@ -1,4 +1,4 @@
-import ProgramWorkoutFormField from "@/components/program-components/ProgramWorkoutFormField"
+import ProgramWorkoutFormField from "@/components/program-components/ProgramCreation"
 import ProgramLayout from "@/components/program-components/program-layout-structure-components/ProgramLayout"
 
 

@@ -4,7 +4,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getProgramById } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import WorkoutDayCard from "./workout-components/WorkoutDayCard";
+import ProgramWorkoutCard from "./program-workout/ProgramWorkoutCard";
+// import WorkoutDayCard from "./workout-components/WorkoutDayCard";
 import { useProgramData } from "@/stores/program-stores/programStore";
 import useProgramDaySlots from "@/hooks/program-hooks/useProgramDaySlots";
 import type { WorkoutDay, DaySlot } from "@/types/workout";
@@ -160,11 +161,10 @@ export default function ProgramDetailedWorkoutScreen() {
 
             <View className="gap-3">
                 {daySlots.map((slot) => (
-                    <WorkoutDayCard
+                    <ProgramWorkoutCard
                         key={slot.dayOrder} 
                         slot={slot}
                         onPress={() => {
-                            console.log(slot);
                             if (!slot.workoutDay?.id) return 
                             router.push(`/program/${program.id}/${slot.workoutDay?.id}`)
                         }}

@@ -6,7 +6,7 @@ export interface Program {
   id: string;
   name: string;
   description?: string | null;
-  daysPerWeek: number;
+  dayOfWeek: number;
   durationWeeks?: number | null;
   workoutDays?: WorkoutDay[];
 }
@@ -41,13 +41,13 @@ export interface ProgramBuilderState {
 export interface ProgramDraft {
   title: string;
   description: string;
-  daysPerWeek: number;
+  dayOfWeek: number;
 }
 
 export const initialProgramDraft: ProgramDraft = {
   title: "",
   description: "",
-  daysPerWeek: 0,
+  dayOfWeek: 0,
 
 };
 
@@ -55,7 +55,7 @@ export const initialProgramDraft: ProgramDraft = {
 export interface ProgramCreatePayload {
   title: string;
   workoutDescription: string;
-  daysPerWeek: number;
+  dayOfWeek: number;
   durationWeeks?: number;
 }
 
@@ -66,7 +66,7 @@ export interface ProgramResponse {
 export interface ProgramCardProps {
   title?: string;
   description?: string;
-  daysPerWeek?: number;
+  dayOfWeek?: number;
   onPress?: () => void;
 }
 
