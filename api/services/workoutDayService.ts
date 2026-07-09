@@ -2,6 +2,7 @@ import apiClient from "../axiosInstance"
 import type {
   WorkoutDayCreatePayload,
   WorkoutDayResponse,
+  DetailedWorkoutDayResponse,
 } from "@/types/workout";
 
 export const postWorkoutDayCreation = async (
@@ -58,5 +59,18 @@ export const editUserWorkoutDay = async (
     return response.data;
   } catch (error) {
     console.log("error on editUserworkoutDay from mobile api service", error);
+  }
+};
+
+export const getWorkoutDayExercises = async (
+  workoutDayId: string,
+): Promise<DetailedWorkoutDayResponse | undefined> => {
+  try {
+    const response = await apiClient.get(`/program/workoutDays/${workoutDayId}/exercises`);
+    
+    return response.data;
+  } catch (error) {
+    console.log("error in getWorkoutDayExercises: ", error);
+    throw error;
   }
 };

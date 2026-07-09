@@ -28,12 +28,12 @@ export default function ProfileScreen () {
                 {
                     text: isLoading ? "Logging out..." : "Log out",
                     style: "destructive",
-                    onPress: async () => {
-                        await logout();
-                    },
-                    // onPress: () => {
-                    //     router.push('(auth)/signIn')   
-                    // }
+                    // onPress: async () => {
+                    //     await logout();
+                    // },
+                    onPress: () => {
+                        router.push('(auth)/signIn')   
+                    }
                 },
             ]);
         }

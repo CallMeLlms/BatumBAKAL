@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getProgramById } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import ProgramWorkoutCard from "./program-workout/ProgramWorkoutCard";
+import ProgramWorkoutCard from "../program-workout/ProgramWorkoutCard";
 // import WorkoutDayCard from "./workout-components/WorkoutDayCard";
 import { useProgramData } from "@/stores/program-stores/programStore";
 import useProgramDaySlots from "@/hooks/program-hooks/useProgramDaySlots";
@@ -33,7 +33,6 @@ export default function ProgramDetailedWorkoutScreen() {
                 setLoading(true);
                 setHasError(false);
                 const response = await getProgramById(resolvedProgramId);
-                // console.log(response.userProgram.workoutDays[0].id);
                 setProgramData(response ?? null);
                 setHasError(!response?.userProgram);
             } catch (err) {

@@ -19,8 +19,6 @@ export default function useProgramDaySlots(programData: { userProgram: Program }
             const dayOrder = index + 1;
             const workoutDay = workoutDays.find((wd) => wd.dayOrder === dayOrder);
             
-            // Logic to determine if slot is active or not based on total dayOfWeek
-            // This is a simple assumption based on your previous logic
             const status = workoutDay ? "active" : "empty";
 
             return {

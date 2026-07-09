@@ -1,7 +1,17 @@
+export interface Exercise {
+  id: string;
+  name: string;
+  sortOrder: number;
+  defaultSets: number;
+  defaultReps: number;
+  workoutDayId: string;
+}
+
 export interface WorkoutDay {
   id: string;
   name: string;
   dayOrder: number;
+  exercises: Exercise[];
 }
 
 export interface WorkoutDayCreatePayload {
@@ -11,6 +21,11 @@ export interface WorkoutDayCreatePayload {
 
 export interface WorkoutDayResponse {
   workoutDay?: WorkoutDay;
+}
+
+export interface DetailedWorkoutDayResponse {
+  success: boolean;
+  data: WorkoutDay;
 }
 
 export interface DaySlot {

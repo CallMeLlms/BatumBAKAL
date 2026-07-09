@@ -59,6 +59,11 @@ export interface ProgramCreatePayload {
   durationWeeks?: number;
 }
 
+export interface ProgramDetailResponse {
+  success: boolean;
+  data: Program;
+}
+
 export interface ProgramResponse {
   response: Program[];
 }

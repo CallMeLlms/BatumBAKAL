@@ -93,7 +93,7 @@ export default function ProgramScreen() {
                         title={program.name}
                         description={program.description ?? ""}
                         dayOfWeek={program.dayOfWeek}
-                        onPress={() => router.push(`/program/${program.id}`)}
+                        onPress={() => router.push(`/program/${program.id}/`)}
                     />
                 ))}
             </View> 

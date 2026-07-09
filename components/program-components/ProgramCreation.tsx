@@ -34,10 +34,12 @@ export default function ProgramInputFieldForm() {
             return;
         }
 
+
         setIsLoading(true);
         try {
-            const response = await postProgramCreation(title, description, days);
             
+            const response = await postProgramCreation(title, description, days);
+            // console.log(response)
             if (response && response.success) {
                 showToast("Program created successfully!", "success");
                 setSuccessProgram(response.data || { name: title, description, days });
