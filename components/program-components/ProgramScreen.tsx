@@ -1,18 +1,11 @@
 import { View, Text } from "react-native";
-import ProgramButton from "./ProgramButton";
+import ProgramButton from "./program-input-field-components/ProgramButton";
 import ProgramDisplayCard from "./ProgramCard";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import { getUserPrograms } from "@/api/services/programService";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useProgramData } from "@/stores/program-stores/programStore";
-
-type ProgramCardData =  {
-    id: string;
-    name: string;
-    description?: string | null;
-    daysPerWeek?: number;
-};
+import type { Program } from "@/types/program";
 
 export default function ProgramScreen() {
     const router = useRouter();
@@ -25,13 +18,14 @@ export default function ProgramScreen() {
         void fetchUserProgramData();
     }, [fetchUserProgramData])
 
-    // console.log(`${JSON.stringify(programData, null , 2)}`);
+    console.log(`${JSON.stringify(programData, null , 2)}`);
 
     if (loading) {
         return (
             <Text>Loading lol</Text>
         )
     }
+
 
     return (
 
@@ -63,7 +57,7 @@ export default function ProgramScreen() {
                     >
                         Active
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData.response.length}`}</Text>
+                    {/* <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text> */}
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -93,13 +87,13 @@ export default function ProgramScreen() {
             </Text>
 
             <View className="gap-3">                
-                {programData.response.map((program : any) => (
+                {programData?.response?.map((program: Program) => (
                     <ProgramDisplayCard
                         key={program.id}
                         title={program.name}
                         description={program.description ?? ""}
-                        daysPerWeek={program.daysPerWeek}
-                        onPress={() => router.push(`/program/${program.id}/workout`)}
+                        dayOfWeek={program.dayOfWeek}
+                        onPress={() => router.push(`/program/${program.id}/`)}
                     />
                 ))}
             </View> 

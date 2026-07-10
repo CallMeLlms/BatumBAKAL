@@ -1,12 +1,11 @@
-
-import ProgramInputFieldForm from "@/components/program-components/ProgramCreation"
 import ProgramLayout from "@/components/program-components/program-layout-structure-components/ProgramLayout"
+import ProgramDraftDayOfTheWeekScreen from "@/components/program-components/draft-components/DayOfTheWeekScreen"
 
-export default function CreateProgram () {
+export default function DraftDayOfWeek() {
     return (
         <>
             <ProgramLayout>
-                <ProgramInputFieldForm/>
+                <ProgramDraftDayOfTheWeekScreen/>
             </ProgramLayout>
         </>
     )

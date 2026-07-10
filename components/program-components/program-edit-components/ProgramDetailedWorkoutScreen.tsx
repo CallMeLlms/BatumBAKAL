@@ -4,35 +4,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getProgramById } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import WorkoutDayCard from "./workout-components/WorkoutDayCard";
+import ProgramWorkoutCard from "../program-workout/ProgramWorkoutCard";
+// import WorkoutDayCard from "./workout-components/WorkoutDayCard";
 import { useProgramData } from "@/stores/program-stores/programStore";
 import useProgramDaySlots from "@/hooks/program-hooks/useProgramDaySlots";
-
-export type WorkoutDay = {
-    id: string;
-    name: string;
-    dayOrder: number;
-    focusTags: string[];
-    workoutGroups: string[];
-};
-
-export type ProgramData = {
-    userProgram: {
-        id: string;
-        name: string;
-        description?: string | null;
-        daysPerWeek: number;
-        durationWeeks?: number | null;
-        createdAt?: string;
-        updatedAt?: string;
-        workoutDays?: WorkoutDay[];
-    };
-};
-
-export type DaySlot = {
-    dayOrder: number;
-    workoutDay?: WorkoutDay;
-};
+import type { WorkoutDay, DaySlot } from "@/types/workout";
+import type { Program } from "@/types/program";
 
 
 export default function ProgramDetailedWorkoutScreen() {
@@ -40,7 +17,7 @@ export default function ProgramDetailedWorkoutScreen() {
     const router = useRouter();
     const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
 
-    const [programData, setProgramData] = useState<ProgramData | null>(null);
+    const [programData, setProgramData] = useState<{ userProgram: Program } | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
@@ -56,7 +33,6 @@ export default function ProgramDetailedWorkoutScreen() {
                 setLoading(true);
                 setHasError(false);
                 const response = await getProgramById(resolvedProgramId);
-                // console.log(response.userProgram.workoutDays[0].id);
                 setProgramData(response ?? null);
                 setHasError(!response?.userProgram);
             } catch (err) {
@@ -184,11 +160,10 @@ export default function ProgramDetailedWorkoutScreen() {
 
             <View className="gap-3">
                 {daySlots.map((slot) => (
-                    <WorkoutDayCard
+                    <ProgramWorkoutCard
                         key={slot.dayOrder} 
                         slot={slot}
                         onPress={() => {
-                            console.log(slot);
                             if (!slot.workoutDay?.id) return 
                             router.push(`/program/${program.id}/${slot.workoutDay?.id}`)
                         }}

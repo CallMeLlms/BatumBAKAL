@@ -1,18 +1,15 @@
-import axios from "axios";
 import apiClient from "../axiosInstance";
 import { store_jwt_token, store_refresh_tokens } from "@/utils/auth/authStorage";
+import { SignUpPayload, SignInPayload, AuthSuccessResponse, AuthError } from "@/types";
 
-export const signUpUser = async (email: string, password: string, username: string) => {
+export const signUpUser = async (payload: SignUpPayload): Promise<AuthSuccessResponse> => {
     try {
-        const response = await apiClient.post('/auth/signUp', {
-            username,
-            email,
-            password,
-        });
+        const response = await apiClient.post('/auth/signUp', payload);
         return response.data
     } catch(error : any) {
         if (error.response) {
-            throw {status: error.response.status, message: error.response.data?.error || "Request failed" };
+            const message = error.response.data?.message || error.response.data?.error || "Request failed";
+            throw { status: error.response.status, message };
         } else {
             throw {message: "Network Error"};
         }
@@ -20,12 +17,9 @@ export const signUpUser = async (email: string, password: string, username: stri
 } 
 
 
-export const signInUser = async(email: string, password: string) => {
+export const signInUser = async (payload: SignInPayload): Promise<AuthSuccessResponse> => {
     try {
-        const response = await apiClient.post('/auth/signIn', {
-            email,
-            password,
-        });
+        const response = await apiClient.post('/auth/signIn', payload);
 
         if (response.data.success) {
             console.log(response.data.success);
@@ -36,7 +30,8 @@ export const signInUser = async(email: string, password: string) => {
         return response.data;
     } catch (error: any) {
         if (error.response) {
-            throw {status: error.response.status, message: error.response.data?.error || "Request failed" };
+            const message = error.response.data?.message || error.response.data?.error || "Request failed";
+            throw { status: error.response.status, message };
         } else {
             throw {message: "Network Error"};
         }
@@ -44,13 +39,24 @@ export const signInUser = async(email: string, password: string) => {
 }
 
 // add this l4ter
-export const logOutUser = async () => {
-    
+export const logOutUser = async (refreshToken: string | null): Promise<{
+    success: boolean;
+    message: string;
+}> => {
     try {
-        const response = await apiClient.delete('/auth/logout', {});
+        const response = await apiClient.delete<{
+            success: boolean;
+            message: string;
+        }>('/auth/logout', {
+            data: { refreshToken },
+        });
 
-
-    } catch(error: any) {
-
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            throw { status: error.response.status, message: error.response.data?.message || "Logout failed" };
+        } else {
+            throw { message: "Network Error" };
+        }
     }
-}
+};

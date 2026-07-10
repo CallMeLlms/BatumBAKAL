@@ -1,3 +1,4 @@
+import { editUserWorkoutDay } from "@/api/services/workoutDayService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { useWorkdayData } from "@/stores/program-stores/programStore";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -9,28 +10,11 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Alert,
 } from "react-native";
+import type { WorkoutDay, WorkoutDayResponse, WorkdayStoreState } from "@/types/workout";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
-
-type WorkoutDay = {
-    id: string;
-    name: string;
-    dayOrder: number;
-    focusTags: string[];
-    workoutGroups: string[];
-};
-
-type WorkoutDayResponse = {
-    workoutDay?: WorkoutDay;
-};
-
-type WorkdayStoreState = {
-    workoutDayData: WorkoutDayResponse | null;
-    isLoading: boolean;
-    hasError: boolean;
-    fetchUserWorkoutDayData: (workoutId: string) => Promise<void>;
-};
 
 const fallbackFocusTags = ["Push", "Pull", "Legs", "Upper", "Lower", "Full Body"];
 const fallbackWorkoutGroups = ["Chest", "Back", "Shoulders", "Arms", "Quads", "Hamstrings"];
@@ -169,6 +153,36 @@ export default function ProgramDetailedEditScreen() {
         setSelectedFocusTags(workoutDay.focusTags ?? []);
         setSelectedWorkoutGroups(workoutDay.workoutGroups ?? []);
     }, [workoutDay]);
+
+    const onSubmit = async () => {
+        
+        if (!resolvedProgramId) {
+            console.log("undefined")
+            return;
+        }
+
+        const dayOrderNum = Number(dayOrder)
+
+        if (dayOrderNum >= 5) {
+            Alert.alert("day order must me only equal less than 7");
+            return
+        }
+
+        try {
+            const response = await editUserWorkoutDay(
+                resolvedWorkoutDayId, 
+                name, 
+                dayOrderNum, 
+                selectedFocusTags, 
+                selectedWorkoutGroups
+            )
+
+            console.log(response)
+
+        } catch (error) {
+            console.log("error on onsubmit ProgramDetailedEditScreen")
+        }
+    }
 
     const focusTagOptions = useMemo(
         () => Array.from(new Set([...(workoutDay?.focusTags ?? []), ...fallbackFocusTags])),
@@ -367,6 +381,7 @@ export default function ProgramDetailedEditScreen() {
 
                 <TouchableOpacity
                     disabled={!hasUnsavedChanges}
+                    onPress={() => onSubmit()}
                     activeOpacity={0.8}
                     className="flex-[1.35] rounded-xl px-4 py-4"
                     style={{

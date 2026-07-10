@@ -16,7 +16,7 @@ export type SettingsProfileStats = {
 export type SettingsProfileResponse = {
     success: boolean;
     message: string;
-    userData: SettingsProfile;
+    userData: SettingsProfile | null;
     stats: SettingsProfileStats;
 };
 
@@ -48,6 +48,15 @@ export const updateProfileUsername = async (username: string): Promise<{
     message: string;
     userData: SettingsProfile;
 }> => {
+    
+    if (username.length < 3) {
+        return {
+            success: false,
+            message: "Username must be at least 3 characters",
+            userData: null as any
+        }
+    }
+    
     try {
         const response = await apiClient.patch<{
             success: boolean;

@@ -25,11 +25,11 @@ export default function SignInInputField() {
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         try {
-            const response = await signInUser(data.email, data.password);
+            const response = await signInUser({ email: data.email, password: data.password });
             if (response.success) {
                 await signIn();
             } else {
-                Alert.alert(response.message);
+                Alert.alert("Error", response.message || "Incorrect email or password");
             }
         } catch (error: any) {
             Alert.alert("Error", error.message || "Incorrect email or password");

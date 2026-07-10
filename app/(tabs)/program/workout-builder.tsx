@@ -1,5 +1,5 @@
-import ProgramWorkoutFormField from "@/components/program-components/ProgramWorkoutFormField"
-import ProgramLayout from "@/components/program-components/ProgramLayout"
+import ProgramWorkoutFormField from "@/components/program-components/ProgramCreation"
+import ProgramLayout from "@/components/program-components/program-layout-structure-components/ProgramLayout"
 
 
 export default function WorkoutBuilderScreen() {

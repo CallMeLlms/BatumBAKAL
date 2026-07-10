@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { DaySlot, ProgramData } from "@/components/program-components/ProgramDetailedWorkoutScreen";
+import { useMemo } from "react";
+import type { DaySlot } from "@/types/workout";
+import type { Program } from "@/types/program";
 
+const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export default function useProgramDaySlots(programData: ProgramData | null) {
+export default function useProgramDaySlots(programData: { userProgram: Program } | null) {
 
     const program = programData?.userProgram;
     
@@ -12,15 +14,21 @@ export default function useProgramDaySlots(programData: ProgramData | null) {
     );
 
     const daySlots = useMemo<DaySlot[]>(() => {
-        const daysPerWeek = program?.daysPerWeek ?? 0;
-        return Array.from({ length: daysPerWeek }).map((_, index) => {
+        const dayOfWeek = program?.dayOfWeek ?? 0;
+        return Array.from({ length: 7 }).map((_, index) => {
             const dayOrder = index + 1;
+            const workoutDay = workoutDays.find((wd) => wd.dayOrder === dayOrder);
+            
+            const status = workoutDay ? "active" : "empty";
+
             return {
+                dayName: DAY_NAMES[index],
                 dayOrder,
-                workoutDay: workoutDays.find((workoutDay) => workoutDay.dayOrder === dayOrder),
+                status,
+                workoutDay,
             };
         });
-    }, [program?.daysPerWeek, workoutDays]);
+    }, [program?.dayOfWeek, workoutDays]);
 
     return {workoutDays, daySlots, program}
 }

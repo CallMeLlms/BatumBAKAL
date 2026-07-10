@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler';
 import "../global.css"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -14,6 +13,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import GlobalBottomSheet from '@/components/shared/BottomSheet';
+import Toast from '@/components/shared/Toast';
 import { useProfileData } from "@/stores/profileStore";
 
 import "@/api/interceptors/jwtInterceptor";
@@ -23,9 +23,19 @@ SplashScreen.preventAutoHideAsync();
 function RootLayoutNav() {
   const router = useRouter();
   const segments = useSegments();
-  const { isVerified, isLoading } = useAuthStore();
+  const { isVerified, isLoading, initializeAuth } = useAuthStore();
+  const fetchProfile = useProfileData((state) => state.fetchProfile);
+
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
   useEffect(() => {
     if (isLoading) return;
+
+    if (isVerified) {
+      fetchProfile();
+    }
 
     const inAuthGroup = segments[0] === '(auth)';
 
@@ -34,6 +44,8 @@ function RootLayoutNav() {
     } else if (isVerified && inAuthGroup) {
       router.replace('/(tabs)');
     }
+
+    SplashScreen.hideAsync();
   }, [isVerified, isLoading])
 
   return (
@@ -47,21 +59,6 @@ function RootLayoutNav() {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const interFontsLoaded = useInterFonts();
-  const fetchProfile =  useProfileData((state) => state.fetchProfile)
-      
-  // const [loaded] = useFonts({
-  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  // });
-
-  useEffect(() => {
-    fetchProfile()
-  }, [])
-  
-  useEffect(() => {
-    if (interFontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [interFontsLoaded]);
 
   if (!interFontsLoaded) {
     return null;
@@ -74,6 +71,7 @@ export default function RootLayout() {
             <RootLayoutNav/>
             <StatusBar style="auto" />
           </ThemeProvider>
+          <Toast />
           <GlobalBottomSheet/>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
