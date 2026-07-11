@@ -19,6 +19,8 @@ export default function ProgramWorkoutExecutionScreen() {
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
+    console.log(JSON.stringify(workoutDay, null ,2))
+
     useEffect(() => {
         if (!resolvedWorkoutDayId) {
             setLoading(false);
@@ -99,6 +101,7 @@ export default function ProgramWorkoutExecutionScreen() {
                         <ExerciseExecutionCard
                             dayName={dayName}
                             exercises={workoutDay.exercises}
+                            // exercisesId={workoutDay.exercises.}
                         />
                     </>
                 )}

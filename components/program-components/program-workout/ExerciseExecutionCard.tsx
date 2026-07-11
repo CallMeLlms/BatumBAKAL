@@ -3,13 +3,17 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import type { Exercise } from "@/types/workout";
+import ProgramButton from "../program-input-field-components/ProgramButton";
+import { ActivityIndicator } from "react-native";
+import { postCompletedExercises } from "@/api/services/workoutDayService";
 
 interface ExerciseExecutionCardProps {
     dayName: string;
     exercises: Exercise[];
+    exercisesId: string
 }
 
-export default function ExerciseExecutionCard({ dayName, exercises }: ExerciseExecutionCardProps) {
+export default function ExerciseExecutionCard({ dayName, exercises, exercisesId}: ExerciseExecutionCardProps) {
     const [completed, setCompleted] = useState<Set<string>>(new Set());
 
     const toggleExercise = (exerciseId: string) => {
@@ -23,6 +27,26 @@ export default function ExerciseExecutionCard({ dayName, exercises }: ExerciseEx
             return next;
         });
     };
+
+    // console.log(JSON.stringify(exercises, null, 2))
+    
+    const onSubmit = async () => {
+        const logs = Array.from(completed).map((exerciseId) => {
+            const exercise = exercises.find((ex) => ex.id === exerciseId);
+            return {
+                exerciseId,
+                setsPerformed: exercise?.defaultSets || 0,
+                repsPerformed: exercise?.defaultReps || 0,
+                weightUsed: 0
+            };
+        });
+
+        try {
+            await postCompletedExercises(exercisesId, logs);
+        } catch (error) {
+            console.log("ERROR ON ONSUBMIT", error);
+        }
+    }
 
     const allDone = exercises.length > 0 && exercises.every((ex) => completed.has(ex.id));
 
@@ -108,6 +132,25 @@ export default function ExerciseExecutionCard({ dayName, exercises }: ExerciseEx
                     )}
                 </View>
             )}
+
+            <TouchableOpacity
+                onPress={onSubmit}
+                className={`mt-4 h-12 rounded-xl flex-row items-center justify-center ${true ? "opacity-75" : ""}`}
+                style={{ backgroundColor: MAIN_COLORS.primary }}
+                activeOpacity={0.8}
+                // disabled={!completed.size}
+                accessibilityRole="button"
+                accessibilityLabel="Submit program"
+            >
+                <Text>Submit</Text>
+                {/* {completed.size !== 0 ? (
+                    <Text>shit</Text>
+                ) : (
+                    <Text className="text-[15px] font-bold font-sans" style={{ color: MAIN_COLORS.black }}>
+                        Submit
+                    </Text>
+                )} */}
+            </TouchableOpacity>
         </View>
     );
 }

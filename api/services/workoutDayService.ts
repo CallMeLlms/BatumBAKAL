@@ -5,6 +5,23 @@ import type {
   DetailedWorkoutDayResponse,
 } from "@/types/workout";
 
+
+
+
+export const postCompletedExercises = async (
+  workoutId: string,
+  logs: any[]
+) => {
+  try {
+    const response = await apiClient.post(`/program/workoutDays/${workoutId}/exercises/completed`, { logs });
+    return response.data;
+  } catch (error) {
+    console.log("ERROR ON POSTCOMPLETEDEXERCISES", error);
+    throw error;
+  }
+}
+
+
 export const postWorkoutDayCreation = async (
   programId: string,
   workoutDayData: WorkoutDayCreatePayload,
