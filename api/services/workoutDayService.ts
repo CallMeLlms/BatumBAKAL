@@ -22,6 +22,21 @@ export const postCompletedExercises = async (
 }
 
 
+export const getCompletedExercises = async () => {
+  
+  try {
+    const response = await apiClient.get(`/log/userLogs`)
+
+    // console.log(JSON.stringify(response.data, null, 2));
+    
+    return response.data
+    
+  } catch (error) {
+    console.log(`===== ${error} =====`)
+  }
+}
+
+
 export const postWorkoutDayCreation = async (
   programId: string,
   workoutDayData: WorkoutDayCreatePayload,

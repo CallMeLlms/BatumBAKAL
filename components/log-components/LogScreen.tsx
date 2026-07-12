@@ -1,9 +1,11 @@
 import { View, Text } from "react-native";
-import type { ComponentProps } from "react";
+import { useEffect, type ComponentProps } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import StatCard from "./stat-components/StatCard";
 import ExerciseRow from "./log-exercise-components/ExerciseRow";
+import { useLog } from "@/stores/log-stores/logStores";
+
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
@@ -29,7 +31,17 @@ const workoutDraft = [
 //     { title: "Pull Session", detail: "Back and biceps - 46 min", icon: "clipboard-list" },
 // ];
 
+
+
 export default function LogScreen () {
+
+    const testLogData = useLog((state) => state.completedExercisesLog)
+    const logData = useLog((state) => state.data)
+
+    useEffect(() => {
+        void testLogData()
+    }, [testLogData])
+
     return (
         <View className="flex-1">
             <View className="flex-row justify-between items-center mb-6">
