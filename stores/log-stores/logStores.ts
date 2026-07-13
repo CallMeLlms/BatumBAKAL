@@ -1,15 +1,23 @@
 import { create } from "zustand";
 import { getCompletedExercises } from "@/api/services/workoutDayService";
 
-interface Log {
-    data: any
-    completedExercisesLog: () => void
+interface CompletedExercisesLog {
+    id: string;
+    setsPerformed: number;
+    repsPerformed: number;
+    weightUsed: number;
+    completedAt: string;
+    exerciseId: string;
 }
 
+interface Log {
+    data: CompletedExercisesLog[] | null;
+    completedExercisesLog: () => Promise<void>;
+}
 
 export const useLog = create<Log>((set, get) => ({
     data: null,
-    
+
     completedExercisesLog: async () => {
     
         try {

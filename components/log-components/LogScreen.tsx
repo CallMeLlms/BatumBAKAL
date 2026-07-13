@@ -5,6 +5,7 @@ import { MAIN_COLORS } from "@/constants/MainColors";
 import StatCard from "./stat-components/StatCard";
 import ExerciseRow from "./log-exercise-components/ExerciseRow";
 import { useLog } from "@/stores/log-stores/logStores";
+import RecentLogs from "./log-exercise-components/RecentLogs";
 
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
@@ -35,12 +36,17 @@ const workoutDraft = [
 
 export default function LogScreen () {
 
-    const testLogData = useLog((state) => state.completedExercisesLog)
+    const retrieveLogData = useLog((state) => state.completedExercisesLog)
     const logData = useLog((state) => state.data)
 
     useEffect(() => {
-        void testLogData()
-    }, [testLogData])
+        void retrieveLogData()
+    }, [retrieveLogData])
+
+    console.log(JSON.stringify(logData, null, 2))
+
+
+
 
     return (
         <View className="flex-1">
@@ -125,16 +131,16 @@ export default function LogScreen () {
                 Recent Logs
             </Text>
 
-            {/* <View className="gap-3">
-                {recentLogs.map((log) => (
-                    <RecentLog
-                        key={log.title}
-                        title={log.title}
-                        detail={log.detail}
-                        icon={log.icon}
+            <View className="gap-3">
+                {logData?.map((item) => (
+                    <RecentLogs
+                        key={item.id}
+                        sets={item.setsPerformed}
+                        reps={item.repsPerformed}
+                        weights={item.weightUsed}
                     />
                 ))}
-            </View> */}
+            </View>
         </View>
     )
 }
