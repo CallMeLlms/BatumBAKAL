@@ -6,7 +6,7 @@ import { getProgramById } from "@/api/services/programService";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import ProgramWorkoutCard from "../program-workout/ProgramWorkoutCard";
 // import WorkoutDayCard from "./workout-components/WorkoutDayCard";
-import { useProgramData } from "@/stores/program-stores/programStore";
+import { useProgramData } from "@/stores/program-stores/programDataStore";
 import useProgramDaySlots from "@/hooks/program-hooks/useProgramDaySlots";
 import type { WorkoutDay, DaySlot } from "@/types/workout";
 import type { Program } from "@/types/program";
@@ -17,7 +17,7 @@ export default function ProgramDetailedWorkoutScreen() {
     const router = useRouter();
     const resolvedProgramId = Array.isArray(programId) ? programId[0] : programId;
 
-    const [programData, setProgramData] = useState<{ userProgram: Program } | null>(null);
+    const [program, setProgram] = useState<Program | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
@@ -33,8 +33,8 @@ export default function ProgramDetailedWorkoutScreen() {
                 setLoading(true);
                 setHasError(false);
                 const response = await getProgramById(resolvedProgramId);
-                setProgramData(response ?? null);
-                setHasError(!response?.userProgram);
+                setProgram(response?.data ?? null);
+                setHasError(!response?.success);
             } catch (err) {
                 console.log("Error Getting Program By Id", err);
                 setHasError(true);
@@ -46,7 +46,7 @@ export default function ProgramDetailedWorkoutScreen() {
         fetchProgram();
     }, [resolvedProgramId]);
 
-    const {daySlots, workoutDays, program} = useProgramDaySlots(programData)
+    const {daySlots, workoutDays, program: resolvedProgram} = useProgramDaySlots(program)
     
     if (loading) {
         return (

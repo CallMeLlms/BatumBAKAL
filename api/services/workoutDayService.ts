@@ -8,6 +8,7 @@ import type {
 
 
 
+// @deprecated — old creation flow, will resume later
 export const postCompletedExercises = async (
   workoutId: string,
   logs: any[]
@@ -26,17 +27,15 @@ export const getCompletedExercises = async () => {
   
   try {
     const response = await apiClient.get(`/log/userLogs`)
-
-    // console.log(JSON.stringify(response.data, null, 2));
-    
     return response.data
-    
   } catch (error) {
     console.log(`===== ${error} =====`)
+    throw error;
   }
 }
 
 
+// @deprecated — old creation flow, will resume later
 export const postWorkoutDayCreation = async (
   programId: string,
   workoutDayData: WorkoutDayCreatePayload,
@@ -69,6 +68,7 @@ export const getUserWorkoutDay = async (
   }
 };
 
+// @deprecated — old creation flow, will resume later
 export const editUserWorkoutDay = async (
   workoutID: string | undefined,
   name: string,
@@ -91,6 +91,7 @@ export const editUserWorkoutDay = async (
     return response.data;
   } catch (error) {
     console.log("error on editUserworkoutDay from mobile api service", error);
+    throw error;
   }
 };
 

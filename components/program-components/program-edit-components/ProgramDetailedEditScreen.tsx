@@ -1,6 +1,7 @@
+// @deprecated — old edit flow, will resume later
 import { editUserWorkoutDay } from "@/api/services/workoutDayService";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import { useWorkdayData } from "@/stores/program-stores/programStore";
+import { useWorkdayData } from "@/stores/program-stores/workdayDataStore";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState, type ComponentProps } from "react";

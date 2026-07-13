@@ -8,6 +8,9 @@ interface CompletedExercisesLog {
     weightUsed: number;
     completedAt: string;
     exerciseId: string;
+    exercise: {
+        name: string;
+    };
 }
 
 interface Log {
@@ -15,15 +18,14 @@ interface Log {
     completedExercisesLog: () => Promise<void>;
 }
 
-export const useLog = create<Log>((set, get) => ({
+export const useLog = create<Log>((set) => ({
     data: null,
 
     completedExercisesLog: async () => {
-    
         try {
             const response = await getCompletedExercises()    
             set({
-                data: response
+                data: response.data
             })
             
         } catch (error) {

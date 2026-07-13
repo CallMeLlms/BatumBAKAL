@@ -1,3 +1,4 @@
+// @deprecated — old creation flow, will resume later
 import { create } from "zustand";
 import { FocusTag, MuscleGroup } from "@/constants/workout-day-constants/focusTagMap";
 

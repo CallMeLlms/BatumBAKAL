@@ -43,10 +43,7 @@ export default function LogScreen () {
         void retrieveLogData()
     }, [retrieveLogData])
 
-    console.log(JSON.stringify(logData, null, 2))
-
-
-
+    // console.log(JSON.stringify(logData, null, 2))
 
     return (
         <View className="flex-1">
@@ -135,6 +132,7 @@ export default function LogScreen () {
                 {logData?.map((item) => (
                     <RecentLogs
                         key={item.id}
+                        name={item.exercise.name}
                         sets={item.setsPerformed}
                         reps={item.repsPerformed}
                         weights={item.weightUsed}

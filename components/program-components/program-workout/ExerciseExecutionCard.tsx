@@ -43,6 +43,8 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId}
 
         try {
             await postCompletedExercises(exercisesId, logs);
+
+            setCompleted((prev) => prev = new Set())
         } catch (error) {
             console.log("ERROR ON ONSUBMIT", error);
         }
@@ -136,20 +138,14 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId}
             <TouchableOpacity
                 onPress={onSubmit}
                 className={`mt-4 h-12 rounded-xl flex-row items-center justify-center ${true ? "opacity-75" : ""}`}
-                style={{ backgroundColor: MAIN_COLORS.primary }}
+                style={{backgroundColor: completed.size === 0 ? MAIN_COLORS.mediumGrey : MAIN_COLORS.primary}}
                 activeOpacity={0.8}
-                // disabled={!completed.size}
+                disabled={completed.size === 0}
                 accessibilityRole="button"
                 accessibilityLabel="Submit program"
             >
-                <Text>Submit</Text>
-                {/* {completed.size !== 0 ? (
-                    <Text>shit</Text>
-                ) : (
-                    <Text className="text-[15px] font-bold font-sans" style={{ color: MAIN_COLORS.black }}>
-                        Submit
-                    </Text>
-                )} */}
+                {completed.size === 0 ? (<Text className="text-white">Select Exercise</Text>) : (<Text>Submit</Text>)}
+                
             </TouchableOpacity>
         </View>
     );

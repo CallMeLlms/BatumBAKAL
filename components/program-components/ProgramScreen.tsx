@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import ProgramButton from "./program-input-field-components/ProgramButton";
 import ProgramDisplayCard from "./ProgramCard";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { useEffect } from "react";
-import { useProgramData } from "@/stores/program-stores/programStore";
+import { useProgramData } from "@/stores/program-stores/programDataStore";
 import type { Program } from "@/types/program";
 
 export default function ProgramScreen() {
@@ -18,11 +18,11 @@ export default function ProgramScreen() {
         void fetchUserProgramData();
     }, [fetchUserProgramData])
 
-    console.log(`${JSON.stringify(programData, null , 2)}`);
-
     if (loading) {
         return (
-            <Text>Loading lol</Text>
+            <View className="flex-1 items-center justify-center">
+                <ActivityIndicator size="large" color={MAIN_COLORS.primary} />
+            </View>
         )
     }
 
@@ -66,7 +66,7 @@ export default function ProgramScreen() {
                     >
                         Total
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">3</Text>
+                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text>
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -75,7 +75,7 @@ export default function ProgramScreen() {
                     >
                         Weeks
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">8</Text>
+                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.reduce((sum, p) => sum + (p.durationWeeks ?? 0), 0) ?? 0}`}</Text>
                 </View>
             </View>
 

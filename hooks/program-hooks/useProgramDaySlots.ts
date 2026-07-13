@@ -4,9 +4,7 @@ import type { Program } from "@/types/program";
 
 const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export default function useProgramDaySlots(programData: { userProgram: Program } | null) {
-
-    const program = programData?.userProgram;
+export default function useProgramDaySlots(program: Program | null) {
     
     const workoutDays = useMemo(
         () => [...(program?.workoutDays ?? [])].sort((left, right) => left.dayOrder - right.dayOrder),

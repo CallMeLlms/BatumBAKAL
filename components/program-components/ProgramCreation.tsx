@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { useProgramBuilderStore } from "@/stores/program-stores/programStore";
+import { useProgramBuilderStore } from "@/stores/program-stores/builderStore";
 import ProgramDaysCards from "./ProgramDaysCard";
 import ProgramDayBottomSheet from "./ProgramDayBottomSheet";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
@@ -14,7 +14,7 @@ import { useToastStore } from "@/stores/toastStore";
 export default function ProgramInputFieldForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [successProgram, setSuccessProgram] = useState<any | null>(null);
+    const [successProgram, setSuccessProgram] = useState<{ name?: string; title?: string; description?: string | null } | null>(null);
     
     const openSheet = useBottomSheetStore((state) => state.openSheet)
     const closeSheet = useBottomSheetStore((state) => state.closeSheet)
@@ -40,11 +40,11 @@ export default function ProgramInputFieldForm() {
             
             const response = await postProgramCreation(title, description, days);
             // console.log(response)
-            if (response && response.success) {
+            if (response.success && response.data) {
                 showToast("Program created successfully!", "success");
-                setSuccessProgram(response.data || { name: title, description, days });
+                setSuccessProgram(response.data);
             } else {
-                throw new Error(response?.message || "Failed to create program");
+                throw new Error("Failed to create program");
             }
         } catch (error: any) {
             console.log(`ERROR ON POSTPROGRAMCREATION: ${error}`);
