@@ -10,27 +10,34 @@ interface CompletedExercisesLog {
     exerciseId: string;
     exercise: {
         name: string;
+        workoutDay: {
+            dayOrder: number;
+        };
     };
 }
 
 interface Log {
     data: CompletedExercisesLog[] | null;
+    loading: boolean;
+    error: string | null;
     completedExercisesLog: () => Promise<void>;
 }
 
 export const useLog = create<Log>((set) => ({
     data: null,
+    loading: false,
+    error: null,
 
     completedExercisesLog: async () => {
-        try {
-            const response = await getCompletedExercises()    
-            set({
-                data: response.data
-            })
-            
-        } catch (error) {
-            console.log(error)
-        }
-    } 
+        set({ loading: true, error: null });
 
-}))
+        try {
+            const response = await getCompletedExercises();
+            set({ data: response.data, loading: false });
+        } catch (error) {
+            const message =
+                error instanceof Error ? error.message : "Failed to load logs";
+            set({ error: message, loading: false });
+        }
+    },
+}));
