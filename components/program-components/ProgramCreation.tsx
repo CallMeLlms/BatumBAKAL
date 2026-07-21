@@ -14,7 +14,7 @@ import { useToastStore } from "@/stores/toastStore";
 export default function ProgramInputFieldForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [successProgram, setSuccessProgram] = useState<{ name?: string; title?: string; description?: string | null } | null>(null);
+    const [successProgram, setSuccessProgram] = useState<any | null>(null);
     
     const openSheet = useBottomSheetStore((state) => state.openSheet)
     const closeSheet = useBottomSheetStore((state) => state.closeSheet)
@@ -37,14 +37,14 @@ export default function ProgramInputFieldForm() {
 
         setIsLoading(true);
         try {
-            
+
             const response = await postProgramCreation(title, description, days);
             // console.log(response)
-            if (response.success && response.data) {
+            if (response && response.success) {
                 showToast("Program created successfully!", "success");
-                setSuccessProgram(response.data);
+                setSuccessProgram(response.data || { name: title, description, days });
             } else {
-                throw new Error("Failed to create program");
+                throw new Error(response?.message || "Failed to create program");
             }
         } catch (error: any) {
             console.log(`ERROR ON POSTPROGRAMCREATION: ${error}`);

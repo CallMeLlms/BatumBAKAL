@@ -14,6 +14,8 @@ interface ProgramWorkoutCardProps {
 
 export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProps) {
     const router = useRouter();
+
+
     const [program, setProgram] = useState<Program | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);

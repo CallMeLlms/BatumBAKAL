@@ -101,7 +101,7 @@ export default function ProgramWorkoutExecutionScreen() {
                         <ExerciseExecutionCard
                             dayName={dayName}
                             exercises={workoutDay.exercises}
-                            // exercisesId={workoutDay.exercises.}
+                            exercisesId={workoutDay.exercises[0].workoutDayId}
                         />
                     </>
                 )}
