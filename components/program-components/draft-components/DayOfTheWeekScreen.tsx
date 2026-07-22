@@ -139,7 +139,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
                             name={"rep"}
                             errors={errors}
                             label={"Reps"}
-                            placeholder={"3"}
+                            placeholder={"12"}
                             keyboardType={'number-pad'}
                             rules={{ required: "Reps is required", pattern: { value: /^\d+$/, message: "Must be a number" } }}
                         />
@@ -151,7 +151,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
                             name={"set"}
                             errors={errors}
                             label={"Sets"}
-                            placeholder={"12"}
+                            placeholder={"3"}
                             keyboardType={'number-pad'}
                             rules={{ required: "Sets is required", pattern: { value: /^\d+$/, message: "Must be a number" } }}
                         />
