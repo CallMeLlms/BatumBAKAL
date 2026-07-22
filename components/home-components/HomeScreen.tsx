@@ -3,7 +3,7 @@ import { useEffect, useState, type ComponentProps } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import HomeHeader from "./HomeHeader";
-import { useProfileData } from "@/stores/profileStore";
+import { useProfileData } from "@/stores/profile-stores/profileStore";
 
 type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
 
@@ -40,7 +40,7 @@ function StatCard({ label, value, detail }: { label: string; value: string; deta
                 >
                     {detail}
                 </Text>
-            </View>
+            </View>T
         </View>
     );
 }

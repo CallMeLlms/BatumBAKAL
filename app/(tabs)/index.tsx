@@ -1,5 +1,5 @@
 import { useRefresh } from "@/hooks/useRefresh";
-import { useProfileData } from "@/stores/profileStore";
+import { useProfileData } from "@/stores/profile-stores/profileStore";
 import HomeLayout from "@/components/home-components/HomeLayout";
 import HomeScreen from "@/components/home-components/HomeScreen";
 

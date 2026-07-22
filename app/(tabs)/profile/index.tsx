@@ -1,5 +1,5 @@
 import { useRefresh } from "@/hooks/useRefresh";
-import { useProfileData } from "@/stores/profileStore";
+import { useProfileData } from "@/stores/profile-stores/profileStore";
 import ProfileScreenLayout from "@/components/profile-components/ProfileScreenLayout"
 import ProfileScreen from "@/components/profile-components/ProfileScreen";
 

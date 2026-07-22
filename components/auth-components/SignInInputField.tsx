@@ -3,7 +3,7 @@ import { AuthInputField } from "./AuthInput";
 import { useForm } from "react-hook-form";
 import { authValidationRules } from "@/utils/auth/authUtils";
 import { signInUser } from "@/api/services/authService";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
 import { router } from "expo-router";
 import { useState } from "react";
 
