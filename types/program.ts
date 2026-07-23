@@ -7,7 +7,6 @@ export interface Program {
   name: string;
   description?: string | null;
   dayOfWeek: number;
-  durationWeeks?: number | null;
   workoutDays?: WorkoutDay[];
 }
 

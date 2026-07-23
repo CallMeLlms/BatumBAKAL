@@ -70,15 +70,7 @@ export default function ProgramScreen() {
                     </Text>
                     <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text>
                 </View>
-                <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
-                    <Text
-                        className="text-[11px] font-sans uppercase tracking-wider mb-1"
-                        style={{ color: MAIN_COLORS.mediumGrey }}
-                    >
-                        Weeks
-                    </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.reduce((sum, p) => sum + (p.durationWeeks ?? 0), 0) ?? 0}`}</Text>
-                </View>
+
             </View>
 
             <Text

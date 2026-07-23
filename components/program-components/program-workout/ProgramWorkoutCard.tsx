@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { getProgramById } from "@/api/services/programService";
+import { getProgramById, updateProgram, deleteProgram } from "@/api/services/programService";
+import { useToastStore } from "@/stores/toastStore";
+import { useProgramData } from "@/stores/program-stores/programDataStore";
 import type { Program } from "@/types/program";
 import type { WorkoutDay } from "@/types/workout";
 import { DAY_NAMES } from "@/constants/workout-day-constants/dayNames";
@@ -14,11 +16,17 @@ interface ProgramWorkoutCardProps {
 
 export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProps) {
     const router = useRouter();
-
+    const showToast = useToastStore((state) => state.showToast);
+    const fetchUserProgramData = useProgramData((state) => state.fetchUserProgramData);
 
     const [program, setProgram] = useState<Program | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editName, setEditName] = useState("");
+    const [editDescription, setEditDescription] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     
     useEffect(() => {
         const fetchProgram = async () => {
@@ -40,7 +48,74 @@ export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProp
         void fetchProgram();
     }, [programId]);
 
-    if (loading) {
+    const startEditing = () => {
+        setEditName(program?.name ?? "");
+        setEditDescription(program?.description ?? "");
+        setIsEditing(true);
+    };
+
+    const cancelEditing = () => {
+        setIsEditing(false);
+        setEditName("");
+        setEditDescription("");
+    };
+
+    const handleSave = async () => {
+        if (!editName.trim()) {
+            showToast("Program name cannot be empty", "error");
+            return;
+        }
+        setIsSaving(true);
+        try {
+            const response = await updateProgram(programId, editName.trim(), editDescription.trim());
+            if (response?.success) {
+                setProgram((prev) => prev ? { ...prev, name: editName.trim(), description: editDescription.trim() } : prev);
+                showToast("Program updated", "success");
+                setIsEditing(false);
+            } else {
+                showToast(response?.message || "Failed to update", "error");
+            }
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || error?.message || "Failed to update program";
+            showToast(msg, "error");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleDelete = () => {
+        Alert.alert(
+            "Delete Program",
+            `Are you sure you want to delete "${program?.name}"? This action cannot be undone.`,
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                        setIsDeleting(true);
+                        try {
+                            const response = await deleteProgram(programId);
+                            if (response?.success) {
+                                showToast("Program deleted", "success");
+                                void fetchUserProgramData();
+                                router.back();
+                            } else {
+                                showToast(response?.message || "Failed to delete", "error");
+                            }
+                        } catch (error: any) {
+                            const msg = error?.response?.data?.message || error?.message || "Failed to delete program";
+                            showToast(msg, "error");
+                        } finally {
+                            setIsDeleting(false);
+                        }
+                    },
+                },
+            ],
+        );
+    };
+
+    if (loading || isDeleting) {
         return (
             <View className="flex-1 items-center justify-center py-20">
                 <ActivityIndicator size="large" color={MAIN_COLORS.primary} />
@@ -76,14 +151,61 @@ export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProp
 
     return (
         <View className="flex-1">
-            <TouchableOpacity
-                onPress={() => router.back()}
-                className="mb-6 flex-row items-center self-start"
-                activeOpacity={0.7}
-            >
-                <FontAwesome5 name="arrow-left" size={14} color={MAIN_COLORS.white} />
-                <Text className="ml-2 text-[14px] text-white font-sans">Back</Text>
-            </TouchableOpacity>
+            <View className="flex-row items-center justify-between mb-6">
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                    className="flex-row items-center"
+                    activeOpacity={0.7}
+                >
+                    <FontAwesome5 name="arrow-left" size={14} color={MAIN_COLORS.white} />
+                    <Text className="ml-2 text-[14px] text-white font-sans">Back</Text>
+                </TouchableOpacity>
+
+                <View className="flex-row gap-3">
+                    {isEditing ? (
+                        <>
+                            <TouchableOpacity
+                                onPress={cancelEditing}
+                                className="px-3 py-2 rounded-lg border border-[#2A2A2A]"
+                                activeOpacity={0.7}
+                                disabled={isSaving}
+                            >
+                                <Text className="text-[13px] text-white font-sans">Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={handleSave}
+                                className="px-3 py-2 rounded-lg"
+                                style={{ backgroundColor: MAIN_COLORS.primary }}
+                                activeOpacity={0.7}
+                                disabled={isSaving}
+                            >
+                                {isSaving ? (
+                                    <ActivityIndicator size="small" color={MAIN_COLORS.black} />
+                                ) : (
+                                    <Text className="text-[13px] font-bold font-sans" style={{ color: MAIN_COLORS.black }}>Save</Text>
+                                )}
+                            </TouchableOpacity>
+                        </>
+                    ) : (
+                        <>
+                            <TouchableOpacity
+                                onPress={startEditing}
+                                className="px-3 py-2 rounded-lg border border-[#2A2A2A]"
+                                activeOpacity={0.7}
+                            >
+                                <FontAwesome5 name="pen" size={13} color={MAIN_COLORS.mediumGrey} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={handleDelete}
+                                className="px-3 py-2 rounded-lg border border-[#2A2A2A]"
+                                activeOpacity={0.7}
+                            >
+                                <FontAwesome5 name="trash-alt" size={13} color="#EF4444" />
+                            </TouchableOpacity>
+                        </>
+                    )}
+                </View>
+            </View>
 
             <View className="mb-5 overflow-hidden rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A]">
                 <View className="h-1 w-full" style={{ backgroundColor: MAIN_COLORS.primary }} />
@@ -105,16 +227,40 @@ export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProp
                             </Text>
                         </View>
                     </View>
-                    <Text className="text-[28px] font-bold tracking-tight text-white font-sans" numberOfLines={2}>
-                        {program.name}
-                    </Text>
-                    <Text
-                        className="mt-2 text-[13px] leading-5 font-sans"
-                        style={{ color: MAIN_COLORS.mediumGrey }}
-                        numberOfLines={3}
-                    >
-                        {program.description || "No description added yet."}
-                    </Text>
+
+                    {isEditing ? (
+                        <>
+                            <TextInput
+                                value={editName}
+                                onChangeText={setEditName}
+                                className="text-[28px] font-bold tracking-tight text-white font-sans border-b border-[#2A2A2A] pb-1 mb-3"
+                                placeholderTextColor="#4A4A4A"
+                                placeholder="Program name"
+                                autoFocus
+                            />
+                            <TextInput
+                                value={editDescription}
+                                onChangeText={setEditDescription}
+                                className="text-[13px] leading-5 font-sans text-white border-b border-[#2A2A2A] pb-1"
+                                placeholderTextColor="#4A4A4A"
+                                placeholder="Program description"
+                                multiline
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Text className="text-[28px] font-bold tracking-tight text-white font-sans" numberOfLines={2}>
+                                {program.name}
+                            </Text>
+                            <Text
+                                className="mt-2 text-[13px] leading-5 font-sans"
+                                style={{ color: MAIN_COLORS.mediumGrey }}
+                                numberOfLines={3}
+                            >
+                                {program.description || "No description added yet."}
+                            </Text>
+                        </>
+                    )}
                 </View>
             </View>
 
@@ -126,12 +272,10 @@ export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProp
             </Text>
 
             <View className="gap-2">
-                {!DAY_NAMES ? (<Text>Loading</Text>) : (DAY_NAMES.map((dayName, index) => {
+                {DAY_NAMES.map((dayName, index) => {
                     const dayOrder = index;
                     const workoutDay = workoutDays.find((wd) => wd.dayOrder === dayOrder);
                     const isActive = !!workoutDay;
-                    
-                    // console.log(workoutDay)
 
                     return (
                         <TouchableOpacity
@@ -197,7 +341,7 @@ export default function ProgramWorkoutCard({ programId }: ProgramWorkoutCardProp
                             )}
                         </TouchableOpacity>
                     );
-                })) }
+                })}
             </View>
         </View>
     );

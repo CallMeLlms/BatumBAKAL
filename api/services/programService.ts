@@ -44,3 +44,32 @@ export const getProgramById = async (
     throw error;
   }
 };
+
+export const updateProgram = async (
+  programId: string,
+  title: string,
+  description: string,
+): Promise<ProgramDetailResponse> => {
+  try {
+    const response = await apiClient.patch(`/program/updateProgram/${programId}`, {
+      name: title,
+      description,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error updating program", error);
+    throw error;
+  }
+};
+
+export const deleteProgram = async (
+  programId: string,
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete(`/program/deleteProgram/${programId}`);
+    return response.data;
+  } catch (error) {
+    console.log("Error deleting program", error);
+    throw error;
+  }
+};

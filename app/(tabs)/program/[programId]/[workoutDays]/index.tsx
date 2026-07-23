@@ -19,37 +19,34 @@ export default function ProgramWorkoutExecutionScreen() {
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
-    console.log(JSON.stringify(workoutDay, null ,2))
-
-    useEffect(() => {
+    const fetchExercises = async () => {
         if (!resolvedWorkoutDayId) {
             setLoading(false);
             setHasError(true);
             return;
         }
-
-        const fetchExercises = async () => {
-            try {
-                setLoading(true);
-                setHasError(false);
-                const response = await getWorkoutDayExercises(resolvedWorkoutDayId);
-                if (response?.success && response.data) {
-                    setWorkoutDay(response.data);
-                } else {
-                    setHasError(true);
-                }
-            } catch (err) {
-                console.log("Error fetching workout day exercises", err);
+        try {
+            setLoading(true);
+            setHasError(false);
+            const response = await getWorkoutDayExercises(resolvedWorkoutDayId);
+            if (response?.success && response.data) {
+                setWorkoutDay(response.data);
+            } else {
                 setHasError(true);
-            } finally {
-                setLoading(false);
             }
-        };
+        } catch (err) {
+            console.log("Error fetching workout day exercises", err);
+            setHasError(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         void fetchExercises();
     }, [resolvedWorkoutDayId]);
 
-    const dayName = workoutDay?.dayOrder !== undefined ? DAY_NAMES[workoutDay.dayOrder - 1] : "Workout";
+    const dayName = workoutDay?.dayOrder !== undefined ? DAY_NAMES[workoutDay.dayOrder] : "Workout";
 
     return (
         <ProgramLayout>
@@ -101,7 +98,8 @@ export default function ProgramWorkoutExecutionScreen() {
                         <ExerciseExecutionCard
                             dayName={dayName}
                             exercises={workoutDay.exercises}
-                            exercisesId={workoutDay.exercises[0].workoutDayId}
+                            exercisesId={workoutDay.exercises[0]?.workoutDayId ?? ""}
+                            onExercisesChange={fetchExercises}
                         />
                     </>
                 )}

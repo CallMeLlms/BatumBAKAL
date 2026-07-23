@@ -107,3 +107,28 @@ export const getWorkoutDayExercises = async (
     throw error;
   }
 };
+
+export const updateExercise = async (
+  exerciseId: string,
+  data: { name?: string; sortOrder?: number; defaultSets?: number; defaultReps?: number },
+): Promise<any> => {
+  try {
+    const response = await apiClient.patch(`/program/exercises/${exerciseId}`, data);
+    return response.data;
+  } catch (error) {
+    console.log("Error updating exercise", error);
+    throw error;
+  }
+};
+
+export const deleteExercise = async (
+  exerciseId: string,
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete(`/program/exercises/${exerciseId}`);
+    return response.data;
+  } catch (error) {
+    console.log("Error deleting exercise", error);
+    throw error;
+  }
+};
