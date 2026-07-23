@@ -155,9 +155,11 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId,
 
         if (logsToSend.length === 0) return;
 
+        const sessionId = crypto.randomUUID();
+
         setIsSubmitting(true);
         try {
-            const response = await postCompletedExercises(exercisesId, logsToSend);
+            const response = await postCompletedExercises(exercisesId, logsToSend, sessionId);
             if (response?.success) {
                 showToast("Workout logged!", "success");
                 setCompleted(new Set());

@@ -8,13 +8,13 @@ import type {
 
 
 
-// @deprecated — old creation flow, will resume later
 export const postCompletedExercises = async (
   workoutId: string,
-  logs: any[]
+  logs: any[],
+  sessionId?: string
 ) => {
   try {
-    const response = await apiClient.post(`/program/workoutDays/${workoutId}/exercises/completed`, { logs });
+    const response = await apiClient.post(`/program/workoutDays/${workoutId}/exercises/completed`, { logs, sessionId });
     return response.data;
   } catch (error) {
     console.log("ERROR ON POSTCOMPLETEDEXERCISES", error);
@@ -23,10 +23,10 @@ export const postCompletedExercises = async (
 }
 
 
-export const getCompletedExercises = async () => {
+export const getCompletedExercises = async (params?: { cursor?: string; limit?: number; dayOrder?: number }) => {
   
   try {
-    const response = await apiClient.get(`/log/userLogs`)
+    const response = await apiClient.get(`/log/userLogs`, { params })
     return response.data
   } catch (error) {
     console.log(`===== ${error} =====`)
