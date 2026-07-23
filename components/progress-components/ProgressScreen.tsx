@@ -1,24 +1,29 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import { useEffect } from "react";
-import type { ComponentProps } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { useProgressStore } from "@/stores/progress-stores/progressStores";
 import ProgressVolumeCard from "./progress-dashboard-components/ProgressVolumeCard";
 import ProgressStatCard from "./progress-dashboard-components/ProgressStatCard";
 
-type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
-
-
 export default function ProgressScreen () {
-    const { weeklyVolume, weeklyStats, loading, fetchAll } = useProgressStore();
+    const { dashboardData, loading, error, fetchDashboard } = useProgressStore();
 
     useEffect(() => {
-        fetchAll();
+        fetchDashboard();
     }, []);
 
+    if (loading && !dashboardData) {
+        return (
+            <View className="flex-1 items-center justify-center">
+                <ActivityIndicator color={MAIN_COLORS.primary} size="large" />
+            </View>
+        );
+    }
+
+    const dd = dashboardData;
+
     return (
-        <View className="flex-1">
+        <View>
             <View className="flex-row justify-between items-center mb-6">
                 <View>
                     <Text className="text-white font-bold text-[28px] font-sans tracking-tight">
@@ -33,16 +38,46 @@ export default function ProgressScreen () {
                 </View>
             </View>
 
-            {loading && !weeklyVolume.length ? (
-                <View className="flex-1 items-center justify-center">
-                    <ActivityIndicator color={MAIN_COLORS.primary} size="large" />
-                </View>
-            ) : (
-                <ProgressVolumeCard
-                    weeklyVolume={weeklyVolume}
-                    weeklyStats={weeklyStats}
-                />
+            {error && (
+                <Text className="text-red-400 text-sm mb-3">{error}</Text>
+            )}
+
+            {dd && (
+                <>
+                    <ProgressVolumeCard
+                        weeklyVolume={dd.weeklyVolume}
+                        weeklyStats={dd.weeklyStats}
+                        totalWeightVolume={dd.totalWeightVolume}
+                        previousWeekStats={dd.previousWeekStats}
+                    />
+
+                    <View className="flex-row gap-3 mt-4">
+                        <ProgressStatCard
+                            label="Sets"
+                            value={dd.totalSets.toLocaleString()}
+                            detail="this week"
+                        />
+                        <ProgressStatCard
+                            label="Reps"
+                            value={dd.totalReps.toLocaleString()}
+                            detail="this week"
+                        />
+                    </View>
+
+                    <View className="flex-row gap-3 mt-3">
+                        <ProgressStatCard
+                            label="Volume"
+                            value={`${dd.totalWeightVolume.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg`}
+                            detail="total weight"
+                        />
+                        <ProgressStatCard
+                            label="Streak"
+                            value={dd.streak.toString()}
+                            detail={dd.streak === 1 ? "day" : "days"}
+                        />
+                    </View>
+                </>
             )}
         </View>
-    )
+    );
 }

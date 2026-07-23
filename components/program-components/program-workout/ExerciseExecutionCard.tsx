@@ -37,7 +37,8 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId}
                 exerciseId,
                 setsPerformed: exercise?.defaultSets || 0,
                 repsPerformed: exercise?.defaultReps || 0,
-                weightUsed: 0
+                weightUsed: 0,
+                completedAt: new Date().toISOString()
             };
         });
 

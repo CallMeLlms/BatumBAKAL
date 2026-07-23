@@ -1,21 +1,11 @@
 import apiClient from "../axiosInstance"
 
-export const getWeeklyVolume = async () => {
+export const getDashboardData = async () => {
   try {
-    const response = await apiClient.get("/progress/weeklyVolume");
+    const response = await apiClient.get("/progress/dashboardData");
     return response.data;
   } catch (error) {
-    console.log("error in getWeeklyVolume: ", error);
-    throw error;
-  }
-};
-
-export const getWeeklyStats = async () => {
-  try {
-    const response = await apiClient.get("/progress/weeklyStats");
-    return response.data;
-  } catch (error) {
-    console.log("error in getWeeklyStats: ", error);
+    console.log("error in getDashboardData: ", error);
     throw error;
   }
 };

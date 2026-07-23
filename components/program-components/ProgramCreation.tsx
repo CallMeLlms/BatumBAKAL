@@ -19,7 +19,7 @@ export default function ProgramInputFieldForm() {
     const openSheet = useBottomSheetStore((state) => state.openSheet)
     const closeSheet = useBottomSheetStore((state) => state.closeSheet)
     const showToast = useToastStore((state) => state.showToast);
-    
+
     const { title, description, days, setMeta, reset } = useProgramBuilderStore();
 
     const handleSubmit = async () : Promise<void> => {

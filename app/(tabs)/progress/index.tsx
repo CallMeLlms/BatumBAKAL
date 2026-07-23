@@ -4,8 +4,8 @@ import ProgressScreenLayout from "@/components/progress-components/ProgressScree
 import ProgressScreen from "@/components/progress-components/ProgressScreen";
 
 export default function progress () {
-    const fetchAll = useProgressStore((s) => s.fetchAll);
-    const { refreshing, onRefresh } = useRefresh([fetchAll]);
+    const fetchDashboard = useProgressStore((s) => s.fetchDashboard);
+    const { refreshing, onRefresh } = useRefresh([fetchDashboard]);
 
     return (
         <ProgressScreenLayout refreshing={refreshing} onRefresh={onRefresh}>
