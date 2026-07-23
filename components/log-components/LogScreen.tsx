@@ -99,6 +99,7 @@ export default function LogScreen () {
                             weights={item.weightUsed}
                             day={item.exercise.workoutDay.dayOrder}
                             completedAt={item.completedAt}
+                            programName={item.exercise.workoutDay.program.name}
                         />
                     ))}
                 </View>

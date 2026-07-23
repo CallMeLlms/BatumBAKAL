@@ -5,13 +5,14 @@ import { formatDate } from "@/utils/format/formatDate";
 
 
 
-export default function RecentLogs({name, sets, reps, weights, day, completedAt} : {
+export default function RecentLogs({name, sets, reps, weights, day, completedAt, programName} : {
     name: string,
     sets: number,
     reps: number,
     weights: number,
     day: number,
-    completedAt: string
+    completedAt: string,
+    programName?: string
 }) {
     return (
         <View 
@@ -21,8 +22,13 @@ export default function RecentLogs({name, sets, reps, weights, day, completedAt}
                 <Text className="font-bold text-lg text-white">{DAY_NAMES[day]}</Text>
                 <Text className="text-gray-600 text-xs">{formatDate(completedAt)}</Text>
             </View>
+            {programName ? (
+                <Text className="text-[#6B6B6B] text-[11px] font-sans uppercase tracking-wider mb-0.5">
+                    {programName}
+                </Text>
+            ) : null}
             <Text className="font-bold text-lg text-white" numberOfLines={2}>{name}</Text>
-            <Text className="text-gray-600 text-sm mt-1">{reps} reps × {sets} sets</Text>
+            <Text className="text-gray-600 text-sm mt-1">{reps} reps × {sets} sets{weights > 0 ? ` · ${weights} lbs` : ""}</Text>
         </View>
     )
 }

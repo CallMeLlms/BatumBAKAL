@@ -12,6 +12,10 @@ interface CompletedExercisesLog {
         name: string;
         workoutDay: {
             dayOrder: number;
+            program: {
+                id: string;
+                name: string;
+            };
         };
     };
 }
