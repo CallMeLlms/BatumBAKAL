@@ -17,7 +17,7 @@ import {
     updateProfileUsername,
     type SettingsProfile,
 } from "@/api/services/settingServices";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
 import { delete_auth_tokens, get_refresh_tokens } from "@/utils/auth/authStorage";
 import {
     DEFAULT_SETTINGS_PREFERENCES,

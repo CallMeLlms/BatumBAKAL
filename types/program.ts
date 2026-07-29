@@ -7,7 +7,6 @@ export interface Program {
   name: string;
   description?: string | null;
   dayOfWeek: number;
-  durationWeeks?: number | null;
   workoutDays?: WorkoutDay[];
 }
 
@@ -38,33 +37,14 @@ export interface ProgramBuilderState {
   reset: () => void
 }
 
-export interface ProgramDraft {
-  title: string;
-  description: string;
-  dayOfWeek: number;
-}
-
-export const initialProgramDraft: ProgramDraft = {
-  title: "",
-  description: "",
-  dayOfWeek: 0,
-
-};
-
-
-export interface ProgramCreatePayload {
-  title: string;
-  workoutDescription: string;
-  dayOfWeek: number;
-  durationWeeks?: number;
-}
-
 export interface ProgramDetailResponse {
   success: boolean;
   data: Program;
 }
 
 export interface ProgramResponse {
+  success: boolean;
+  message?: string;
   response: Program[];
 }
 
@@ -79,6 +59,5 @@ export interface ProgramStoreState {
   programData: ProgramResponse | null;
   isLoading: boolean;
   hasError: boolean;
-  localIdParam: string;
   fetchUserProgramData: () => Promise<void>;
 }

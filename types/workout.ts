@@ -39,6 +39,5 @@ export interface WorkdayStoreState {
   workoutDayData: WorkoutDayResponse | null;
   isLoading: boolean;
   hasError: boolean;
-  localIdParam: string;
   fetchUserWorkoutDayData: (workoutId: string) => Promise<void>;
 }

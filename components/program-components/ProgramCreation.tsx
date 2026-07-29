@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { useProgramBuilderStore } from "@/stores/program-stores/programStore";
+import { useProgramBuilderStore } from "@/stores/program-stores/builderStore";
 import ProgramDaysCards from "./ProgramDaysCard";
 import ProgramDayBottomSheet from "./ProgramDayBottomSheet";
 import { useBottomSheetStore } from "@/stores/bottomSheetStore";
@@ -19,7 +19,7 @@ export default function ProgramInputFieldForm() {
     const openSheet = useBottomSheetStore((state) => state.openSheet)
     const closeSheet = useBottomSheetStore((state) => state.closeSheet)
     const showToast = useToastStore((state) => state.showToast);
-    
+
     const { title, description, days, setMeta, reset } = useProgramBuilderStore();
 
     const handleSubmit = async () : Promise<void> => {
@@ -37,7 +37,7 @@ export default function ProgramInputFieldForm() {
 
         setIsLoading(true);
         try {
-            
+
             const response = await postProgramCreation(title, description, days);
             // console.log(response)
             if (response && response.success) {

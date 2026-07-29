@@ -9,12 +9,12 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import  useInterFonts from '@/hooks/useInterFonts';
 // import { PortalHost } from '@rn-primitives/portal';
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import GlobalBottomSheet from '@/components/shared/BottomSheet';
 import Toast from '@/components/shared/Toast';
-import { useProfileData } from "@/stores/profileStore";
+import { useProfileData } from "@/stores/profile-stores/profileStore";
 
 import "@/api/interceptors/jwtInterceptor";
 // Prevent the splash screen from auto-hiding before asset loading is complete.

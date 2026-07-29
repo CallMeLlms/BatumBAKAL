@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MAIN_COLORS } from "@/constants/MainColors";
-import type { DayDraft } from "@/types";
-import { useProgramBuilderStore } from "@/stores/program-stores/programStore";
+import type { DayDraft } from "@/types/program";
+import { useProgramBuilderStore } from "@/stores/program-stores/builderStore";
 import { useRouter } from "expo-router";
 
 interface DayBottomSheetProps {

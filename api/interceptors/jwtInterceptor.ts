@@ -1,7 +1,7 @@
 import apiClient from "../axiosInstance";
 import { store_jwt_token, store_refresh_tokens, get_refresh_tokens, get_jwt_token} from "@/utils/auth/authStorage";
 
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
 let isRefreshing = false;
 let requestQueue : any[] = [];
 

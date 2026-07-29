@@ -1,4 +1,3 @@
-import { progressStats } from "../ProgressScreen"
 import {View, Text } from "react-native";
 import { MAIN_COLORS } from "@/constants/MainColors";
 

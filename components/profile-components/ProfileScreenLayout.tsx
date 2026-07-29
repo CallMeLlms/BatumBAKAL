@@ -1,7 +1,7 @@
-import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, ScrollView, KeyboardAvoidingView, Platform, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ProfileScreenLayout({ children }: { children: React.ReactNode }) {
+export default function ProfileScreenLayout({ children, refreshing, onRefresh }: { children: React.ReactNode, refreshing?: boolean, onRefresh?: () => void }) {
     return (
         <SafeAreaView className="flex-1 bg-[#111111]" edges={["top"]}>
             <KeyboardAvoidingView
@@ -13,6 +13,7 @@ export default function ProfileScreenLayout({ children }: { children: React.Reac
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ flexGrow: 1, paddingBottom: 82 }}
                         keyboardShouldPersistTaps="handled"
+                        refreshControl={refreshing !== undefined && onRefresh !== undefined ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> : undefined}
                     >
                         {children}
                     </ScrollView>

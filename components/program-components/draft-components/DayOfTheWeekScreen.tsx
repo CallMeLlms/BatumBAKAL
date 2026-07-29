@@ -1,17 +1,21 @@
 import {View, Text, TouchableOpacity} from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import {useProgramBuilderStore} from "@/stores/program-stores/programStore";
+import {useProgramBuilderStore} from "@/stores/program-stores/builderStore";
 import ProgramInput from "../program-input-field-components/ProgramInput";
 import { useForm } from "react-hook-form";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { useRouter } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useToastStore } from "@/stores/toastStore";
 import type { ExerciseDraft } from "@/types/program";
 
 export default function ProgramDraftDayOfTheWeekScreen() {
     
-    const { control, handleSubmit, reset, formState: { errors } } = useForm();
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: { exercise: "", rep: "", set: "" }
+    });
     const {dayOfWeek} = useLocalSearchParams();
+    const showToast = useToastStore((state) => state.showToast);
     const days = useProgramBuilderStore((state) => state.days);
     const addExercise = useProgramBuilderStore((state) => state.addExercise);
     const removeExercise = useProgramBuilderStore((state) => state.removeExercise);
@@ -26,7 +30,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
     const onSubmit = (data: any) => {
         const newExercise: ExerciseDraft = {
             exerciseId: Date.now().toString(),
-            name: data.muscle,
+            name: data.exercise,
             sortOrder: currentExercises.length,
             defaultSets: Number(data.set),
             defaultReps: Number(data.rep),
@@ -42,7 +46,7 @@ export default function ProgramDraftDayOfTheWeekScreen() {
             toggleDayStatus(Number(dayOfWeek), "active");
             router.back();
         } else {
-            alert("No exercises created yet");
+            showToast("Add at least one exercise before saving", "error");
         }
     }
     
@@ -112,11 +116,12 @@ export default function ProgramDraftDayOfTheWeekScreen() {
 
                 <ProgramInput
                     control={control}
-                    name={"muscle"}
+                    name={"exercise"}
                     errors={errors}
                     label={"Exercise"}
                     placeholder={"e.g Bench Press, Squat..."}
                     keyboardType={'default'}
+                    rules={{ required: "Exercise name is required" }}
                 />
 
                 {/* <Text
@@ -134,8 +139,9 @@ export default function ProgramDraftDayOfTheWeekScreen() {
                             name={"rep"}
                             errors={errors}
                             label={"Reps"}
-                            placeholder={"3"}
+                            placeholder={"12"}
                             keyboardType={'number-pad'}
+                            rules={{ required: "Reps is required", pattern: { value: /^\d+$/, message: "Must be a number" } }}
                         />
                         </View>
 
@@ -145,8 +151,9 @@ export default function ProgramDraftDayOfTheWeekScreen() {
                             name={"set"}
                             errors={errors}
                             label={"Sets"}
-                            placeholder={"12"}
+                            placeholder={"3"}
                             keyboardType={'number-pad'}
+                            rules={{ required: "Sets is required", pattern: { value: /^\d+$/, message: "Must be a number" } }}
                         />
                         </View>
                     </View>

@@ -1,7 +1,7 @@
 
 
 import { useState } from "react";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
 import { delete_auth_tokens, get_refresh_tokens } from "@/utils/auth/authStorage";
 import { logOutUser } from "@/api/services/authService";
 

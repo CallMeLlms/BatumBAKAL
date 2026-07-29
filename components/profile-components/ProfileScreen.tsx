@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { PROFILE_MENU } from "@/constants/settings-constants/profileMenuItems";
 import type { ProfileMenuItem } from "@/constants/settings-constants/profileMenuItems";
 import { useLogout } from "@/hooks/useLogout"
-import { useProfileData } from "@/stores/profileStore";
+import { useProfileData } from "@/stores/profile-stores/profileStore";
 
 export default function ProfileScreen () {
     

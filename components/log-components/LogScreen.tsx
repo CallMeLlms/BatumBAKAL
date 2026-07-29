@@ -1,35 +1,89 @@
-import { View, Text } from "react-native";
-import type { ComponentProps } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import { useEffect, useMemo } from "react";
 import { MAIN_COLORS } from "@/constants/MainColors";
-import StatCard from "./stat-components/StatCard";
-import ExerciseRow from "./log-exercise-components/ExerciseRow";
+import { useLog } from "@/stores/log-stores/logStores";
+import { DAY_NAMES } from "@/constants/workout-day-constants/dayNames";
+import RecentLogs from "./log-exercise-components/RecentLogs";
+import SessionCard from "./log-exercise-components/SessionCard";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
-type FontAwesomeName = ComponentProps<typeof FontAwesome5>["name"];
-
-const logStats = [
-    { label: "Today", value: "0", detail: "sets" },
-    { label: "Week", value: "3", detail: "logs" },
-    { label: "Volume", value: "12.8k", detail: "kg" },
-];
-
-const workoutDraft = [
-    { name: "Bench Press", sets: "4 x 8", status: "Ready" },
-    { name: "Incline DB Press", sets: "3 x 10", status: "Next" },
-    { name: "Cable Fly", sets: "3 x 12", status: "Accessory" },
-];
-
-// const recentLogs: {
-//     title: string;
-//     detail: string;
-//     icon: FontAwesomeName;
-// }[] = [
-//     { title: "Upper Strength", detail: "Logged yesterday - 52 min", icon: "dumbbell" },
-//     { title: "Leg Day", detail: "9 exercises - 14.2k kg volume", icon: "running" },
-//     { title: "Pull Session", detail: "Back and biceps - 46 min", icon: "clipboard-list" },
-// ];
 
 export default function LogScreen () {
+
+    const fetchLogs = useLog((state) => state.fetchLogs)
+    const loadMoreLogs = useLog((state) => state.loadMoreLogs)
+    const logData = useLog((state) => state.data)
+    const loading = useLog((state) => state.loading)
+    const loadingMore = useLog((state) => state.loadingMore)
+    const error = useLog((state) => state.error)
+    const hasMore = useLog((state) => state.hasMore)
+    const selectedDayOrder = useLog((state) => state.selectedDayOrder)
+    const setDayFilter = useLog((state) => state.setDayFilter)
+
+    const groupedLogs = useMemo(() => {
+        if (!logData) return [];
+        const groups: { key: string; logs: typeof logData } = [];
+        const sessionMap = new Map<string, typeof logData>();
+        for (const item of logData) {
+            const key = item.sessionId || item.id;
+            if (sessionMap.has(key)) {
+                sessionMap.get(key)!.push(item);
+            } else {
+                sessionMap.set(key, [item]);
+            }
+        }
+        for (const [, logs] of sessionMap) {
+            groups.push({ key: logs[0].sessionId || logs[0].id, logs });
+        }
+        groups.sort((a, b) => new Date(b.logs[0].completedAt).getTime() - new Date(a.logs[0].completedAt).getTime());
+        return groups;
+    }, [logData]);
+
+    useEffect(() => {
+        void fetchLogs()
+    }, [fetchLogs, selectedDayOrder])
+
+    if (loading && !logData) {
+        return (
+            <View className="flex-1">
+                <View className="flex-row justify-between items-center mb-6">
+                    <View>
+                        <Text className="text-white font-bold text-[28px] font-sans tracking-tight">
+                            Log
+                        </Text>
+                    </View>
+                </View>
+                <LoadingSpinner fullScreen />
+            </View>
+        )
+    }
+
+    if (error && !logData) {
+        return (
+            <View className="flex-1">
+                <View className="flex-row justify-between items-center mb-6">
+                    <View>
+                        <Text className="text-white font-bold text-[28px] font-sans tracking-tight">
+                            Log
+                        </Text>
+                    </View>
+                </View>
+                <View className="flex-1 items-center justify-center px-6">
+                    <Text className="text-gray-500 text-center text-sm mb-4">
+                        {error}
+                    </Text>
+                    <TouchableOpacity
+                        className="px-6 py-3 rounded-xl"
+                        style={{ backgroundColor: MAIN_COLORS.primary }}
+                        onPress={() => fetchLogs()}
+                    >
+                        <Text className="text-black font-bold text-sm">Retry</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <View className="flex-1">
             <View className="flex-row justify-between items-center mb-6">
@@ -44,66 +98,67 @@ export default function LogScreen () {
                         Track today's work and recent sessions
                     </Text>
                 </View>
+            </View>
 
-                <View
-                    className="w-11 h-11 rounded-lg items-center justify-center"
-                    style={{ backgroundColor: MAIN_COLORS.primary }}
+            <View>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4"
+                    style={{ height: 40 }}
+                    contentContainerStyle={{ gap: 8, alignItems: "center" }}
                 >
-                    <FontAwesome5 name="plus" size={14} color={MAIN_COLORS.black} />
-                </View>
-            </View>
-
-            <View className="rounded-2xl bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden mb-5">
-                <View className="h-1 w-full" style={{ backgroundColor: MAIN_COLORS.primary }} />
-
-                <View className="px-4 py-4">
-                    <View className="flex-row items-start justify-between mb-3">
-                        <View className="flex-1 mr-4">
-                            <Text
-                                className="text-[11px] font-sans uppercase tracking-wider mb-1"
-                                style={{ color: MAIN_COLORS.mediumGrey }}
-                            >
-                                Current Session
-                            </Text>
-                            <Text className="text-white text-[18px] font-bold font-sans">
-                                Push Day
-                            </Text>
-                            <Text
-                                className="text-[13px] mt-1 font-sans"
-                                style={{ color: MAIN_COLORS.mediumGrey }}
-                            >
-                                Start with the main lift, then accessories
-                            </Text>
-                        </View>
-
-                        <View
-                            className="w-10 h-10 rounded-lg items-center justify-center"
-                            style={{ backgroundColor: `${MAIN_COLORS.primary}15` }}
+                    <TouchableOpacity
+                        onPress={() => setDayFilter(null)}
+                        className={`px-4 rounded-full border items-center justify-center ${
+                            selectedDayOrder === null
+                                ? "border-transparent"
+                                : "border-[#2A2A2A]"
+                        }`}
+                        style={{
+                            height: 34,
+                            backgroundColor: selectedDayOrder === null
+                                ? MAIN_COLORS.primary
+                                : "#1A1A1A"
+                        }}
+                        activeOpacity={0.7}
+                    >
+                        <Text
+                            className={`text-[13px] font-sans font-medium ${
+                                selectedDayOrder === null ? "text-black" : "text-white"
+                            }`}
                         >
-                            <FontAwesome5 name="stopwatch" size={13} color={MAIN_COLORS.primary} />
-                        </View>
-                    </View>
-
-                    {workoutDraft.map((exercise) => (
-                        <ExerciseRow
-                            key={exercise.name}
-                            name={exercise.name}
-                            sets={exercise.sets}
-                            status={exercise.status}
-                        />
-                    ))}
-                </View>
-            </View>
-
-            <View className="flex-row gap-3 mb-5">
-                {logStats.map((stat) => (
-                    <StatCard
-                        key={stat.label}
-                        label={stat.label}
-                        value={stat.value}
-                        detail={stat.detail}
-                    />
-                ))}
+                            All
+                        </Text>
+                    </TouchableOpacity>
+                    {DAY_NAMES.map((name, idx) => {
+                        const isActive = selectedDayOrder === idx;
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                onPress={() => setDayFilter(isActive ? null : idx)}
+                                className={`px-4 rounded-full border items-center justify-center ${
+                                    isActive ? "border-transparent" : "border-[#2A2A2A]"
+                                }`}
+                                style={{
+                                    height: 34,
+                                    backgroundColor: isActive
+                                        ? MAIN_COLORS.primary
+                                        : "#1A1A1A"
+                                }}
+                                activeOpacity={0.7}
+                            >
+                                <Text
+                                    className={`text-[13px] font-sans font-medium ${
+                                        isActive ? "text-black" : "text-white"
+                                    }`}
+                                >
+                                    {name}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
             </View>
 
             <Text
@@ -113,16 +168,49 @@ export default function LogScreen () {
                 Recent Logs
             </Text>
 
-            {/* <View className="gap-3">
-                {recentLogs.map((log) => (
-                    <RecentLog
-                        key={log.title}
-                        title={log.title}
-                        detail={log.detail}
-                        icon={log.icon}
-                    />
-                ))}
-            </View> */}
+            {groupedLogs.length === 0 ? (
+                <View className="flex-1 items-center justify-center px-6">
+                    <Text className="text-gray-500 text-center text-sm">
+                        No logs yet — complete a workout to see your history here.
+                    </Text>
+                </View>
+            ) : (
+                <View className="gap-3">
+                    {groupedLogs.map((group) =>
+                        group.logs.length > 1 ? (
+                            <SessionCard key={group.key} logs={group.logs} />
+                        ) : (
+                            <RecentLogs
+                                key={group.logs[0].id}
+                                name={group.logs[0].exercise.name}
+                                sets={group.logs[0].setsPerformed}
+                                reps={group.logs[0].repsPerformed}
+                                weights={group.logs[0].weightUsed}
+                                day={group.logs[0].exercise.workoutDay.dayOrder}
+                                completedAt={group.logs[0].completedAt}
+                                programName={group.logs[0].exercise.workoutDay.program.name}
+                            />
+                        )
+                    )}
+
+                    {hasMore && (
+                        <TouchableOpacity
+                            onPress={() => loadMoreLogs()}
+                            className="h-12 rounded-xl flex-row items-center justify-center border border-[#2A2A2A]"
+                            activeOpacity={0.7}
+                            disabled={loadingMore}
+                        >
+                            {loadingMore ? (
+                                <ActivityIndicator size="small" color={MAIN_COLORS.mediumGrey} />
+                            ) : (
+                                <Text className="text-[14px] font-sans font-medium" style={{ color: MAIN_COLORS.mediumGrey }}>
+                                    Load More
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+                    )}
+                </View>
+            )}
         </View>
     )
 }

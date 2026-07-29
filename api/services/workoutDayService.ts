@@ -5,6 +5,37 @@ import type {
   DetailedWorkoutDayResponse,
 } from "@/types/workout";
 
+
+
+
+export const postCompletedExercises = async (
+  workoutId: string,
+  logs: any[],
+  sessionId?: string
+) => {
+  try {
+    const response = await apiClient.post(`/program/workoutDays/${workoutId}/exercises/completed`, { logs, sessionId });
+    return response.data;
+  } catch (error) {
+    console.log("ERROR ON POSTCOMPLETEDEXERCISES", error);
+    throw error;
+  }
+}
+
+
+export const getCompletedExercises = async (params?: { cursor?: string; limit?: number; dayOrder?: number }) => {
+  
+  try {
+    const response = await apiClient.get(`/log/userLogs`, { params })
+    return response.data
+  } catch (error) {
+    console.log(`===== ${error} =====`)
+    throw error;
+  }
+}
+
+
+// @deprecated — old creation flow, will resume later
 export const postWorkoutDayCreation = async (
   programId: string,
   workoutDayData: WorkoutDayCreatePayload,
@@ -37,6 +68,7 @@ export const getUserWorkoutDay = async (
   }
 };
 
+// @deprecated — old creation flow, will resume later
 export const editUserWorkoutDay = async (
   workoutID: string | undefined,
   name: string,
@@ -59,6 +91,7 @@ export const editUserWorkoutDay = async (
     return response.data;
   } catch (error) {
     console.log("error on editUserworkoutDay from mobile api service", error);
+    throw error;
   }
 };
 
@@ -71,6 +104,31 @@ export const getWorkoutDayExercises = async (
     return response.data;
   } catch (error) {
     console.log("error in getWorkoutDayExercises: ", error);
+    throw error;
+  }
+};
+
+export const updateExercise = async (
+  exerciseId: string,
+  data: { name?: string; sortOrder?: number; defaultSets?: number; defaultReps?: number },
+): Promise<any> => {
+  try {
+    const response = await apiClient.patch(`/program/exercises/${exerciseId}`, data);
+    return response.data;
+  } catch (error) {
+    console.log("Error updating exercise", error);
+    throw error;
+  }
+};
+
+export const deleteExercise = async (
+  exerciseId: string,
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete(`/program/exercises/${exerciseId}`);
+    return response.data;
+  } catch (error) {
+    console.log("Error deleting exercise", error);
     throw error;
   }
 };

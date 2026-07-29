@@ -4,8 +4,9 @@ import ProgramDisplayCard from "./ProgramCard";
 import { useRouter } from "expo-router";
 import { MAIN_COLORS } from "@/constants/MainColors";
 import { useEffect } from "react";
-import { useProgramData } from "@/stores/program-stores/programStore";
+import { useProgramData } from "@/stores/program-stores/programDataStore";
 import type { Program } from "@/types/program";
+import { ActivityIndicator } from "react-native";
 
 export default function ProgramScreen() {
     const router = useRouter();
@@ -13,16 +14,17 @@ export default function ProgramScreen() {
     const programData = useProgramData((state) => state.programData);
     const loading = useProgramData((state) => state.isLoading);
     
+    // console.log(JSON.stringify(programData?.response, null, 2))
 
     useEffect(() => {    
         void fetchUserProgramData();
     }, [fetchUserProgramData])
 
-    console.log(`${JSON.stringify(programData, null , 2)}`);
-
     if (loading) {
         return (
-            <Text>Loading lol</Text>
+            <View className="flex-1 items-center justify-center">
+                <ActivityIndicator size="large" color={MAIN_COLORS.primary} />
+            </View>
         )
     }
 
@@ -57,7 +59,7 @@ export default function ProgramScreen() {
                     >
                         Active
                     </Text>
-                    {/* <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text> */}
+                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text>
                 </View>
                 <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
                     <Text
@@ -66,17 +68,9 @@ export default function ProgramScreen() {
                     >
                         Total
                     </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">3</Text>
+                    <Text className="text-white font-bold text-[20px] font-sans">{`${programData?.response.length ?? 0}`}</Text>
                 </View>
-                <View className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#2A2A2A]">
-                    <Text
-                        className="text-[11px] font-sans uppercase tracking-wider mb-1"
-                        style={{ color: MAIN_COLORS.mediumGrey }}
-                    >
-                        Weeks
-                    </Text>
-                    <Text className="text-white font-bold text-[20px] font-sans">8</Text>
-                </View>
+
             </View>
 
             <Text

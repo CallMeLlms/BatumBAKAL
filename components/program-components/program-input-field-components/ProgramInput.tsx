@@ -12,6 +12,7 @@ interface ProgramInputProps {
     placeholder: string;
     keyboardType: KeyboardType;
     multiline?: boolean;
+    rules?: object;
 }
 
 export default function ProgramInput({
@@ -22,6 +23,7 @@ export default function ProgramInput({
     placeholder,
     keyboardType,
     multiline = false,
+    rules,
 }: ProgramInputProps) {
     const [isFocused, setIsFocused] = useState(false);
     const hasError = !!errors[name];
@@ -37,7 +39,7 @@ export default function ProgramInput({
             <Controller
                 control={control}
                 name={name}
-                rules={{ required: `${label} is required` }}
+                rules={rules ?? { required: `${label} is required` }}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View
                         className="rounded-xl overflow-hidden"
