@@ -100,65 +100,66 @@ export default function LogScreen () {
                 </View>
             </View>
 
-
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className="mb-4"
-                style={{ height: 36 }}
-                contentContainerStyle={{ gap: 8, alignItems: "center" }}
-            >
-                <TouchableOpacity
-                    onPress={() => setDayFilter(null)}
-                    className={`px-4 rounded-full border items-center justify-center ${
-                        selectedDayOrder === null
-                            ? "border-transparent"
-                            : "border-[#2A2A2A]"
-                    }`}
-                    style={{
-                        height: 34,
-                        backgroundColor: selectedDayOrder === null
-                            ? MAIN_COLORS.primary
-                            : "#1A1A1A"
-                    }}
-                    activeOpacity={0.7}
+            <View>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4"
+                    style={{ height: 40 }}
+                    contentContainerStyle={{ gap: 8, alignItems: "center" }}
                 >
-                    <Text
-                        className={`text-[13px] font-sans font-medium ${
-                            selectedDayOrder === null ? "text-black" : "text-white"
+                    <TouchableOpacity
+                        onPress={() => setDayFilter(null)}
+                        className={`px-4 rounded-full border items-center justify-center ${
+                            selectedDayOrder === null
+                                ? "border-transparent"
+                                : "border-[#2A2A2A]"
                         }`}
+                        style={{
+                            height: 34,
+                            backgroundColor: selectedDayOrder === null
+                                ? MAIN_COLORS.primary
+                                : "#1A1A1A"
+                        }}
+                        activeOpacity={0.7}
                     >
-                        All
-                    </Text>
-                </TouchableOpacity>
-                {DAY_NAMES.map((name, idx) => {
-                    const isActive = selectedDayOrder === idx;
-                    return (
-                        <TouchableOpacity
-                            key={idx}
-                            onPress={() => setDayFilter(isActive ? null : idx)}
-                            className={`px-4 rounded-full border items-center justify-center ${
-                                isActive ? "border-transparent" : "border-[#2A2A2A]"
+                        <Text
+                            className={`text-[13px] font-sans font-medium ${
+                                selectedDayOrder === null ? "text-black" : "text-white"
                             }`}
-                            style={{
-                                height: 34,
-                                backgroundColor: isActive
-                                    ? MAIN_COLORS.primary
-                                    : "#1A1A1A"
-                            }}
-                            activeOpacity={0.7}
                         >
-                            <Text
-                                className={`text-[13px] font-sans font-medium ${
-                                    isActive ? "text-black" : "text-white"
+                            All
+                        </Text>
+                    </TouchableOpacity>
+                    {DAY_NAMES.map((name, idx) => {
+                        const isActive = selectedDayOrder === idx;
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                onPress={() => setDayFilter(isActive ? null : idx)}
+                                className={`px-4 rounded-full border items-center justify-center ${
+                                    isActive ? "border-transparent" : "border-[#2A2A2A]"
                                 }`}
+                                style={{
+                                    height: 34,
+                                    backgroundColor: isActive
+                                        ? MAIN_COLORS.primary
+                                        : "#1A1A1A"
+                                }}
+                                activeOpacity={0.7}
                             >
-                                {name}
-                            </Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </ScrollView>
+                                <Text
+                                    className={`text-[13px] font-sans font-medium ${
+                                        isActive ? "text-black" : "text-white"
+                                    }`}
+                                >
+                                    {name}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
+            </View>
 
             <Text
                 className="text-[12px] font-semibold uppercase tracking-wider font-sans mb-3"
