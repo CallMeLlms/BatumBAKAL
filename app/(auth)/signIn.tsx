@@ -8,7 +8,7 @@ export default function SignIn() {
         <AuthForm>
             <SignInInputField />
             <TouchableOpacity className="bg-red-200"
-            onPress={() => router.push('/(tabs)')}
+            onPress={() => router.push('/(tabs)/log')}
             >
                 <Text>aaassbb</Text>
             </TouchableOpacity>
