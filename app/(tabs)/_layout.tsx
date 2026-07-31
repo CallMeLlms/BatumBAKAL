@@ -4,6 +4,7 @@ import { TabBar } from "@/components/bottom-tab-components/TabBar";
 export default function TabLayout() {
     return (
         <Tabs
+        initialRouteName="log"
         tabBar={(props) => <TabBar {...props}/> }
         screenOptions={{
             headerShown: false,
@@ -15,12 +16,13 @@ export default function TabLayout() {
             },
         }}
         >
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Home",
+                    tabBarItemStyle: { display: "none" },
+                    href: null,
                 }}
-            />
+            /> */}
 
             <Tabs.Screen
                 name="log"

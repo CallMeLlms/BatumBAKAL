@@ -142,6 +142,7 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId,
     };
 
     const onSubmit = async () => {
+
         const logsToSend = Array.from(completed).map((exerciseId) => {
             const log = logs[exerciseId];
             return {
@@ -155,11 +156,9 @@ export default function ExerciseExecutionCard({ dayName, exercises, exercisesId,
 
         if (logsToSend.length === 0) return;
 
-        const sessionId = crypto.randomUUID();
-
         setIsSubmitting(true);
         try {
-            const response = await postCompletedExercises(exercisesId, logsToSend, sessionId);
+            const response = await postCompletedExercises(exercisesId, logsToSend);
             if (response?.success) {
                 showToast("Workout logged!", "success");
                 setCompleted(new Set());
