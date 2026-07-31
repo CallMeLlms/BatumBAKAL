@@ -180,24 +180,6 @@ The app reads its API base URL from the `DEV_PHYSICAL_DEVICE_IP` environment var
 
 ---
 
-## 🗺️ Roadmap
-
-> This section will be updated as development progresses.
-
-- [x] Project scaffolding and navigation setup
-- [x] Authentication screens (login / register)
-- [x] API integration layer with Axios
-- [x] Zustand state management setup
-- [x] Bottom tab navigation (Progress, Log, Profile)
-- [ ] Program creation and management flow
-- [ ] Workout day builder
-- [ ] Live workout logging screen
-- [ ] Progress charts and history visualization
-- [ ] Profile editing
-- [ ] Production build and release
-
----
-
 <div align="center">
 
 Built with 💪 — one rep at a time.
