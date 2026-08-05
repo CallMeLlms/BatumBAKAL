@@ -1,8 +1,9 @@
 import { View, Text, TextInput, KeyboardType, TouchableOpacity } from "react-native";
-import { FieldErrors, Control } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { TextInputProps } from "react-native";
+import { FieldErrors, Control, Controller } from "react-hook-form";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
+import { MAIN_COLORS } from "@/constants/MainColors";
 
 interface AuthInputFieldTypes {
     control: Control<any>;
@@ -15,6 +16,8 @@ interface AuthInputFieldTypes {
     secureTextEntry?: boolean;
     keyboardType?: KeyboardType;
     autoCapitalize?: "none" | "sentences" | "words" | "characters";
+    autoComplete?: TextInputProps["autoComplete"];
+    textContentType?: TextInputProps["textContentType"];
 }
 
 export const AuthInputField = ({
@@ -28,14 +31,19 @@ export const AuthInputField = ({
     secureTextEntry = false,
     keyboardType = "default",
     autoCapitalize = "none",
+    autoComplete,
+    textContentType,
 }: AuthInputFieldTypes) => {
     const fieldError = errors[name];
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     return (
         <View className="mb-5">
-            {/* Label */}
-            <Text className="text-neutral-400 text-xs font-medium tracking-widest uppercase mb-2 ml-1">
+            <Text
+                className="text-[12px] font-semibold uppercase tracking-wider mb-2 font-sans"
+                style={{ color: MAIN_COLORS.mediumGrey }}
+            >
                 {label}
             </Text>
 
@@ -45,11 +53,17 @@ export const AuthInputField = ({
                 rules={rules}
                 render={({ field: { onChange, value, onBlur } }) => (
                     <View>
-                        {/* Input container */}
                         <View
-                            className={`flex-row items-center bg-neutral-900 border rounded-xl px-4 h-14 ${
-                                fieldError ? "border-red-500/60" : "border-neutral-800"
-                            }`}
+                            className="flex-row items-center rounded-xl px-4 h-14"
+                            style={{
+                                borderWidth: 1.5,
+                                borderColor: fieldError
+                                    ? MAIN_COLORS.red
+                                    : isFocused
+                                      ? MAIN_COLORS.primary
+                                      : "#2A2A2A",
+                                backgroundColor: "#1A1A1A",
+                            }}
                         >
                             {icon ? (
                                 <Feather
@@ -62,13 +76,20 @@ export const AuthInputField = ({
 
                             <TextInput
                                 placeholder={placeholder}
-                                placeholderTextColor="#404040"
-                                onBlur={onBlur}
-                                className="flex-1 text-[15px] text-white font-normal"
+                                placeholderTextColor="#4A4A4A"
+                                onBlur={() => {
+                                    onBlur();
+                                    setIsFocused(false);
+                                }}
+                                onFocus={() => setIsFocused(true)}
+                                className="flex-1 text-[15px] font-sans"
+                                style={{ color: MAIN_COLORS.white }}
                                 value={value}
                                 onChangeText={onChange}
                                 keyboardType={keyboardType}
                                 autoCapitalize={autoCapitalize}
+                                autoComplete={autoComplete}
+                                textContentType={textContentType}
                                 secureTextEntry={secureTextEntry && !isPasswordVisible}
                             />
 
@@ -86,9 +107,8 @@ export const AuthInputField = ({
                             )}
                         </View>
 
-                        {/* Error message */}
                         {fieldError && (
-                            <Text className="text-red-500 text-xs mt-1.5 ml-1">
+                            <Text className="text-[11px] mt-1.5 font-sans" style={{ color: MAIN_COLORS.red }}>
                                 {fieldError.message as string}
                             </Text>
                         )}

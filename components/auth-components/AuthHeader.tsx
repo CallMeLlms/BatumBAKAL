@@ -1,4 +1,5 @@
 import { View, Text } from "react-native";
+import { MAIN_COLORS } from "@/constants/MainColors";
 
 interface AuthHeaderProps {
     title: string;
@@ -7,18 +8,18 @@ interface AuthHeaderProps {
 
 export default function AuthHeader({ title, subtitle }: AuthHeaderProps) {
     return (
-        <View className="items-center mb-12">
-            {/* Brand */}
-            <Text className="text-white text-4xl tracking-[6px] font-bold mb-2">
+        <View className="items-center mb-10">
+            <Text className="text-white text-3xl tracking-[6px] font-bold font-sans mb-3">
                 BATUMBAKAL
             </Text>
-            <View className="w-10 h-[2px] bg-neutral-500 mb-8" />
-
-            {/* Page title */}
-            <Text className="text-white text-2xl font-semibold tracking-wide">
+            <View
+                className="w-12 h-[3px] rounded-full mb-8"
+                style={{ backgroundColor: MAIN_COLORS.primary }}
+            />
+            <Text className="text-white text-2xl font-semibold tracking-wide font-sans">
                 {title}
             </Text>
-            <Text className="text-neutral-500 text-sm mt-2 tracking-wide">
+            <Text className="text-sm mt-2 tracking-wide font-sans" style={{ color: MAIN_COLORS.mediumGrey }}>
                 {subtitle}
             </Text>
         </View>
