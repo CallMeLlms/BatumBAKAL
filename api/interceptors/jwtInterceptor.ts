@@ -11,7 +11,7 @@ const processRefresh = async () => {
         const refreshToken = await get_refresh_tokens();
         const response  = await apiClient.post('/auth/refresh', {refreshToken});
 
-        const newToken = response.data.token;
+        const newToken = response.data.shortLivedJWT;
         const newRefreshToken = response.data.refreshToken;
 
         await store_jwt_token(newToken);
