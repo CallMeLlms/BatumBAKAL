@@ -42,7 +42,7 @@ function RootLayoutNav() {
     if (!isVerified && !inAuthGroup) {
       router.replace('/(auth)/signIn');
     } else if (isVerified && inAuthGroup) {
-      router.replace('/(tabs)/logs');
+      router.replace('/(tabs)/log');
     }
 
     SplashScreen.hideAsync();

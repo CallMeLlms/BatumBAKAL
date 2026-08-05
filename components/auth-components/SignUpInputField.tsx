@@ -1,24 +1,31 @@
-import { TouchableOpacity, View, Text, Alert, ActivityIndicator } from "react-native";
+import { TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
 import { AuthInputField } from "./AuthInput";
 import AuthHeader from "./AuthHeader";
 import { useForm } from "react-hook-form";
-import { authValidationRules } from "@/utils/auth/authUtils";
-import { signUpUser } from "@/api/services/authService";
+import { authValidationRules, confirmPasswordValidationRules } from "@/utils/auth/authUtils";
+import { signUpUser, signInUser } from "@/api/services/authService";
+import { useAuthStore } from "@/stores/auth-stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
+import { MAIN_COLORS } from "@/constants/MainColors";
 import { router } from "expo-router";
 import { useState } from "react";
 
 export default function SignUpInputField() {
+    const { signIn } = useAuthStore();
+    const showToast = useToastStore((state) => state.showToast);
     const [isLoading, setIsLoading] = useState(false);
 
     const {
         handleSubmit,
         control,
+        getValues,
         formState: { errors },
     } = useForm({
         defaultValues: {
             username: "",
             email: "",
             password: "",
+            confirmPassword: "",
         },
     });
 
@@ -27,25 +34,32 @@ export default function SignUpInputField() {
         try {
             const response = await signUpUser({ email: data.email, password: data.password, username: data.username });
             if (response.success) {
-                Alert.alert("Success", response.message || "Account created successfully", [
-                    { text: "Sign In", onPress: () => router.replace("/(auth)/signIn") },
-                ]);
+                try {
+                    const signInResponse = await signInUser({ email: data.email, password: data.password });
+                    if (signInResponse.success) {
+                        showToast("Account created — welcome!", "success");
+                        signIn();
+                        return;
+                    }
+                } catch {
+                    // fall through to redirect if auto sign-in fails
+                }
+                showToast("Account created. Please sign in.", "success");
+                router.replace("/(auth)/signIn");
             } else {
-                Alert.alert("Error", response.message || "Failed to create account");
+                showToast(response.message || "Failed to create account", "error");
             }
         } catch (error: any) {
-            Alert.alert("Error", error.message || "Something went wrong");
+            showToast(error.message || "Something went wrong", "error");
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <View className="rounded-2xl border-2 border-neutral-800 p-4 bg-black">
-            {/* Header */}
-            {/* <AuthHeader title="Create Account" subtitle="Start your fitness journey today" /> */}
+        <View className="rounded-2xl p-5" style={{ backgroundColor: "#1A1A1A", borderWidth: 1.5, borderColor: "#2A2A2A" }}>
+            <AuthHeader title="Create Account" subtitle="Start your fitness journey today" />
 
-            {/* Form fields */}
             <View className="mb-2 mt-2">
                 <AuthInputField
                     control={control}
@@ -55,6 +69,7 @@ export default function SignUpInputField() {
                     label="Username"
                     keyboardType="default"
                     autoCapitalize="none"
+                    autoComplete="off"
                     secureTextEntry={false}
                     icon="user"
                     placeholder="Choose a username"
@@ -68,6 +83,8 @@ export default function SignUpInputField() {
                     label="Email"
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    autoComplete="email"
+                    textContentType="emailAddress"
                     secureTextEntry={false}
                     icon="mail"
                     placeholder="your@email.com"
@@ -81,42 +98,59 @@ export default function SignUpInputField() {
                     label="Password"
                     keyboardType="default"
                     autoCapitalize="none"
+                    autoComplete="new-password"
+                    textContentType="newPassword"
                     secureTextEntry={true}
                     icon="lock"
                     placeholder="Min. 8 characters"
                 />
+
+                <AuthInputField
+                    control={control}
+                    errors={errors}
+                    rules={confirmPasswordValidationRules(getValues)}
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    autoComplete="new-password"
+                    textContentType="newPassword"
+                    secureTextEntry={true}
+                    icon="shield"
+                    placeholder="Re-enter your password"
+                />
             </View>
 
-            {/* Sign Up button */}
             <TouchableOpacity
                 onPress={handleSubmit(onSubmit)}
                 disabled={isLoading}
-                className="bg-white h-14 rounded-xl items-center justify-center mb-6"
+                className="h-14 rounded-xl items-center justify-center mb-6"
+                style={{ backgroundColor: isLoading ? "#7A9E00" : MAIN_COLORS.primary }}
                 activeOpacity={0.8}
             >
                 {isLoading ? (
-                    <ActivityIndicator color="#000" />
+                    <ActivityIndicator color={MAIN_COLORS.black} />
                 ) : (
-                    <Text className="text-black text-base font-semibold tracking-wide">
+                    <Text className="text-base font-bold tracking-wider font-sans" style={{ color: MAIN_COLORS.black }}>
                         CREATE ACCOUNT
                     </Text>
                 )}
             </TouchableOpacity>
 
-            {/* Divider */}
             <View className="flex-row items-center mb-8">
-                <View className="flex-1 h-[1px] bg-neutral-800" />
-                <Text className="text-neutral-600 text-xs mx-4 tracking-wider">OR</Text>
-                <View className="flex-1 h-[1px] bg-neutral-800" />
+                <View className="flex-1 h-[1px]" style={{ backgroundColor: "#2A2A2A" }} />
+                <Text className="text-xs mx-4 tracking-wider font-sans" style={{ color: MAIN_COLORS.mediumGrey }}>
+                    OR
+                </Text>
+                <View className="flex-1 h-[1px]" style={{ backgroundColor: "#2A2A2A" }} />
             </View>
 
-            {/* Switch to Sign In */}
             <View className="flex-row justify-center">
-                <Text className="text-neutral-500 text-sm">
+                <Text className="text-sm font-sans" style={{ color: MAIN_COLORS.mediumGrey }}>
                     Already have an account?{" "}
                 </Text>
                 <TouchableOpacity onPress={() => router.replace("/(auth)/signIn")}>
-                    <Text className="text-white text-sm font-semibold">
+                    <Text className="text-sm font-semibold font-sans" style={{ color: MAIN_COLORS.primary }}>
                         Sign In
                     </Text>
                 </TouchableOpacity>

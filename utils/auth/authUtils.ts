@@ -1,11 +1,3 @@
-import { useForm } from "react-hook-form";
-
-interface SignUnAuthFormTypes {
-    username: string
-    email: string
-    password: string
-}
-
 export const authValidationRules = {
 
     email: {
@@ -13,26 +5,28 @@ export const authValidationRules = {
         pattern: {
             value: /^\S+@\S+$/i,
             message: 'Invalid email address'
-        } 
+        }
     },
     password: {
         required: "Password is required",
-        minLength: {
-            value: 8,
-            message: "Password must be at least 8 characters"
+        pattern: {
+            value: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
+            message: "Min 8 characters, 1 uppercase & 1 number"
         }
     },
     username: {
         required: "Username is required",
         minLength: {
             value: 3,
-            message: "username must be at least 3 characters"
+            message: "Username must be at least 3 characters"
         }
     },
     confirmPassword: {
-        required: 'Please confirm your password',
-        // validate: (value: string, formValues: any) => 
-        // value === formValues.password || 'Passwords do not match'
+        required: 'Please confirm your password'
     }
 }
 
+export const confirmPasswordValidationRules = (getValues: (name?: string) => any) => ({
+    required: 'Please confirm your password',
+    validate: (value: string) => value === getValues("password") || "Passwords do not match"
+});
