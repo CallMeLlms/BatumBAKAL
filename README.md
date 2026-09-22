@@ -178,15 +178,10 @@ The app reads its API base URL from the `DEV_PHYSICAL_DEVICE_IP` environment var
 - Local `.env` files are listed in `.gitignore` and will never be committed to the repository.
 - A **GitHub Actions safety scan** runs on every push and pull request to `master`, checking for accidentally tracked `.env` files, hardcoded local IP addresses, and sensitive debug headers in source code.
 
-
-## 🤝 Contributing
-
-This is a personal development project and is not currently open to external contributions. If you spot a bug or have a suggestion, feel free to open an [Issue](https://github.com/CallMeLlms/BatumBAKAL/issues).
-
 ---
 
-## 👨‍💻 Author
+<div align="center">
 
-- **CallMeLlms** — [@CallMeLlms](https://github.com/CallMeLlms)
+Built with 💪 — one rep at a time.
 
----
+</div>
