@@ -178,25 +178,6 @@ The app reads its API base URL from the `DEV_PHYSICAL_DEVICE_IP` environment var
 - Local `.env` files are listed in `.gitignore` and will never be committed to the repository.
 - A **GitHub Actions safety scan** runs on every push and pull request to `master`, checking for accidentally tracked `.env` files, hardcoded local IP addresses, and sensitive debug headers in source code.
 
----
-
-## 🗺️ Roadmap
-
-> This section will be updated as development progresses.
-
-- [x] Project scaffolding and navigation setup
-- [x] Authentication screens (login / register)
-- [x] API integration layer with Axios
-- [x] Zustand state management setup
-- [x] Bottom tab navigation (Progress, Log, Profile)
-- [ ] Program creation and management flow
-- [ ] Workout day builder
-- [ ] Live workout logging screen
-- [ ] Progress charts and history visualization
-- [ ] Profile editing
-- [ ] Production build and release
-
----
 
 ## 🤝 Contributing
 
@@ -209,15 +190,3 @@ This is a personal development project and is not currently open to external con
 - **CallMeLlms** — [@CallMeLlms](https://github.com/CallMeLlms)
 
 ---
-
-## 📄 License
-
-This project is private. All rights reserved © 2026.
-
----
-
-<div align="center">
-
-Built with 💪 — one rep at a time.
-
-</div>
